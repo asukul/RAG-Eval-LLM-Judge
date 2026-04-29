@@ -84,6 +84,8 @@ p4-llm-judge/
 ├── papers/                        # Paper drafts
 │   ├── short.md                   # 4-page workshop version (LLM4Eval @ SIGIR 2027)
 │   ├── long.md                    # Full conference version (ECIR 2028 / TOIS)
+│   ├── WALKTHROUGH.md             # How each paper works (claims map, section-by-section,
+│   │                              # figure/table guide, edit instructions, reviewer Q&A)
 │   ├── PUBLIC_BENCHMARKS_VALIDATION.md  # §7 plan + results
 │   └── MECHANISTIC_KL_ANALYSIS.md       # §6 mechanism notes
 ├── slides/                        # PowerPoint decks + generator
