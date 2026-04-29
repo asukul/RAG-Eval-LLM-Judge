@@ -29,11 +29,18 @@ We deploy **9 LLM judges across 5 model families** (Anthropic, OpenAI, Google, D
 
 ![9-judge κ matrix](figures/kappa_matrix_9judge.png)
 
-| | Sonnet | GPT-5.5 | Opus | DSV4 | Gemini 2.5 | Gemini 3.1 | GPT-4o | Qwen | Gemma |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| **Highest κ pair** | Qwen ↔ Gemma 4 = **0.80** | | | | | | | | |
-| **Cross-family ceiling** | Sonnet ↔ GPT-5.5 = 0.79 | | | | | | | | |
-| **Lowest κ pair** | Sonnet ↔ Gemini 3.1 Prev = 0.56 | | | | | | | | |
+Selected cells from the 9×9 matrix above:
+
+| | Pair | κ | Landis-Koch |
+|---|---|---:|---|
+| **Matrix maximum** | Qwen 3.6 Plus ↔ Gemma 4 26B (cross-org open-weight) | **0.80** | almost-perfect (boundary) |
+| **Cross-family commercial ceiling** | Claude Sonnet 4.6 ↔ GPT-5.5 (reasoning=low) | 0.79 | substantial |
+| **Within-family Anthropic** | Claude Opus 4.7 ↔ Claude Sonnet 4.6 | 0.71 | substantial |
+| **Within-family Google** | Gemini 3.1 Pro Prev ↔ Gemini 2.5 Pro | 0.67 | substantial |
+| **Within-family OpenAI** | GPT-5.5 ↔ GPT-4o | 0.63 | substantial |
+| **Lowest off-diagonal** | Claude Sonnet 4.6 ↔ Gemini 3.1 Pro Prev | 0.56 | moderate |
+
+Every off-diagonal cell is ≥ 0.56 — substantial or moderate by Landis-Koch.
 
 ### External validation — TREC RAG 2024 NIST qrels (n=537)
 
