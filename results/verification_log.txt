@@ -61,6 +61,12 @@ Reproducibility verification — RAG-Eval-LLM-Judge
   [PASS] post-fix: Sonnet↔DSV4 numeric value matches matrix: expected=0.7600 actual=0.7600
   [PASS] post-fix: paper no longer asserts GPT-5.5↔DSV4 = 0.77: expected=0.6900 actual=0.6900
 
+=== Section 6: supplementary statistical outputs ===
+  [PASS] bootstrap CI file: TREC RAG 9-judge ensemble κ point: expected=0.4941 actual=0.4941
+  [PASS] bootstrap CI: TREC RAG ensemble lower < point: expected=True actual=True
+  [PASS] Gwet AC2 file: TREC RAG 9-judge κ matches verifier: expected=0.4941 actual=0.4941
+  [PASS] Gwet AC2 > Cohen κ (marginal-skew sanity): expected=True actual=True
+
 ========================================================================
-Results: 48 pass, 0 fail, 0 warn
+Results: 52 pass, 0 fail, 0 warn
 ========================================================================

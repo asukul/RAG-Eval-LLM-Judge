@@ -1,0 +1,117 @@
+{
+  "method": "Gwet (2008) AC2 with quadratic weighting; Cohen kappa from src/eval_llm_judge.py for comparison",
+  "trec-rag-2024": {
+    "per_judge": {
+      "Claude Opus 4.7 (OpenRouter)": {
+        "kappa": 0.4792,
+        "ac2": 0.7614,
+        "delta_ac2_minus_kappa": 0.2822
+      },
+      "Claude Sonnet 4.6 (OpenRouter)": {
+        "kappa": 0.5123,
+        "ac2": 0.7747,
+        "delta_ac2_minus_kappa": 0.2624
+      },
+      "GPT-5.5 (reasoning=low)": {
+        "kappa": 0.4789,
+        "ac2": 0.7698,
+        "delta_ac2_minus_kappa": 0.2909
+      },
+      "GPT-4o (chat)": {
+        "kappa": 0.4065,
+        "ac2": 0.6895,
+        "delta_ac2_minus_kappa": 0.283
+      },
+      "Gemini 3.1 Pro Preview (OpenRouter)": {
+        "kappa": 0.4092,
+        "ac2": 0.7117,
+        "delta_ac2_minus_kappa": 0.3025
+      },
+      "Gemini 2.5 Pro (OpenRouter)": {
+        "kappa": 0.5513,
+        "ac2": 0.7679,
+        "delta_ac2_minus_kappa": 0.2166
+      },
+      "DeepSeek V4 Pro (OpenRouter)": {
+        "kappa": 0.4705,
+        "ac2": 0.7091,
+        "delta_ac2_minus_kappa": 0.2386
+      },
+      "Qwen 3.6 Plus (OpenRouter)": {
+        "kappa": 0.4141,
+        "ac2": 0.6553,
+        "delta_ac2_minus_kappa": 0.2412
+      },
+      "Gemma 4 26B (OpenRouter)": {
+        "kappa": 0.3958,
+        "ac2": 0.6715,
+        "delta_ac2_minus_kappa": 0.2757
+      }
+    },
+    "ensemble_9j": {
+      "kappa": 0.4941,
+      "ac2": 0.751
+    },
+    "ensemble_7j_frontier": {
+      "kappa": 0.5187,
+      "ac2": 0.7737
+    }
+  },
+  "trec-covid": {
+    "per_judge": {
+      "Claude Opus 4.7 (OpenRouter)": {
+        "kappa": 0.5323,
+        "ac2": 0.7552,
+        "delta_ac2_minus_kappa": 0.2229
+      },
+      "Claude Sonnet 4.6 (OpenRouter)": {
+        "kappa": 0.4238,
+        "ac2": 0.6573,
+        "delta_ac2_minus_kappa": 0.2335
+      },
+      "GPT-5.5 (reasoning=low)": {
+        "kappa": 0.3871,
+        "ac2": 0.6462,
+        "delta_ac2_minus_kappa": 0.2591
+      },
+      "GPT-4o (chat)": {
+        "kappa": 0.3874,
+        "ac2": 0.6615,
+        "delta_ac2_minus_kappa": 0.2741
+      },
+      "Gemini 3.1 Pro Preview (OpenRouter)": {
+        "kappa": 0.2202,
+        "ac2": 0.5826,
+        "delta_ac2_minus_kappa": 0.3624
+      },
+      "Gemini 2.5 Pro (OpenRouter)": {
+        "kappa": 0.46,
+        "ac2": 0.6569,
+        "delta_ac2_minus_kappa": 0.1969
+      },
+      "DeepSeek V4 Pro (OpenRouter)": {
+        "kappa": 0.3144,
+        "ac2": 0.5194,
+        "delta_ac2_minus_kappa": 0.205
+      },
+      "Qwen 3.6 Plus (OpenRouter)": {
+        "kappa": 0.3181,
+        "ac2": 0.5465,
+        "delta_ac2_minus_kappa": 0.2284
+      },
+      "Gemma 4 26B (OpenRouter)": {
+        "kappa": 0.2743,
+        "ac2": 0.569,
+        "delta_ac2_minus_kappa": 0.2947
+      }
+    },
+    "ensemble_9j": {
+      "kappa": 0.3447,
+      "ac2": 0.5997
+    },
+    "ensemble_7j_frontier": {
+      "kappa": 0.4462,
+      "ac2": 0.6771
+    }
+  }
+}

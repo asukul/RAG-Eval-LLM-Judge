@@ -1,0 +1,182 @@
+{
+  "config": {
+    "n_resamples": 1000,
+    "seed": 42,
+    "method": "case-resampling bootstrap (resample pairs with replacement)",
+    "ci_method": "percentile 2.5 / 97.5"
+  },
+  "trec_rag_2024": {
+    "per_judge": {
+      "Claude Opus 4.7 (OpenRouter)": {
+        "kappa": 0.4792,
+        "ci_95_low": 0.4247,
+        "ci_95_high": 0.5373,
+        "n_valid": 537
+      },
+      "Claude Sonnet 4.6 (OpenRouter)": {
+        "kappa": 0.5123,
+        "ci_95_low": 0.4501,
+        "ci_95_high": 0.5695,
+        "n_valid": 537
+      },
+      "GPT-5.5 (reasoning=low)": {
+        "kappa": 0.4789,
+        "ci_95_low": 0.4079,
+        "ci_95_high": 0.5429,
+        "n_valid": 537
+      },
+      "GPT-4o (chat)": {
+        "kappa": 0.4065,
+        "ci_95_low": 0.3414,
+        "ci_95_high": 0.4673,
+        "n_valid": 537
+      },
+      "Gemini 3.1 Pro Preview (OpenRouter)": {
+        "kappa": 0.4092,
+        "ci_95_low": 0.2739,
+        "ci_95_high": 0.5398,
+        "n_valid": 127
+      },
+      "Gemini 2.5 Pro (OpenRouter)": {
+        "kappa": 0.5513,
+        "ci_95_low": 0.39,
+        "ci_95_high": 0.6839,
+        "n_valid": 92
+      },
+      "DeepSeek V4 Pro (OpenRouter)": {
+        "kappa": 0.4705,
+        "ci_95_low": 0.3594,
+        "ci_95_high": 0.5734,
+        "n_valid": 212
+      },
+      "Qwen 3.6 Plus (OpenRouter)": {
+        "kappa": 0.4141,
+        "ci_95_low": 0.3493,
+        "ci_95_high": 0.4778,
+        "n_valid": 537
+      },
+      "Gemma 4 26B (OpenRouter)": {
+        "kappa": 0.3958,
+        "ci_95_low": 0.3342,
+        "ci_95_high": 0.454,
+        "n_valid": 537
+      }
+    },
+    "ensemble_9j": {
+      "kappa": 0.4941,
+      "ci_95_low": 0.4317,
+      "ci_95_high": 0.555
+    },
+    "ensemble_7j_frontier": {
+      "kappa": 0.5187,
+      "ci_95_low": 0.4563,
+      "ci_95_high": 0.5775
+    }
+  },
+  "trec_covid": {
+    "per_judge": {
+      "Claude Opus 4.7 (OpenRouter)": {
+        "kappa": 0.5323,
+        "ci_95_low": 0.4349,
+        "ci_95_high": 0.6241,
+        "n_valid": 251
+      },
+      "Claude Sonnet 4.6 (OpenRouter)": {
+        "kappa": 0.4238,
+        "ci_95_low": 0.3319,
+        "ci_95_high": 0.5108,
+        "n_valid": 300
+      },
+      "GPT-5.5 (reasoning=low)": {
+        "kappa": 0.3871,
+        "ci_95_low": 0.2841,
+        "ci_95_high": 0.4822,
+        "n_valid": 300
+      },
+      "GPT-4o (chat)": {
+        "kappa": 0.3874,
+        "ci_95_low": 0.2933,
+        "ci_95_high": 0.49,
+        "n_valid": 300
+      },
+      "Gemini 3.1 Pro Preview (OpenRouter)": {
+        "kappa": 0.2202,
+        "ci_95_low": 0.0386,
+        "ci_95_high": 0.3883,
+        "n_valid": 133
+      },
+      "Gemini 2.5 Pro (OpenRouter)": {
+        "kappa": 0.46,
+        "ci_95_low": 0.1329,
+        "ci_95_high": 0.7645,
+        "n_valid": 19
+      },
+      "DeepSeek V4 Pro (OpenRouter)": {
+        "kappa": 0.3144,
+        "ci_95_low": 0.1892,
+        "ci_95_high": 0.4307,
+        "n_valid": 250
+      },
+      "Qwen 3.6 Plus (OpenRouter)": {
+        "kappa": 0.3181,
+        "ci_95_low": 0.2098,
+        "ci_95_high": 0.4245,
+        "n_valid": 300
+      },
+      "Gemma 4 26B (OpenRouter)": {
+        "kappa": 0.2743,
+        "ci_95_low": 0.169,
+        "ci_95_high": 0.3804,
+        "n_valid": 300
+      }
+    },
+    "ensemble_9j": {
+      "kappa": 0.3447,
+      "ci_95_low": 0.2352,
+      "ci_95_high": 0.4506
+    },
+    "ensemble_7j_frontier": {
+      "kappa": 0.4462,
+      "ci_95_low": 0.3451,
+      "ci_95_high": 0.5348
+    }
+  },
+  "within_corpus": {
+    "Qwen <-> Gemma 4 (open-weight cross-org, matrix max)": {
+      "kappa": 0.7967,
+      "ci_95_low": 0.7596,
+      "ci_95_high": 0.8284,
+      "n_pairs": 570
+    },
+    "Sonnet <-> GPT-5.5 (cross-family commercial ceiling)": {
+      "kappa": 0.7891,
+      "ci_95_low": 0.7508,
+      "ci_95_high": 0.8238,
+      "n_pairs": 570
+    },
+    "Opus <-> Sonnet (Anthropic within-family)": {
+      "kappa": 0.7087,
+      "ci_95_low": 0.6701,
+      "ci_95_high": 0.743,
+      "n_pairs": 570
+    },
+    "GPT-5.5 <-> GPT-4o (OpenAI within-family)": {
+      "kappa": 0.632,
+      "ci_95_low": 0.5922,
+      "ci_95_high": 0.6695,
+      "n_pairs": 570
+    },
+    "Gem 3.1 <-> Gem 2.5 (Google-commercial within-family)": {
+      "kappa": 0.6723,
+      "ci_95_low": 0.5581,
+      "ci_95_high": 0.771,
+      "n_pairs": 570
+    },
+    "Sonnet <-> DSV4 Pro (cross-family, post-fix from C1)": {
+      "kappa": 0.7557,
+      "ci_95_low": 0.7253,
+      "ci_95_high": 0.7853,
+      "n_pairs": 570
+    }
+  }
+}

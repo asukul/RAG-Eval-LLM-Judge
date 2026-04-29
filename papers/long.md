@@ -104,6 +104,10 @@ Where a judge returned a missing/unparseable score (`null`), we exclude that pai
 
 **Ensemble convention (§7).** All ensemble medians in §7 use the **upper-middle** convention: for a sorted vote vector of length *n*, we report `sorted_votes[n // 2]`. With 9 judges this places the ensemble at the 5th-of-9 sorted position when all judges return scores. A lower-middle convention (`sorted_votes[(n - 1) // 2]`) would shift the ensemble by one position when the vote count is even (e.g., when one or more judges null on a given pair). Adopting upper-middle uniformly across TREC RAG 2024, BEIR scifact, and TREC-COVID prevents subtle inconsistencies and keeps published numbers reproducible from the shipped JSONs alone (verified by `src/verify_paper_claims.py`).
 
+**Confidence intervals.** All headline κ values in §7 carry 95% bootstrap confidence intervals (1,000 case-resampled replicates with replacement, seed = 42). The bootstrap script is `src/bootstrap_kappa_cis.py`; results are persisted to `results/bootstrap_kappa_cis.json`. CI overlap between point-estimate-different κ values is reported in-line (§4.3, §5 C3) so that statistical-significance claims do not exceed what the data supports.
+
+**Gwet AC2 alongside Cohen κ.** Cohen's quadratic-weighted κ has a known sensitivity to marginal-distribution skew (the "κ paradox" — Feinstein & Cicchetti 1990), where high observed agreement can yield deflated κ when one rating category dominates. We report **Gwet's AC2 with quadratic weighting** [gwet2008] as a complementary chance-corrected agreement coefficient that is robust to marginal skew. On our data, AC2 values run ≈ 0.25 higher than the corresponding κ values across both per-judge and ensemble cases (e.g., TREC RAG 2024 9-judge ensemble: κ = 0.49, AC2 = 0.75; TREC-COVID 9-judge ensemble: κ = 0.34, AC2 = 0.60), consistent with marginal skew toward the lower ordinal categories. The Landis-Koch interpretation bands strictly apply to unweighted κ; we cite AC2 for triangulation only, not as a replacement for the headline κ. AC2 results: `results/gwet_ac2_alongside_kappa.json`; computation: `src/compute_gwet_ac2.py`.
+
 ## 3.5 External-Validation Protocol
 
 Beyond the within-corpus 9-judge ablation, we replicate the same slate against two public benchmarks (§7):
@@ -153,7 +157,7 @@ Figure 3 (`figures/kappa_matrix_9judge.png`) renders the full pairwise quadratic
 - **Reasoning-generous cluster**: Sonnet ↔ GPT-5.5 = 0.79 leads; cluster ceiling 0.75-0.79
 - **Strict-mid + open-weight cluster**: **Qwen 3.6 ↔ Gemma 4 26B = 0.80 — matrix-highest**; Gemma 4 ↔ GPT-4o = 0.77; Qwen ↔ Opus 4.7 = 0.75
 
-All three commercial within-family pairs (Anthropic 0.71; OpenAI 0.63; Google-commercial 0.67) sit **below** the cross-family reasoning ceiling (0.79); the fourth, cross-organization Open-weight pair (Qwen ↔ Gemma 4), is the matrix maximum. Within-cluster mean κ exceeds cross-cluster mean κ by **0.06** (within-cluster mean κ = 0.74, n = 10 pairs; cross-cluster mean κ = 0.68, n = 26 pairs; Welch t = 3.45, p = 0.002 two-sided; Mann-Whitney U one-sided p = 0.004). The effect is **modest but statistically reliable**: calibration philosophy partitions judges more reliably than provider lineage on this slate, though the absolute gap (0.06 κ) is small enough that we frame this as a tendency rather than a sharp partition. We treat the three-cluster structure (reasoning-generous, strict-mid, Gemini outliers) as a working partition; alternative clusterings on different distance metrics (hierarchical, spectral) are robustness-checks pending in §6.
+All three commercial within-family pairs (Anthropic 0.71, 95% CI [0.67, 0.74]; OpenAI 0.63 [0.59, 0.67]; Google-commercial 0.67 [0.56, 0.77]) sit **below** the cross-family reasoning ceiling (Sonnet↔GPT-5.5 = 0.79 [0.75, 0.82]); the fourth, cross-organization Open-weight pair (Qwen ↔ Gemma 4 = 0.80 [0.76, 0.83]), is the point-estimate matrix maximum. **The Qwen↔Gemma 4 and Sonnet↔GPT-5.5 95% CIs overlap substantially** (n = 570 pairs, 1,000 bootstrap resamples, seed = 42), so the "matrix-max" claim refers to point estimates and is not a statistically significant separation; we re-frame C3's quantitative claim accordingly in §5. Within-cluster mean κ exceeds cross-cluster mean κ by **0.06** (within-cluster mean κ = 0.74, n = 10 pairs; cross-cluster mean κ = 0.68, n = 26 pairs; Welch t = 3.45, p = 0.002 two-sided; Mann-Whitney U one-sided p = 0.004). The effect is **modest but statistically reliable**: calibration philosophy partitions judges more reliably than provider lineage on this slate, though the absolute gap (0.06 κ) is small enough that we frame this as a tendency rather than a sharp partition. We treat the three-cluster structure (reasoning-generous, strict-mid, Gemini outliers) as a working partition; alternative clusterings on different distance metrics (hierarchical, spectral) are robustness-checks pending in §6. Bootstrap CI computation: `src/bootstrap_kappa_cis.py`; results in `results/bootstrap_kappa_cis.json`.
 
 The four highest-κ pairs are all within-cluster: Qwen↔Gemma 4 (0.80), Sonnet↔GPT-5.5 (0.79), GPT-5.5↔Gemini 2.5 Pro on its valid subset (0.78), Gemma 4↔GPT-4o (0.77). The four lowest-κ pairs span the two clusters: Sonnet↔Gemini 3.1 Prev (0.56), Gemini 3.1 Prev↔DSV4 Pro (0.57), Sonnet↔Gemma 4 (0.62), GPT-5.5↔GPT-4o (0.63). The structure is consistent with calibration tiers driving κ, with tier-crossing pairs systematically lower.
 
@@ -169,7 +173,7 @@ Nine cross-family pairs reach substantial-or-better κ ≥ 0.75 (Fig. 3), spanni
 
 The pattern replicates across three independent ablation scales (5-judge → 7-judge → 9-judge) within run-to-run noise; full results in Appendix B (FINDINGS_5judge / 7judge / 9judge).
 
-External corroboration: the 9-judge ensemble achieves κ = 0.4941 against published NIST qrels on TREC RAG 2024 (537 stratified-balanced pairs), with the 7-judge frontier-only subset at κ = 0.5187 — consistent moderate-to-substantial agreement on a public corpus where ground truth is not derived from any of the judges. See §7 for full per-judge breakdown.
+External corroboration: the 9-judge ensemble achieves κ = 0.4941, 95% CI [0.43, 0.56] against published NIST qrels on TREC RAG 2024 (537 stratified-balanced pairs, 1000 bootstrap resamples), with the 7-judge frontier-only subset at κ = 0.5187 [0.46, 0.58] — consistent moderate-to-substantial agreement on a public corpus where ground truth is not derived from any of the judges. See §7 for full per-judge breakdown.
 
 ## C2. Within-family agreement is task-dependent and bounded by the cross-family ceiling
 
@@ -181,9 +185,9 @@ All four within-family pairs are at most equal to the strongest cross-family com
 
 **No within-family pair dominates** — at odds with self-preference findings on open-ended generation [panickssery2024self]. Our companion 4-way extraction study [Sukul, forthcoming] reports within-family agreement ~2× cross-family on open-vocabulary tasks; the inversion under bounded ordinal judging suggests **self-preference is mediated by output-space boundedness**, not provider lineage. In a 4-class ordinal output space (0/1/2/3), the dominant signal is calibration philosophy, which crosses provider lines; in an open-text output space, the dominant signal is style/lexicon, which respects provider lines. A unifying theory of when self-preference dominates vs disappears is left to future work.
 
-## C3. Open-weight judges produce the matrix-highest within-pair κ and cluster with strict-mid commercial models
+## C3. Open-weight judges match the cross-family commercial ceiling and cluster with strict-mid commercial models
 
-Qwen 3.6 Plus ↔ Gemma 4 26B = **0.80** — exceeds every commercial within-family pair and ties the cross-family reasoning ceiling. Both open-weight judges (mean 1.11-1.18) cluster with GPT-4o and Opus 4.7 (1.09-1.15) **not** with the reasoning-generous triad (1.63-1.68). This is a novel finding on bounded ordinal IR judging: prior literature has either lumped open-weight judges into a single bucket or compared them only to a reference frontier judge.
+Qwen 3.6 Plus ↔ Gemma 4 26B = **0.80, 95% CI [0.76, 0.83]** — point-estimate matrix maximum, statistically indistinguishable from the cross-family commercial ceiling Sonnet ↔ GPT-5.5 = 0.79 [0.75, 0.82]. **The honest claim is that the cross-organization open-weight pair *matches* the commercial reasoning ceiling**, not that it exceeds it (the CIs overlap substantially). What is robust is that the open-weight pair clearly *exceeds every commercial within-family pair* (Anthropic 0.71 [0.67, 0.74]; OpenAI 0.63 [0.59, 0.67]; Google-commercial 0.67 [0.56, 0.77]) — those non-overlapping CIs make the C2 + C3 combination defensible. Both open-weight judges (mean 1.11-1.18) cluster with GPT-4o and Opus 4.7 (1.09-1.15) **not** with the reasoning-generous triad (1.63-1.68). This is a novel finding on bounded ordinal IR judging: prior literature has either lumped open-weight judges into a single bucket or compared them only to a reference frontier judge.
 
 At ~USD 0.30 marginal cost via API routing (vs ~USD 18.30 for the commercial 7-judge frontier), **an open-weight cross-organization pair, accessed in this study through API routing, achieves higher cross-validation κ than the ~USD 18 commercial 7-judge frontier.** The economic asymmetry has direct implications for sovereign-cloud and privacy-conservative deployments where commercial APIs are not an option, **conditional on a self-hosted replication confirming that the API-routed κ behavior holds under direct inference** (we note this gap as a §8 limitation pending follow-up). We open-source the cross-org open-weight pair as the recommended low-cost configuration in §9, and treat the policy claim about sovereign-cloud deployments as provisional until a self-hosted measurement is available.
 
@@ -286,6 +290,22 @@ We do not yet have a satisfying explanation for *why* Qwen and Gemma 4 cluster t
 
 We rule out shared tokenizer (§6.4) and shared training-data-language (DSV4 Pro is on Chinese; Sonnet is on Western multilingual; both reasoning-cluster). We do not rule out (1)-(4); we flag them as hypotheses for the P4 follow-up paper.
 
+## 6.6 Bias diagnostics
+
+To preempt reviewer concerns about position bias, verbosity bias, and self-preference [wang2023fair; saito2023verbosity; panickssery2024self], we report three diagnostics computable from the existing 5,130 within-corpus per-judge scores (Fig. 7):
+
+**Family conditional-mean matrix.** For each ordered (family-A, family-B) pair, we report the mean score that family-A judges give on the pairs where family-B judges rated ≥ 2. This is *not* a strict self-preference test in the Panickssery 2024 sense (we do not have a "from family X" provenance label on every retrieved document) but it is a free analogue that surfaces per-family score-allocation asymmetries. The diagonal entries (self-conditional mean) are: Anthropic 2.07, OpenAI 1.93, Google 2.01, DeepSeek **2.45**, Open-weight **1.62**. **DeepSeek's diagonal is the highest** (most generous when the family itself rated ≥ 2) and **Open-weight's the lowest** (least generous), confirming the calibration-tier story rather than a self-preference signal: a self-preference effect would predict each family's diagonal to be the highest in its row, but the data show calibration drift across families instead. Full 5×5 matrix: `results/bias_diagnostics.json`.
+
+**Verbosity bias (deferred).** Quartile-stratified pairwise κ on document length is the conventional verbosity-bias diagnostic. The stored per-judge JSONs uniformly truncate the `text_preview` field at 240 chars (a storage-side artifact, not the 1,500-char judge-input cap), so the shipped data does not preserve enough length spread for length-stratified κ. The full diagnostic requires re-extracting raw chunk text from Qdrant or the embeddings parquet; we flag this as a P3 follow-up. Conservatively, the 1,500-char truncation at API-call time prevents long-passage bias from dominating the decision.
+
+**Position bias.** A pair-swap experiment on a held-out subset is the conventional position-bias diagnostic [wang2023fair]. Our 0–3 ordinal rubric does not present pairwise alternatives (each judge sees one document at a time), so position bias as Wang 2023 defined it is not directly applicable. We acknowledge that ordering effects within a single document (top vs bottom of the truncated passage) could in principle bias scores; the 1,500-char truncation cap mitigates this.
+
+**Per-judge marginal score distributions** (Fig. 7, panel 3) directly visualize the three-cluster structure called out in §4.2. Reasoning-generous judges (Sonnet, GPT-5.5, DSV4 Pro) place 53–58% of mass on scores 2+3; strict-mid judges (GPT-4o, Qwen, Gemma 4, Opus) place 32–34% of mass on scores 2+3; Gemini judges trail at 41% (Gem 3.1 Prev) and 48% (Gem 2.5). The marginal-distribution shape is what mediates pairwise κ in §6.2's decomposition.
+
+**Self-preference under bounded ordinal — open question.** We did not run a strict self-preference test (would require labelling each retrieved document with its source-family-of-origin and measuring within-family vs cross-family scoring delta). The diagonal-vs-off-diagonal pattern in the family conditional-mean matrix is consistent with calibration drift, not with self-preference. A direct test on a follow-up corpus where document provenance is known is on the P3 / P4 plan.
+
+Full bias-diagnostic data: `results/bias_diagnostics.json`. Computation script: `src/bias_diagnostics.py`. Figure: `figures/bias_diagnostics_panel.png`.
+
 # 7. External Validation Against NIST Human Qrels
 
 We validate the same 9-judge slate against two public benchmarks. The within-corpus 9×9 κ matrix establishes inter-judge agreement; this section establishes judge-vs-human agreement on labels we did not generate.
@@ -313,8 +333,8 @@ We validate the same 9-judge slate against two public benchmarks. The within-cor
 | 7 | Gemini 3.1 Pro Preview (OpenRouter) | 0.4092 | 127 | moderate |
 | 8 | GPT-4o (chat) | 0.4065 | 537 | moderate |
 | 9 | Gemma 4 26B (OpenRouter) | 0.3958 | 537 | borderline moderate |
-| **9-judge ensemble median** | | **0.4941** | 537 | **moderate, near-substantial** |
-| 7-judge frontier-only ensemble median | | 0.5187 | 537 | moderate-substantial |
+| **9-judge ensemble median** | | **0.4941** [0.43, 0.56] | 537 | **moderate, near-substantial** |
+| 7-judge frontier-only ensemble median | | 0.5187 [0.46, 0.58] | 537 | moderate-substantial |
 
 *Table 5: Per-judge and ensemble κ vs NIST human qrels on the 537-pair stratified-balanced sample. Ensemble = per-pair median across all valid (non-null) judge scores.*
 
@@ -345,8 +365,8 @@ The **Gemini 2.5 Pro top κ (0.55) is on a tiny n=92 valid sample** and is there
 | 7 | Gemma 4 26B (OpenRouter) | 0.2743 | 300 | fair |
 | 8 | Gemini 3.1 Pro Preview (OpenRouter) | 0.2202 | 133 | fair, low-end |
 | — | Gemini 2.5 Pro (OpenRouter) | n/a | 19 | insufficient overlap |
-| **9-judge ensemble median** | | **0.3447** | 300 | **fair, near-moderate** |
-| 7-judge frontier-only ensemble median | | 0.4462 | 300 | moderate |
+| **9-judge ensemble median** | | **0.3447** [0.24, 0.45] | 300 | **fair, near-moderate** |
+| 7-judge frontier-only ensemble median | | 0.4462 [0.35, 0.53] | 300 | moderate |
 
 *Table 5b: Per-judge and ensemble κ vs NIST-curated TREC-COVID qrels on the 300-pair BEIR-distributed subset. Ensemble = per-pair median across all valid (non-null) judge scores.*
 

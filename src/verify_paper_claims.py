@@ -370,6 +370,40 @@ def verify_long_md_c1():
           0.69, K_matrix[("GPT-5.5", "DSV4")])
 
 
+def verify_supplementary_outputs():
+    """Light checks that bootstrap CI and Gwet AC2 outputs exist and are
+    self-consistent. We don't re-run them here (they're in their own
+    scripts) but we confirm the files match the values cited in the paper."""
+    print("\n=== Section 6: supplementary statistical outputs ===")
+
+    boot_fp = REPO / "results" / "bootstrap_kappa_cis.json"
+    if boot_fp.exists():
+        boot = json.loads(boot_fp.read_text(encoding="utf-8"))
+        e9 = boot.get("trec_rag_2024", {}).get("ensemble_9j", {})
+        check("bootstrap CI file: TREC RAG 9-judge ensemble κ point",
+              0.4941, e9.get("kappa", 0.0))
+        # CI sanity: lower < point < upper
+        check("bootstrap CI: TREC RAG ensemble lower < point",
+              True, e9.get("ci_95_low", 99) < e9.get("kappa", 0) <
+                    e9.get("ci_95_high", -99))
+    else:
+        warn(f"bootstrap CI file not found at {boot_fp}; "
+             "run src/bootstrap_kappa_cis.py")
+
+    ac2_fp = REPO / "results" / "gwet_ac2_alongside_kappa.json"
+    if ac2_fp.exists():
+        ac2 = json.loads(ac2_fp.read_text(encoding="utf-8"))
+        e9 = ac2.get("trec-rag-2024", {}).get("ensemble_9j", {})
+        check("Gwet AC2 file: TREC RAG 9-judge κ matches verifier",
+              0.4941, e9.get("kappa", 0.0))
+        # AC2 should be higher than κ under marginal skew (kappa paradox)
+        check("Gwet AC2 > Cohen κ (marginal-skew sanity)",
+              True, e9.get("ac2", 0) > e9.get("kappa", 99))
+    else:
+        warn(f"Gwet AC2 file not found at {ac2_fp}; "
+             "run src/compute_gwet_ac2.py")
+
+
 def main():
     print("=" * 72)
     print("Reproducibility verification — RAG-Eval-LLM-Judge")
@@ -379,6 +413,7 @@ def main():
     verify_beir_scifact()
     verify_kappa_matrix()
     verify_long_md_c1()
+    verify_supplementary_outputs()
 
     print("\n" + "=" * 72)
     print(f"Results: {n_pass} pass, {n_fail} fail, {n_warn} warn")

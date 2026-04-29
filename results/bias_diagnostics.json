@@ -1,0 +1,128 @@
+{
+  "family_score_mean_matrix": {
+    "description": "M[A][B] = mean score family-A judges give on pairs where family-B judges rated >= 2. Diagonal = self-conditional mean. Off-diagonal differences reveal per-family score allocation asymmetry.",
+    "families": [
+      "Anthropic",
+      "OpenAI",
+      "Google",
+      "DeepSeek",
+      "Open-weight"
+    ],
+    "matrix": {
+      "Anthropic": {
+        "Anthropic": 2.06645056726094,
+        "OpenAI": 2.0358974358974358,
+        "Google": 2.0508474576271185,
+        "DeepSeek": 1.8949640287769784,
+        "Open-weight": 2.2253521126760565
+      },
+      "OpenAI": {
+        "Anthropic": 1.906441717791411,
+        "OpenAI": 2.0128205128205128,
+        "Google": 2.005181347150259,
+        "DeepSeek": 1.7830188679245282,
+        "Open-weight": 2.140969162995595
+      },
+      "Google": {
+        "Anthropic": 1.8925925925925926,
+        "OpenAI": 1.9365671641791045,
+        "Google": 2.1666666666666665,
+        "DeepSeek": 1.796116504854369,
+        "Open-weight": 2.1522842639593907
+      },
+      "DeepSeek": {
+        "Anthropic": 2.4063492063492062,
+        "OpenAI": 2.386138613861386,
+        "Google": 2.4473684210526314,
+        "DeepSeek": 2.398921832884097,
+        "Open-weight": 2.583710407239819
+      },
+      "Open-weight": {
+        "Anthropic": 1.7423312883435582,
+        "OpenAI": 1.7980769230769231,
+        "Google": 1.9041450777202074,
+        "DeepSeek": 1.6078167115902966,
+        "Open-weight": 2.20704845814978
+      }
+    }
+  },
+  "length_stratified_kappa": {
+    "skipped": true,
+    "reason": "all pair text_previews are exactly 240 chars; no length spread to stratify on. The 1500-char judge-input cap was applied at API-call time but not preserved in the stored per-judge JSONs. Length-stratified kappa would require re-extracting raw chunk text from Qdrant or the embeddings parquet.",
+    "uniform_length_chars": 240
+  },
+  "per_judge_marginal_distribution": {
+    "Claude Opus 4.7 (OpenRouter)": {
+      "P(0)": 0.1646,
+      "P(1)": 0.4756,
+      "P(2)": 0.2907,
+      "P(3)": 0.0691,
+      "mean_score": 1.2642,
+      "n_valid": 492
+    },
+    "Claude Sonnet 4.6 (OpenRouter)": {
+      "P(0)": 0.0826,
+      "P(1)": 0.3339,
+      "P(2)": 0.3645,
+      "P(3)": 0.219,
+      "mean_score": 1.7199,
+      "n_valid": 557
+    },
+    "DeepSeek V4 Pro (OpenRouter)": {
+      "P(0)": 0.2657,
+      "P(1)": 0.0682,
+      "P(2)": 0.4004,
+      "P(3)": 0.2657,
+      "mean_score": 1.6661,
+      "n_valid": 557
+    },
+    "Gemini 2.5 Pro (OpenRouter)": {
+      "P(0)": 0.1953,
+      "P(1)": 0.3199,
+      "P(2)": 0.3232,
+      "P(3)": 0.1616,
+      "mean_score": 1.4512,
+      "n_valid": 297
+    },
+    "Gemini 3.1 Pro Preview (OpenRouter)": {
+      "P(0)": 0.35,
+      "P(1)": 0.2444,
+      "P(2)": 0.2889,
+      "P(3)": 0.1167,
+      "mean_score": 1.1722,
+      "n_valid": 180
+    },
+    "Gemma 4 26B (OpenRouter)": {
+      "P(0)": 0.3281,
+      "P(1)": 0.3333,
+      "P(2)": 0.2351,
+      "P(3)": 0.1035,
+      "mean_score": 1.114,
+      "n_valid": 570
+    },
+    "GPT-4o (chat)": {
+      "P(0)": 0.2772,
+      "P(1)": 0.4035,
+      "P(2)": 0.2158,
+      "P(3)": 0.1035,
+      "mean_score": 1.1456,
+      "n_valid": 570
+    },
+    "GPT-5.5 (reasoning=low)": {
+      "P(0)": 0.0702,
+      "P(1)": 0.3982,
+      "P(2)": 0.3632,
+      "P(3)": 0.1684,
+      "mean_score": 1.6298,
+      "n_valid": 570
+    },
+    "Qwen 3.6 Plus (OpenRouter)": {
+      "P(0)": 0.3526,
+      "P(1)": 0.3105,
+      "P(2)": 0.1456,
+      "P(3)": 0.1912,
+      "mean_score": 1.1754,
+      "n_valid": 570
+    }
+  }
+}
