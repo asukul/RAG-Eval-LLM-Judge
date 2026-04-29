@@ -160,7 +160,7 @@ The mechanism story progresses from coarsest to finest:
 
 **§7.1 — TREC RAG 2024:** The headline number is here. 537 stratified-balanced pairs (135/134/134/134 across labels 0/1/2/3, `random.seed(42)`), 86 unique queries, MS MARCO v2.1 passages extracted via HF-streaming. **Per-judge κ table is Table 5 in long.md.** All 9 judges have κ > 0.39; ensemble κ = 0.4941 (moderate, near-substantial). 7-judge frontier ensemble κ = 0.5187.
 
-**§7.2 — BEIR scifact:** 300 pairs, all-positive qrels → κ undefined. Report precision-at-≥2 instead. 9-judge ensemble = 63.7%. Notable spread: Gemma 43%, GPT-5.5 75% — judge selection matters even for the simpler "is this rated relevant?" question.
+**§7.2 — BEIR scifact:** 300 pairs, all-positive qrels → κ undefined. Report precision-at-≥2 instead. 9-judge ensemble = 65.7%. Notable spread: Gemma 43%, GPT-5.5 75% — judge selection matters even for the simpler "is this rated relevant?" question.
 
 **§7.3 — Coverage divergence (paper-relevant finding):** Coverage rates differ between corpora. Gemini struggles on TREC RAG 2024 web content (17–24%) but works on BEIR scifact (60–86%). DeepSeek similarly. **The "always-works 6-judge subset" (≥95% on both) is Anthropic + OpenAI + Qwen + Gemma — the 2 cheapest judges make this subset.** This is a content-domain reliability axis that's only visible from cross-corpus comparison.
 
@@ -258,7 +258,7 @@ Each row is a 4-bin probability distribution + entropy. The bolded cell in each 
 
 ### Table 6 — BEIR scifact precision-only (long.md §7.2)
 
-Same structure as Table 5, but precision instead of κ (κ undefined on all-positive qrels). 9-judge ensemble = 63.7%.
+Same structure as Table 5, but precision instead of κ (κ undefined on all-positive qrels). 9-judge ensemble = 65.7%.
 
 ### Table 7 — Coverage divergence (long.md §7.3)
 

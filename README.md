@@ -8,6 +8,8 @@
 [![Code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![Data: CC-BY-4.0](https://img.shields.io/badge/data-CC--BY--4.0-green.svg)](LICENSE)
 [![Paper: arXiv](https://img.shields.io/badge/paper-arXiv-red.svg)](#-paper)
+[![Tests: 25 passing](https://img.shields.io/badge/tests-25%20passing-success.svg)](tests/)
+[![Verified](https://img.shields.io/badge/headline%20claims-48%20verified-success.svg)](src/verify_paper_claims.py)
 
 ---
 

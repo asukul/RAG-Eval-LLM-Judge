@@ -102,6 +102,8 @@ We report per-judge **nDCG@10**, **P@5** (s ≥ 2 threshold), and **MRR** with r
 
 Where a judge returned a missing/unparseable score (`null`), we exclude that pair from the judge's mean and from any κ pair involving that judge. For aggregate retrieval metrics where all 570 pairs must contribute, we treat `null` as 0 and report a corrected valid-only mean alongside (Table 4) so the impact of missing data is transparent.
 
+**Ensemble convention (§7).** All ensemble medians in §7 use the **upper-middle** convention: for a sorted vote vector of length *n*, we report `sorted_votes[n // 2]`. With 9 judges this places the ensemble at the 5th-of-9 sorted position when all judges return scores. A lower-middle convention (`sorted_votes[(n - 1) // 2]`) would shift the ensemble by one position when the vote count is even (e.g., when one or more judges null on a given pair). Adopting upper-middle uniformly across TREC RAG 2024, BEIR scifact, and TREC-COVID prevents subtle inconsistencies and keeps published numbers reproducible from the shipped JSONs alone (verified by `src/verify_paper_claims.py`).
+
 ## 3.5 External-Validation Protocol
 
 Beyond the within-corpus 9-judge ablation, we replicate the same slate against two public benchmarks (§7):
@@ -151,7 +153,7 @@ Figure 3 (`figures/kappa_matrix_9judge.png`) renders the full pairwise quadratic
 - **Reasoning-generous cluster**: Sonnet ↔ GPT-5.5 = 0.79 leads; cluster ceiling 0.75-0.79
 - **Strict-mid + open-weight cluster**: **Qwen 3.6 ↔ Gemma 4 26B = 0.80 — matrix-highest**; Gemma 4 ↔ GPT-4o = 0.77; Qwen ↔ Opus 4.7 = 0.75
 
-All three commercial within-family pairs (Anthropic 0.71; OpenAI 0.63; Google-commercial 0.67) sit **below** the cross-family reasoning ceiling (0.79); the fourth, cross-organization Open-weight pair (Qwen ↔ Gemma 4), is the matrix maximum. Within-cluster κ exceeds cross-cluster κ — **calibration philosophy partitions judges more cleanly than provider lineage**.
+All three commercial within-family pairs (Anthropic 0.71; OpenAI 0.63; Google-commercial 0.67) sit **below** the cross-family reasoning ceiling (0.79); the fourth, cross-organization Open-weight pair (Qwen ↔ Gemma 4), is the matrix maximum. Within-cluster mean κ exceeds cross-cluster mean κ by **0.06** (within-cluster mean κ = 0.74, n = 10 pairs; cross-cluster mean κ = 0.68, n = 26 pairs; Welch t = 3.45, p = 0.002 two-sided; Mann-Whitney U one-sided p = 0.004). The effect is **modest but statistically reliable**: calibration philosophy partitions judges more reliably than provider lineage on this slate, though the absolute gap (0.06 κ) is small enough that we frame this as a tendency rather than a sharp partition. We treat the three-cluster structure (reasoning-generous, strict-mid, Gemini outliers) as a working partition; alternative clusterings on different distance metrics (hierarchical, spectral) are robustness-checks pending in §6.
 
 The four highest-κ pairs are all within-cluster: Qwen↔Gemma 4 (0.80), Sonnet↔GPT-5.5 (0.79), GPT-5.5↔Gemini 2.5 Pro on its valid subset (0.78), Gemma 4↔GPT-4o (0.77). The four lowest-κ pairs span the two clusters: Sonnet↔Gemini 3.1 Prev (0.56), Gemini 3.1 Prev↔DSV4 Pro (0.57), Sonnet↔Gemma 4 (0.62), GPT-5.5↔GPT-4o (0.63). The structure is consistent with calibration tiers driving κ, with tier-crossing pairs systematically lower.
 
@@ -354,7 +356,7 @@ The **Gemini 2.5 Pro top κ (0.55) is on a tiny n=92 valid sample** and is there
 3. **The 9-judge ensemble drops 0.10 below the frontier-7 ensemble** (0.3447 vs 0.4462) — a larger drop than the −0.025 we saw on TREC RAG 2024 web content (0.4941 vs 0.5187). Qwen (κ = 0.32) and Gemma 4 (κ = 0.27) trail their TREC RAG 2024 numbers (0.41 / 0.40 each) on biomedical, suggesting **the robustness↔headline κ tradeoff is content-domain dependent**: open-weight models broaden coverage uniformly but recover less of the human-agreement signal on biomedical scientific text than on web passages.
 4. **Coverage on TREC-COVID matches the always-works subset**: Anthropic + OpenAI + Qwen + Gemma all 100% (except Opus at 84% with thinking-mode null fraction). DeepSeek V4 Pro 83%, Gemini 3.1 Prev 44%, Gemini 2.5 Pro 6%. Gemini 2.5 Pro's biomedical coverage failure is severe enough to exclude its κ on small-n grounds.
 
-**Cross-corpus pattern (3 corpora)**: ISU DSpace within-pair max 0.80 (no human gold), TREC RAG 2024 ensemble κ = 0.4941 (web), BEIR scifact precision = 63.7% (κ undefined), TREC-COVID ensemble κ = 0.3447 (biomedical). All three public-corpus ensembles are above chance; the moderate Landis-Koch band lands on web content, the fair-near-moderate band on biomedical. The §7.3 coverage divergence finding strengthens with the third data point: the always-works 6-judge subset (Anthropic + OpenAI + Qwen + Gemma) holds across all three external corpora.
+**Cross-corpus pattern (3 corpora)**: ISU DSpace within-pair max 0.80 (no human gold), TREC RAG 2024 ensemble κ = 0.4941 (web), BEIR scifact precision = 65.7% (κ undefined), TREC-COVID ensemble κ = 0.3447 (biomedical). All three public-corpus ensembles are above chance; the moderate Landis-Koch band lands on web content, the fair-near-moderate band on biomedical. The §7.3 coverage divergence finding strengthens with the third data point: the always-works 6-judge subset (Anthropic + OpenAI + Qwen + Gemma) holds across all three external corpora.
 
 ## 7.2 BEIR scifact: 300 pairs, precision-only
 
@@ -375,7 +377,7 @@ We report **precision** instead — % of pairs the LLM rates ≥ 2 conditional o
 | Gemini 3.1 Pro Preview | 180 | 54.4% |
 | GPT-4o | 300 | 53.0% |
 | Gemma 4 26B | 300 | 43.0% |
-| **9-judge ensemble median** | 300 | **63.7%** |
+| **9-judge ensemble median** | 300 | **65.7%** |
 
 *Table 6: Per-judge and ensemble precision (% LLM ≥ 2 | human=relevant) on BEIR scifact's all-positive 300-pair sample.*
 

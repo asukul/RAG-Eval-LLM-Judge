@@ -430,7 +430,7 @@ def slide_external_validation_setup(p, n, total, *, version_label):
         ("Coverage: all 86 unique queries; 537 unique passages from MS MARCO v2.1 segmented corpus", False),
         ("Passage extraction: HF-stream from drexalt/msmarco-2.1-segmented (60 shards, ~400 MB peak disk, 38 min wall)", False),
         ("Cost: ~USD 35, ~7.5 h wall (vs IRB human study estimate $1,500-3,000, 6-12 weeks)", True),
-        ("BEIR scifact also run (300 pairs, all-positive qrels — κ undefined; reports precision instead = 63.7% ensemble)", False),
+        ("BEIR scifact also run (300 pairs, all-positive qrels — κ undefined; reports precision instead = 65.7% ensemble)", False),
     ], size=18, line_spacing=1.35)
     add_footer(s, f"P4 — {version_label}")
     add_slide_number(s, n, total)
@@ -518,7 +518,7 @@ def slide_trec_covid_results(p, n, total, *, version_label):
                 "  (no human gold available)\n\n"
                 "• TREC RAG 2024: 9-judge κ = 0.4941\n"
                 "  (web passages)\n\n"
-                "• BEIR scifact: precision 63.7%\n"
+                "• BEIR scifact: precision 65.7%\n"
                 "  (κ undefined — all-positive qrels)\n\n"
                 "• TREC-COVID: 9-judge κ = 0.3447\n"
                 "  (biomedical scientific)\n\n"

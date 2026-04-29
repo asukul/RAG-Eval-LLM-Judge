@@ -21,3 +21,6 @@ sentencepiece>=0.2
 # For the analyze_*.py scripts
 pandas>=2.0
 statsmodels>=0.14
+
+# For the test suite (tests/test_*.py)
+pytest>=8.0

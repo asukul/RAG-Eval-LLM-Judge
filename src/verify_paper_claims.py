@@ -239,40 +239,110 @@ def verify_beir_scifact():
                 check(f"per-judge precision-at-≥2: {ek}", ev, prec, tol=0.1)
                 break
 
-    warn("BEIR ensemble: paper claim 63.7% requires LOWER-median; "
-         "TREC ensembles (this script) use UPPER-median which gives 65.7% on same data. "
-         "Tracked for P2c (standardize convention).")
+    # Verify 9-judge BEIR ensemble precision under the UPPER-median convention
+    # (standardized in P2c, 2026-04-29). Paper now reports 65.7%.
+    e9 = ensemble_upper_median(d["per_judge_scores"])
+    valid = [(s, h) for s, h in zip(e9, human) if s is not None and h == 3]
+    rel = sum(1 for s, h in valid if s >= 2)
+    prec = rel / len(valid) * 100 if valid else 0
+    check("9-judge ensemble precision-at-≥2 (upper-median)", 65.7, prec, tol=0.1)
 
 
 def verify_kappa_matrix():
-    print("\n=== Section 4: ISU 9×9 κ matrix structural claims (Fig. 3) ===")
-    # Transcribed from figures/kappa_matrix_9judge.txt.
-    # Row order: Opus, Sonnet, GPT-5.5, GPT-4o, Gem3.1Prev, Gem2.5, DSV4, Qwen, Gemma4.
-    K = [
-        [1.00, 0.71, 0.71, 0.73, 0.72, 0.73, 0.64, 0.75, 0.74],
-        [0.71, 1.00, 0.79, 0.62, 0.56, 0.77, 0.76, 0.66, 0.62],
-        [0.71, 0.79, 1.00, 0.63, 0.61, 0.78, 0.69, 0.69, 0.63],
-        [0.73, 0.62, 0.63, 1.00, 0.72, 0.68, 0.65, 0.73, 0.77],
-        [0.72, 0.56, 0.61, 0.72, 1.00, 0.67, 0.57, 0.77, 0.76],
-        [0.73, 0.77, 0.78, 0.68, 0.67, 1.00, 0.75, 0.73, 0.73],
-        [0.64, 0.76, 0.69, 0.65, 0.57, 0.75, 1.00, 0.66, 0.63],
-        [0.75, 0.66, 0.69, 0.73, 0.77, 0.73, 0.66, 1.00, 0.80],
-        [0.74, 0.62, 0.63, 0.77, 0.76, 0.73, 0.63, 0.80, 1.00],
-    ]
-    # Symmetry
-    sym_ok = all(K[i][j] == K[j][i] for i in range(9) for j in range(9))
-    check("matrix symmetry holds", True, sym_ok)
+    """Recompute the within-corpus 9x9 kappa matrix from raw per-judge JSONs
+    and verify it matches both (a) the merged kappa_matrix and (b) the
+    paper's structural claims. Falls back to text transcription if the
+    raw files are not shipped (legacy mode)."""
+    print("\n=== Section 4: ISU within-corpus 9x9 kappa matrix (Fig. 3) ===")
 
-    # Within-family pairs
-    check("Anthropic within (Opus↔Sonnet)", 0.71, K[0][1])
-    check("OpenAI within (GPT-5.5↔GPT-4o)", 0.63, K[2][3])
-    check("Google within (Gem3.1↔Gem2.5)", 0.67, K[4][5])
-    check("Open-weight within (Qwen↔Gemma)", 0.80, K[7][8])
-    check("Cross-family ceiling (Sonnet↔GPT-5.5)", 0.79, K[1][2])
+    within_dir = REPO / "results" / "within_corpus"
+    if within_dir.exists() and any(within_dir.glob("judge_*.json")):
+        print("  (recomputing from raw per-judge JSONs in results/within_corpus/)")
+        # Load all 9 per-judge files into {label: flat_score_array}
+        per_judge = {}
+        for fp in sorted(within_dir.glob("judge_*.json")):
+            d = json.loads(fp.read_text(encoding="utf-8"))
+            label = d["config"]["judge_label"]
+            scores = [r["judge_score"]
+                      for q in d["queries"]
+                      for r in sorted(q["retrieved"], key=lambda x: x["rank"])]
+            per_judge[label] = scores
+        check("within-corpus per-judge files loaded", 9, len(per_judge))
+        check("flat-score length per judge", 570, len(next(iter(per_judge.values()))))
 
-    # Off-diagonal min
-    off_diag = [K[i][j] for i in range(9) for j in range(9) if i != j]
-    check("min off-diagonal κ ≥ 0.56", 0.56, min(off_diag))
+        # Recompute pairwise kappa
+        labels = list(per_judge)
+        K_recomputed = {a: {b: cohen_kappa_quadratic(per_judge[a], per_judge[b])
+                            for b in labels}
+                        for a in labels}
+
+        # Compare against the merged 9-judge kappa_matrix
+        merged_fp = within_dir / "multijudge_9judge_merged.json"
+        if merged_fp.exists():
+            merged = json.loads(merged_fp.read_text(encoding="utf-8"))
+            K_merged = merged["kappa_matrix"]
+            mismatches = 0
+            for a in labels:
+                for b in labels:
+                    rec = K_recomputed[a].get(b)
+                    mer = K_merged.get(a, {}).get(b)
+                    if rec is None or mer is None:
+                        continue
+                    if abs(rec - mer) > 1e-3:
+                        mismatches += 1
+            check("merged kappa_matrix matches recomputed (within tol 1e-3)",
+                  0, mismatches)
+
+        # Within-family pairs
+        def find_label(substr):
+            return next((l for l in labels if substr in l), None)
+
+        opus = find_label("Opus")
+        sonnet = find_label("Sonnet")
+        gpt55 = find_label("GPT-5.5")
+        gpt4o = find_label("GPT-4o")
+        gem31 = find_label("3.1 Pro Preview")
+        gem25 = find_label("2.5 Pro")
+        qwen = find_label("Qwen")
+        gemma = find_label("Gemma")
+        dsv4 = find_label("DeepSeek")
+
+        # Paper text rounds to 2 decimals; tolerate up to 0.005 rounding diff.
+        TOL_2DP = 0.0051
+        check("Anthropic within (Opus<->Sonnet) ~ 0.71", 0.71, K_recomputed[opus][sonnet], tol=TOL_2DP)
+        check("OpenAI within (GPT-5.5<->GPT-4o) ~ 0.63", 0.63, K_recomputed[gpt55][gpt4o], tol=TOL_2DP)
+        check("Google within (Gem3.1<->Gem2.5) ~ 0.67", 0.67, K_recomputed[gem31][gem25], tol=TOL_2DP)
+        check("Open-weight within (Qwen<->Gemma) ~ 0.80", 0.80, K_recomputed[qwen][gemma], tol=TOL_2DP)
+        check("Cross-family ceiling (Sonnet<->GPT-5.5) ~ 0.79", 0.79, K_recomputed[sonnet][gpt55], tol=TOL_2DP)
+        check("post-fix Sonnet<->DSV4 ~ 0.76", 0.76, K_recomputed[sonnet][dsv4], tol=TOL_2DP)
+        check("post-fix GPT-5.5<->DSV4 ~ 0.69", 0.69, K_recomputed[gpt55][dsv4], tol=TOL_2DP)
+
+        off_diag = [K_recomputed[a][b] for a in labels for b in labels
+                    if a != b and K_recomputed[a][b] is not None]
+        check("min off-diagonal kappa >= 0.56", True, min(off_diag) >= 0.555)
+    else:
+        print("  (raw per-judge JSONs not found; falling back to text transcription)")
+        # Transcribed from figures/kappa_matrix_9judge.txt.
+        K = [
+            [1.00, 0.71, 0.71, 0.73, 0.72, 0.73, 0.64, 0.75, 0.74],
+            [0.71, 1.00, 0.79, 0.62, 0.56, 0.77, 0.76, 0.66, 0.62],
+            [0.71, 0.79, 1.00, 0.63, 0.61, 0.78, 0.69, 0.69, 0.63],
+            [0.73, 0.62, 0.63, 1.00, 0.72, 0.68, 0.65, 0.73, 0.77],
+            [0.72, 0.56, 0.61, 0.72, 1.00, 0.67, 0.57, 0.77, 0.76],
+            [0.73, 0.77, 0.78, 0.68, 0.67, 1.00, 0.75, 0.73, 0.73],
+            [0.64, 0.76, 0.69, 0.65, 0.57, 0.75, 1.00, 0.66, 0.63],
+            [0.75, 0.66, 0.69, 0.73, 0.77, 0.73, 0.66, 1.00, 0.80],
+            [0.74, 0.62, 0.63, 0.77, 0.76, 0.73, 0.63, 0.80, 1.00],
+        ]
+        sym_ok = all(K[i][j] == K[j][i] for i in range(9) for j in range(9))
+        check("matrix symmetry holds", True, sym_ok)
+        check("Anthropic within (Opus<->Sonnet)", 0.71, K[0][1])
+        check("OpenAI within (GPT-5.5<->GPT-4o)", 0.63, K[2][3])
+        check("Google within (Gem3.1<->Gem2.5)", 0.67, K[4][5])
+        check("Open-weight within (Qwen<->Gemma)", 0.80, K[7][8])
+        check("Cross-family ceiling (Sonnet<->GPT-5.5)", 0.79, K[1][2])
+        off_diag = [K[i][j] for i in range(9) for j in range(9) if i != j]
+        check("min off-diagonal kappa >= 0.56", 0.56, min(off_diag))
 
 
 def verify_long_md_c1():

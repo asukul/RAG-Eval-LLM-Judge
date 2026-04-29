@@ -1,0 +1,235 @@
+{
+  "config": {
+    "collection": "dspace_fulltext_vertex",
+    "qdrant_url": "http://localhost:6334",
+    "top_k": 10,
+    "judge_specs": [
+      "<merged from 20260425_034626 + 20260425_102101>"
+    ],
+    "judge_labels": [
+      "Claude Opus 4.7 (OpenRouter)",
+      "Claude Sonnet 4.6 (OpenRouter)",
+      "DeepSeek V4 Pro (OpenRouter)",
+      "Gemini 2.5 Pro (OpenRouter)",
+      "Gemini 3.1 Pro Preview (OpenRouter)",
+      "GPT-4o (chat)",
+      "GPT-5.5 (reasoning=low)",
+      "Gemma 4 26B (OpenRouter)",
+      "Qwen 3.6 Plus (OpenRouter)"
+    ],
+    "max_chunk_chars": 500,
+    "queries_file": "D:\\RAG-DSpace\\isu-research-search\\backend\\data\\eval\\test_queries.json",
+    "timestamp": "20260425_152318",
+    "elapsed_seconds": -1,
+    "n_queries": 57,
+    "n_retrieved_pairs": 570,
+    "merged_from": [
+      "20260425_034626",
+      "20260425_102101"
+    ],
+    "retrieval_determinism_mismatches": 0,
+    "mode": "merged-multi-judge"
+  },
+  "aggregates_per_judge": {
+    "Claude Opus 4.7 (OpenRouter)": {
+      "ndcg@5": 0.638,
+      "ndcg@10": 0.7487,
+      "precision@1": 0.386,
+      "precision@5": 0.3719,
+      "precision@10": 0.3105,
+      "mrr": 0.536,
+      "mean_judge_score": 1.0912,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "Claude Sonnet 4.6 (OpenRouter)": {
+      "ndcg@5": 0.7351,
+      "ndcg@10": 0.8621,
+      "precision@1": 0.7368,
+      "precision@5": 0.6491,
+      "precision@10": 0.5702,
+      "mrr": 0.826,
+      "mean_judge_score": 1.6807,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "DeepSeek V4 Pro (OpenRouter)": {
+      "ndcg@5": 0.686,
+      "ndcg@10": 0.8349,
+      "precision@1": 0.7895,
+      "precision@5": 0.7018,
+      "precision@10": 0.6509,
+      "mrr": 0.883,
+      "mean_judge_score": 1.6281,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "Gemini 2.5 Pro (OpenRouter)": {
+      "ndcg@5": 0.4708,
+      "ndcg@10": 0.6239,
+      "precision@1": 0.3509,
+      "precision@5": 0.2807,
+      "precision@10": 0.2526,
+      "mrr": 0.4859,
+      "mean_judge_score": 0.7561,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "Gemini 3.1 Pro Preview (OpenRouter)": {
+      "ndcg@5": 0.3347,
+      "ndcg@10": 0.4542,
+      "precision@1": 0.2105,
+      "precision@5": 0.1579,
+      "precision@10": 0.1281,
+      "mrr": 0.3149,
+      "mean_judge_score": 0.3702,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "GPT-4o (chat)": {
+      "ndcg@5": 0.6491,
+      "ndcg@10": 0.8027,
+      "precision@1": 0.4035,
+      "precision@5": 0.3614,
+      "precision@10": 0.3193,
+      "mrr": 0.5753,
+      "mean_judge_score": 1.1456,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "GPT-5.5 (reasoning=low)": {
+      "ndcg@5": 0.7018,
+      "ndcg@10": 0.8464,
+      "precision@1": 0.6491,
+      "precision@5": 0.6,
+      "precision@10": 0.5316,
+      "mrr": 0.7924,
+      "mean_judge_score": 1.6298,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "Gemma 4 26B (OpenRouter)": {
+      "ndcg@5": 0.5902,
+      "ndcg@10": 0.7529,
+      "precision@1": 0.386,
+      "precision@5": 0.3754,
+      "precision@10": 0.3386,
+      "mrr": 0.5726,
+      "mean_judge_score": 1.114,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    },
+    "Qwen 3.6 Plus (OpenRouter)": {
+      "ndcg@5": 0.5932,
+      "ndcg@10": 0.7575,
+      "precision@1": 0.4386,
+      "precision@5": 0.3789,
+      "precision@10": 0.3368,
+      "mrr": 0.5986,
+      "mean_judge_score": 1.1754,
+      "queries_evaluated": 57.0,
+      "queries_with_errors": 0.0
+    }
+  },
+  "kappa_matrix": {
+    "Claude Opus 4.7 (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 1.0,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.7087,
+      "DeepSeek V4 Pro (OpenRouter)": 0.6379,
+      "Gemini 2.5 Pro (OpenRouter)": 0.7321,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.7197,
+      "GPT-4o (chat)": 0.7298,
+      "GPT-5.5 (reasoning=low)": 0.71,
+      "Gemma 4 26B (OpenRouter)": 0.739,
+      "Qwen 3.6 Plus (OpenRouter)": 0.7496
+    },
+    "Claude Sonnet 4.6 (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.7087,
+      "Claude Sonnet 4.6 (OpenRouter)": 1.0,
+      "DeepSeek V4 Pro (OpenRouter)": 0.7557,
+      "Gemini 2.5 Pro (OpenRouter)": 0.7665,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.5604,
+      "GPT-4o (chat)": 0.6226,
+      "GPT-5.5 (reasoning=low)": 0.7891,
+      "Gemma 4 26B (OpenRouter)": 0.6198,
+      "Qwen 3.6 Plus (OpenRouter)": 0.6619
+    },
+    "DeepSeek V4 Pro (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.6379,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.7557,
+      "DeepSeek V4 Pro (OpenRouter)": 1.0,
+      "Gemini 2.5 Pro (OpenRouter)": 0.7499,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.5729,
+      "GPT-4o (chat)": 0.6457,
+      "GPT-5.5 (reasoning=low)": 0.6871,
+      "Gemma 4 26B (OpenRouter)": 0.6336,
+      "Qwen 3.6 Plus (OpenRouter)": 0.6638
+    },
+    "Gemini 2.5 Pro (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.7321,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.7665,
+      "DeepSeek V4 Pro (OpenRouter)": 0.7499,
+      "Gemini 2.5 Pro (OpenRouter)": 1.0,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.6723,
+      "GPT-4o (chat)": 0.6768,
+      "GPT-5.5 (reasoning=low)": 0.7758,
+      "Gemma 4 26B (OpenRouter)": 0.7341,
+      "Qwen 3.6 Plus (OpenRouter)": 0.7268
+    },
+    "Gemini 3.1 Pro Preview (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.7197,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.5604,
+      "DeepSeek V4 Pro (OpenRouter)": 0.5729,
+      "Gemini 2.5 Pro (OpenRouter)": 0.6723,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 1.0,
+      "GPT-4o (chat)": 0.7183,
+      "GPT-5.5 (reasoning=low)": 0.6079,
+      "Gemma 4 26B (OpenRouter)": 0.7609,
+      "Qwen 3.6 Plus (OpenRouter)": 0.765
+    },
+    "GPT-4o (chat)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.7298,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.6226,
+      "DeepSeek V4 Pro (OpenRouter)": 0.6457,
+      "Gemini 2.5 Pro (OpenRouter)": 0.6768,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.7183,
+      "GPT-4o (chat)": 1.0,
+      "GPT-5.5 (reasoning=low)": 0.632,
+      "Gemma 4 26B (OpenRouter)": 0.7706,
+      "Qwen 3.6 Plus (OpenRouter)": 0.7342
+    },
+    "GPT-5.5 (reasoning=low)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.71,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.7891,
+      "DeepSeek V4 Pro (OpenRouter)": 0.6871,
+      "Gemini 2.5 Pro (OpenRouter)": 0.7758,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.6079,
+      "GPT-4o (chat)": 0.632,
+      "GPT-5.5 (reasoning=low)": 1.0,
+      "Gemma 4 26B (OpenRouter)": 0.6293,
+      "Qwen 3.6 Plus (OpenRouter)": 0.6939
+    },
+    "Gemma 4 26B (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.739,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.6198,
+      "DeepSeek V4 Pro (OpenRouter)": 0.6336,
+      "Gemini 2.5 Pro (OpenRouter)": 0.7341,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.7609,
+      "GPT-4o (chat)": 0.7706,
+      "GPT-5.5 (reasoning=low)": 0.6293,
+      "Gemma 4 26B (OpenRouter)": 1.0,
+      "Qwen 3.6 Plus (OpenRouter)": 0.7967
+    },
+    "Qwen 3.6 Plus (OpenRouter)": {
+      "Claude Opus 4.7 (OpenRouter)": 0.7496,
+      "Claude Sonnet 4.6 (OpenRouter)": 0.6619,
+      "DeepSeek V4 Pro (OpenRouter)": 0.6638,
+      "Gemini 2.5 Pro (OpenRouter)": 0.7268,
+      "Gemini 3.1 Pro Preview (OpenRouter)": 0.765,
+      "GPT-4o (chat)": 0.7342,
+      "GPT-5.5 (reasoning=low)": 0.6939,
+      "Gemma 4 26B (OpenRouter)": 0.7967,
+      "Qwen 3.6 Plus (OpenRouter)": 1.0
+    }
+  }
+}

@@ -273,7 +273,7 @@ If the criteria fail: revisit ensemble composition, judge configuration, or scor
 | Gemini 3.1 Pro Preview | 180 | 54.4% |
 | GPT-4o | 300 | 53.0% |
 | Gemma 4 26B | 300 | 43.0% |
-| **9-judge ensemble median** | 300 | **63.7%** |
+| **9-judge ensemble median** | 300 | **65.7%** |
 
 ### Total session cost (validation work only)
 

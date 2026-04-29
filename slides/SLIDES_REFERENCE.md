@@ -119,7 +119,7 @@ When you ask "change the κ from 0.49 to X", I edit these constants in `make_p4_
 
 ### External validation — BEIR scifact (precision-only)
 - **Sample:** 300 pairs (all-positive qrels, κ undefined methodologically)
-- **9-judge ensemble precision (≥ 2):** **63.7%**
+- **9-judge ensemble precision (≥ 2):** **65.7%**
 - **Per-judge precision range:** 43% (Gemma 4 26B) to 75% (GPT-5.5 reasoning=low)
 
 ### External validation — TREC-COVID biomedical scientific (added 2026-04-28; 9-judge merged 2026-04-29)
