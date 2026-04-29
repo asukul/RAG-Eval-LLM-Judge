@@ -1,0 +1,19 @@
+Loading judge results from D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_results\beir-scifact_judges.json...
+Parsing human qrels from D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_data\beir-scifact\scifact.zip...
+Aligned 300 pairs (judge-rated AND human-rated)
+
+=== Per-judge κ vs human qrels ===
+  Claude Opus 4.7 (OpenRouter)         κ = 0.0000
+  Claude Sonnet 4.6 (OpenRouter)       κ = 0.0000
+  GPT-5.5 (reasoning=low)              κ = 0.0000
+  GPT-4o (chat)                        κ = 0.0000
+  Gemini 3.1 Pro Preview (OpenRouter)  κ = 0.0000
+  Gemini 2.5 Pro (OpenRouter)          κ = 0.0000
+  DeepSeek V4 Pro (OpenRouter)         κ = 0.0000
+  Qwen 3.6 Plus (OpenRouter)           κ = 0.0000
+  Gemma 4 26B (OpenRouter)             κ = 0.0000
+
+=== Ensemble (9-judge median) vs human qrels ===
+  ensemble_median  κ = 0.0000
+
+Saved: D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_results\beir-scifact_kappa_vs_human.json

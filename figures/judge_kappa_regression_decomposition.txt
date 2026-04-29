@@ -1,0 +1,72 @@
+# Image-generation prompt — judge_kappa_regression_decomposition
+
+## One-line summary
+A 4-panel diagnostic figure showing the nested-OLS regression decomposition of pairwise κ variance: (A) cumulative R² across 4 nested models, (B) incremental ΔR² per added predictor, (C) coefficient plot for full M4 model with 95% CI, (D) M4 predicted-vs-actual κ scatter colored by same-class.
+
+## Style guidance
+- Style: matplotlib-style 2×2 academic figure, four panels in a grid
+- Background: white
+- Color palette: blue/green/red/purple per model (M1/M2/M3/M4)
+- Font: sans-serif, readable
+- Aspect ratio: square (2×2 grid; total figure ~14:10 widescreen-square)
+
+## Panel A (top-left): Cumulative R² across nested models
+- Type: vertical bar chart with 4 bars
+- Title: "A. Cumulative variance explained, nested models"
+- X-tick labels: "M1\nκ~KL", "M2\n+reasoning", "M3\n+provider", "M4\n+class"
+- Y-axis: "Cumulative R²" range 0 to ~0.45
+- Bar values:
+  - M1: 0.326 (color #1565C0 dark blue)
+  - M2: 0.342 (color #2E7D32 dark green)
+  - M3: 0.354 (color #C62828 dark red)
+  - M4: 0.384 (color #6A1B9A dark purple)
+- Each bar has a text label above it: "R²=0.326", "R²=0.342", "R²=0.354", "R²=0.384"
+- Y-axis grid at 0.3 alpha
+- Bars semi-transparent (alpha=0.8) with black edge
+
+## Panel B (top-right): Incremental ΔR² per added predictor
+- Type: vertical bar chart with 4 bars
+- Title: "B. Incremental variance contribution per predictor"
+- X-tick labels (smaller font): "KL\n(M0→M1)", "+reasoning\n(M1→M2)", "+provider\n(M2→M3)", "+class\n(M3→M4)"
+- Y-axis: "Incremental ΔR²"
+- Bar values:
+  - KL: +0.326 (large, dark blue) — dominant
+  - +reasoning: +0.015 (small, dark green)
+  - +provider: +0.013 (small, dark red)
+  - +class: +0.030 (small, dark purple)
+- Text labels: "+0.326", "+0.015", "+0.013", "+0.030"
+- Horizontal line at y=0 (black, thin)
+
+## Panel C (bottom-left): M4 coefficient plot
+- Type: horizontal forest plot (coefficients with 95% CI error bars)
+- Title: "C. M4 (full model) coefficient estimates\nblue = significant at p<0.05"
+- 4 coefficients listed top-to-bottom:
+  - kl: β = -0.130, p = 0.000424 *** → BLUE dot (significant)
+  - same_reasoning: β = +0.029, p = 0.184 → gray dot
+  - same_provider: β = -0.019, p = 0.482 → gray dot
+  - same_class: β = -0.027, p = 0.228 → gray dot
+- Each row: black horizontal line for 95% CI, dot at coefficient value, annotation "β=X.XXX, p=Y.Y (sig)"
+- Vertical dashed line at x=0
+- Color significant points blue (p<0.05), non-significant gray
+- X-axis: "OLS coefficient (β) ± 95% CI"
+
+## Panel D (bottom-right): Predicted vs actual κ scatter
+- Type: scatter plot with diagonal reference
+- Title: "D. M4 predicted vs actual κ"
+- X-axis: "Predicted κ (M4 full model)" range 0.55-0.85
+- Y-axis: "Actual κ" range 0.55-0.85
+- 36 points total
+- Colors: same-class (dark green) vs different-class (dark red)
+- Diagonal dashed black line (y=x)
+- Inset text box (top-left, wheat color):
+  ```
+  M4: R² = 0.384
+       adj R² = 0.305
+       RMSE = 0.0485
+       F (4, 31) = 4.84
+       p = 3.7e-3
+  ```
+- Legend bottom-right: "Same class" green dot, "Different class" red dot
+
+## Caption (place below figure)
+"Nested OLS regression decomposition. Panel A: cumulative R² across 4 nested models. Panel B: only KL is a statistically significant predictor (ΔR² = +0.326, p < 0.001); structural features add < 0.030 each (all p > 0.18). Panel C: M4 coefficient plot — only KL (blue) is significant. Panel D: M4 predicted vs actual κ with same-class (green) vs cross-class (red) coloring. **Interpretation: KL is a fully-mediating variable — structural factors (reasoning-mode, provider, class) affect κ only through the calibration distribution they induce.**"

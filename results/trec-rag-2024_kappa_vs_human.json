@@ -1,0 +1,17 @@
+{
+  "corpus": "trec-rag-2024",
+  "n_aligned_pairs": 537,
+  "kappa_per_judge_vs_human": {
+    "Claude Opus 4.7 (OpenRouter)": 0.4792,
+    "Claude Sonnet 4.6 (OpenRouter)": 0.5123,
+    "GPT-5.5 (reasoning=low)": 0.4789,
+    "GPT-4o (chat)": 0.4065,
+    "Gemini 3.1 Pro Preview (OpenRouter)": 0.4092,
+    "Gemini 2.5 Pro (OpenRouter)": 0.5513,
+    "DeepSeek V4 Pro (OpenRouter)": 0.4705,
+    "Qwen 3.6 Plus (OpenRouter)": 0.4141,
+    "Gemma 4 26B (OpenRouter)": 0.3958
+  },
+  "kappa_ensemble_median_vs_human": 0.4941,
+  "interpretation": "moderate"
+}

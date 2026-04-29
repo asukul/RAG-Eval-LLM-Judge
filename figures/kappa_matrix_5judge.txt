@@ -1,0 +1,28 @@
+# Image-generation prompt — kappa_matrix_5judge (preliminary, appendix replication)
+
+## One-line summary
+A square 5×5 heatmap showing pairwise quadratic-weighted Cohen's κ between 5 LLM judges across 3 families (preliminary run; the original ablation before adding DeepSeek and open-weight judges).
+
+## Style guidance
+Same as kappa_matrix_9judge.txt (matplotlib heatmap, RdYlGn colormap, square aspect ratio).
+
+## Plot specification
+- Title: "Pairwise quadratic-weighted Cohen's κ — 5 judges, 3 families (preliminary run)"
+- Tick labels (both axes, in this order): "Sonnet 4.6", "GPT-5.5 low", "GPT-4o", "Gem 3.1 Prev", "Gem 2.5 Pro"
+- 5×5 cells; rotate x-axis labels 45°
+- Cell values rounded to 2 decimals
+- Same colorbar (κ scale 0.55-1.00)
+
+## Data matrix (5×5, symmetric)
+
+```
+              Sonn  G55   GPT4o Gem31 Gem25
+Sonnet 4.6    1.00  0.81  0.63  0.58  0.77
+GPT-5.5 low   0.81  1.00  0.62  0.61  0.79
+GPT-4o        0.63  0.62  1.00  0.73  0.68
+Gem 3.1 Prev  0.58  0.61  0.73  1.00  0.64
+Gem 2.5 Pro   0.77  0.79  0.68  0.64  1.00
+```
+
+## Caption (place below figure)
+"Figure 3b (appendix replication checkpoint): 5-judge κ matrix from the preliminary run on 2026-04-24. Headline finding (Sonnet ↔ GPT-5.5 = 0.81 cross-family ceiling) replicates within ±0.02 of the 7-judge run (Figure 3a) and 9-judge canonical matrix (Figure 3); Gemini 3.1 Pro Preview's strict-outlier behavior is reproducible across all three runs."

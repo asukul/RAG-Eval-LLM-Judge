@@ -1,0 +1,150 @@
+  loaded 301 TREC RAG 2024 topics
+  loaded 537 MS MARCO v2.1 passages from passages.json
+  built 537 TREC RAG 2024 pairs (skipped 0 no-query, 0 no-passage)
+Loaded 537 aligned pairs from trec-rag-2024
+Judge preset: p4-frontier or judges: None
+
+Running judges on 537 pairs...
+[22:00:17] OpenAISdkJudge[openrouter]: model=anthropic/claude-opus-4.7 reasoning=None max_out_tok=16
+[22:00:18] OpenAISdkJudge[openrouter]: model=anthropic/claude-sonnet-4.6 reasoning=None max_out_tok=16
+[22:00:18] OpenAISdkJudge[openai]: model=gpt-5.5 reasoning=low max_out_tok=256
+[22:00:19] OpenAISdkJudge[openai]: model=gpt-4o reasoning=None max_out_tok=16
+[22:00:19] OpenAISdkJudge[openrouter]: model=google/gemini-3.1-pro-preview reasoning=None max_out_tok=2048
+[22:00:20] OpenAISdkJudge[openrouter]: model=google/gemini-2.5-pro reasoning=None max_out_tok=2048
+[22:00:20] OpenAISdkJudge[openrouter]: model=deepseek/deepseek-v4-pro reasoning=None max_out_tok=16
+Built 7 judges:
+  - Claude Opus 4.7 (OpenRouter)
+  - Claude Sonnet 4.6 (OpenRouter)
+  - GPT-5.5 (reasoning=low)
+  - GPT-4o (chat)
+  - Gemini 3.1 Pro Preview (OpenRouter)
+  - Gemini 2.5 Pro (OpenRouter)
+  - DeepSeek V4 Pro (OpenRouter)
+
+  [   5/537] processed
+  [  10/537] processed
+  [  15/537] processed
+  [  20/537] processed
+  [  25/537] processed
+  [  30/537] processed
+  [  35/537] processed
+[22:20:15]   OpenAI judge error (attempt 2/3) (deepseek/deepseek-v4-pro): 'NoneType' object is not subscriptable — retrying in 2s
+[22:20:38]   OpenAI judge error final (deepseek/deepseek-v4-pro): 'NoneType' object is not subscriptable
+  [  40/537] processed
+[22:22:33]   OpenAI judge error final (deepseek/deepseek-v4-pro): 'NoneType' object is not subscriptable
+  [  45/537] processed
+  [  50/537] processed
+  [  55/537] processed
+  [  60/537] processed
+  [  65/537] processed
+  [  70/537] processed
+  [  75/537] processed
+  [  80/537] processed
+  [  85/537] processed
+  [  90/537] processed
+  [  95/537] processed
+  [ 100/537] processed
+  [ 105/537] processed
+  [ 110/537] processed
+  [ 115/537] processed
+  [ 120/537] processed
+  [ 125/537] processed
+  [ 130/537] processed
+  [ 135/537] processed
+  [ 140/537] processed
+  [ 145/537] processed
+  [ 150/537] processed
+  [ 155/537] processed
+  [ 160/537] processed
+  [ 165/537] processed
+  [ 170/537] processed
+  [ 175/537] processed
+  [ 180/537] processed
+  [ 185/537] processed
+  [ 190/537] processed
+  [ 195/537] processed
+  [ 200/537] processed
+  [ 205/537] processed
+  [ 210/537] processed
+  [ 215/537] processed
+  [ 220/537] processed
+  [ 225/537] processed
+  [ 230/537] processed
+  [ 235/537] processed
+  [ 240/537] processed
+  [ 245/537] processed
+  [ 250/537] processed
+  [ 255/537] processed
+  [ 260/537] processed
+  [ 265/537] processed
+  [ 270/537] processed
+  [ 275/537] processed
+  [ 280/537] processed
+  [ 285/537] processed
+  [ 290/537] processed
+  [ 295/537] processed
+  [ 300/537] processed
+  [ 305/537] processed
+  [ 310/537] processed
+  [ 315/537] processed
+  [ 320/537] processed
+  [ 325/537] processed
+  [ 330/537] processed
+  [ 335/537] processed
+  [ 340/537] processed
+  [ 345/537] processed
+  [ 350/537] processed
+[01:11:15]   OpenAI judge error final (deepseek/deepseek-v4-pro): 'NoneType' object is not subscriptable
+  [ 355/537] processed
+  [ 360/537] processed
+  [ 365/537] processed
+[01:22:01]   OpenAI judge error final (deepseek/deepseek-v4-pro): 'NoneType' object is not subscriptable
+[01:24:59]   OpenAI judge error (attempt 1/3) (deepseek/deepseek-v4-pro): 'NoneType' object is not subscriptable — retrying in 1s
+  [ 370/537] processed
+  [ 375/537] processed
+  [ 380/537] processed
+  [ 385/537] processed
+  [ 390/537] processed
+  [ 395/537] processed
+  [ 400/537] processed
+  [ 405/537] processed
+  [ 410/537] processed
+  [ 415/537] processed
+  [ 420/537] processed
+  [ 425/537] processed
+  [ 430/537] processed
+  [ 435/537] processed
+  [ 440/537] processed
+  [ 445/537] processed
+  [ 450/537] processed
+  [ 455/537] processed
+  [ 460/537] processed
+  [ 465/537] processed
+  [ 470/537] processed
+  [ 475/537] processed
+  [ 480/537] processed
+  [ 485/537] processed
+  [ 490/537] processed
+  [ 495/537] processed
+  [ 500/537] processed
+  [ 505/537] processed
+  [ 510/537] processed
+  [ 515/537] processed
+  [ 520/537] processed
+  [ 525/537] processed
+  [ 530/537] processed
+  [ 535/537] processed
+  [ 537/537] processed
+
+Saved: D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_results\trec-rag-2024_judges.json
+
+=== Per-judge summary ===
+  Claude Opus 4.7 (OpenRouter)              valid=537/537  mean=1.07
+  Claude Sonnet 4.6 (OpenRouter)            valid=537/537  mean=1.31
+  GPT-5.5 (reasoning=low)                   valid=537/537  mean=1.51
+  GPT-4o (chat)                             valid=537/537  mean=0.95
+  Gemini 3.1 Pro Preview (OpenRouter)       valid=127/537  mean=0.73
+  Gemini 2.5 Pro (OpenRouter)               valid= 92/537  mean=1.35
+  DeepSeek V4 Pro (OpenRouter)              valid=212/537  mean=1.07
+
+Next step: --analyze trec-rag-2024 to compute κ vs human qrels

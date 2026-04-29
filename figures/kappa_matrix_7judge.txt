@@ -1,0 +1,30 @@
+# Image-generation prompt — kappa_matrix_7judge (intermediate, appendix replication)
+
+## One-line summary
+A square 7×7 heatmap showing pairwise quadratic-weighted Cohen's κ between 7 LLM judges across 4 families (canonical 7-judge run, before open-weight supplement). Same style as 9-judge matrix but smaller.
+
+## Style guidance
+Same as `kappa_matrix_9judge.txt` (matplotlib-style heatmap, RdYlGn colormap, square aspect ratio, colorbar on right).
+
+## Plot specification
+- Title: "Pairwise quadratic-weighted Cohen's κ — 7 judges, 4 families (intermediate run)"
+- Tick labels (both axes, in this order): "Opus 4.7", "Sonnet 4.6", "GPT-5.5 low", "GPT-4o", "Gem 3.1 Prev", "Gem 2.5 Pro", "DSV4 Pro"
+- 7×7 cells; rotate x-axis labels 45°
+- Cell values rounded to 2 decimals
+- Same colorbar (κ scale 0.55-1.00 with Landis-Koch band labels)
+
+## Data matrix (7×7, symmetric)
+
+```
+              Opus  Sonn  G55   GPT4o Gem31 Gem25 DSV4P
+Opus 4.7      1.00  0.71  0.71  0.73  0.72  0.73  0.64
+Sonnet 4.6    0.71  1.00  0.79  0.62  0.56  0.77  0.76
+GPT-5.5 low   0.71  0.79  1.00  0.63  0.61  0.78  0.69
+GPT-4o        0.73  0.62  0.63  1.00  0.72  0.68  0.65
+Gem 3.1 Prev  0.72  0.56  0.61  0.72  1.00  0.67  0.57
+Gem 2.5 Pro   0.73  0.77  0.78  0.68  0.67  1.00  0.75
+DSV4 Pro      0.64  0.76  0.69  0.65  0.57  0.75  1.00
+```
+
+## Caption (place below figure)
+"Figure 3a (appendix replication checkpoint): 7-judge κ matrix from the intermediate canonical run. The reasoning-generous cluster ceiling (Sonnet ↔ GPT-5.5 = 0.79; GPT-5.5 ↔ Gemini 2.5 Pro = 0.78; Sonnet ↔ Gemini 2.5 Pro = 0.77) replicates from the 5-judge preliminary run within run-to-run noise. The 9-judge merged matrix (Figure 3) extends this with two open-weight peers."

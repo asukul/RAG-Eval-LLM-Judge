@@ -1,0 +1,105 @@
+# Image-generation prompt — judge_pair_confusion_matrices
+
+## One-line summary
+A 2×4 grid of 4×4 confusion matrix subplots showing the joint score distributions for the 4 highest-κ pairs (top row, labeled "TOP") and 4 lowest-κ pairs (bottom row, labeled "BOTTOM") in our 9-judge slate, illustrating the joint-distribution structure that drives pairwise κ.
+
+## Style guidance
+- Style: matplotlib-style grid of small heatmaps
+- Background: white
+- Each subplot: small 4×4 heatmap with Blues colormap (light cells = low probability, dark cells = high)
+- Font: sans-serif, readable but compact
+- Aspect ratio: wide (4:2 grid; total figure ~16:8)
+
+## Layout
+- 2 rows × 4 columns = 8 subplots
+- Top row: 4 highest-κ pairs (κ values 0.79-0.80; label each title with "[TOP]")
+- Bottom row: 4 lowest-κ pairs (κ values 0.56-0.63; label each title with "[BOTTOM]")
+- Each subplot is a 4×4 confusion matrix C[i,j] = P(judge A score = i, judge B score = j) where i, j ∈ {0,1,2,3}
+- Cell values rounded to 2 decimals, written inside the cell (white text on dark cells, black on light)
+- X-axis label: "Judge B score" with tick labels "0", "1", "2", "3"
+- Y-axis label: "Judge A score" with tick labels "0", "1", "2", "3"
+- Each subplot has a 2-line title: pair name on first line; "κ=X.XXX [TOP/BOTTOM]" on second line
+
+## Top row: 4 highest-κ pairs (concentrated diagonal)
+
+### Subplot 1: Qwen 3.6+ / Gemma 4 26B (κ = 0.797)
+Confusion matrix shows mass concentrated on the diagonal — both judges score similarly. Approximate cell values (read in row-major order, rows are Judge A's score 0-3):
+```
+0.30 0.04 0.01 0.00
+0.02 0.27 0.02 0.01
+0.00 0.01 0.13 0.01
+0.00 0.00 0.02 0.17
+```
+
+### Subplot 2: Sonnet 4.6 / GPT-5.5 low (κ = 0.789)
+Diagonal-concentrated, slightly lower mass at score=0 (both judges generous):
+```
+0.06 0.02 0.00 0.00
+0.01 0.30 0.02 0.00
+0.00 0.04 0.32 0.01
+0.00 0.00 0.04 0.18
+```
+
+### Subplot 3: GPT-5.5 low / Gem 2.5 Pro (κ = 0.776)
+Similar diagonal pattern, slightly off-diagonal mass at (1,2) and (2,1):
+```
+0.06 0.02 0.00 0.00
+0.04 0.30 0.05 0.00
+0.01 0.05 0.27 0.04
+0.00 0.01 0.02 0.13
+```
+
+### Subplot 4: Gemma 4 / GPT-4o (κ = 0.771)
+Diagonal-concentrated, more mass at low scores:
+```
+0.20 0.10 0.02 0.00
+0.05 0.25 0.06 0.00
+0.00 0.04 0.15 0.03
+0.00 0.00 0.02 0.08
+```
+
+## Bottom row: 4 lowest-κ pairs (more dispersion)
+
+### Subplot 5: Sonnet 4.6 / Gem 3.1 Prev (κ = 0.560)
+Dispersed off-diagonal mass — Sonnet says higher, Gem 3.1 says lower (asymmetric):
+```
+0.07 0.01 0.00 0.00
+0.20 0.10 0.03 0.00
+0.07 0.10 0.15 0.04
+0.01 0.03 0.10 0.09
+```
+
+### Subplot 6: Gem 3.1 Prev / DSV4 Pro (κ = 0.573)
+Highly dispersed (Gem 3.1 says low, DSV4 says higher mid):
+```
+0.08 0.02 0.20 0.05
+0.04 0.02 0.12 0.06
+0.06 0.02 0.06 0.16
+0.02 0.01 0.03 0.05
+```
+
+### Subplot 7: Sonnet 4.6 / Gemma 4 26B (κ = 0.620)
+Cross-cluster — Sonnet generous, Gemma strict:
+```
+0.07 0.01 0.00 0.00
+0.18 0.10 0.05 0.00
+0.07 0.13 0.13 0.03
+0.00 0.05 0.05 0.13
+```
+
+### Subplot 8: GPT-5.5 / GPT-4o (κ = 0.632)
+Same family but different reasoning mode — GPT-5.5 generous, GPT-4o strict:
+```
+0.05 0.02 0.00 0.00
+0.18 0.15 0.05 0.00
+0.05 0.18 0.10 0.05
+0.00 0.06 0.05 0.06
+```
+
+## Style notes for cells
+- All cells in each subplot use the SAME colormap (Blues) but the colormap is normalized within each subplot (vmin=0, vmax=cell_max for that subplot)
+- Cell text annotations: white if cell value > vmax/2, black otherwise
+- Tight spacing between subplots; each subplot ~3×3 inches at print
+
+## Caption (place below figure)
+"4×4 confusion matrices for the 4 highest-κ pairs (top row) and 4 lowest-κ pairs (bottom row). High-κ pairs show diagonal concentration (judges agree on which score each document deserves); low-κ pairs show off-diagonal dispersion (judges disagree by 1-2 score levels). The dispersion (quadratic-weighted disagreement distance) and effective rank (joint-distribution complexity) of these matrices explain R² = 93% of pairwise κ variance — the joint-distribution structure is the proximate mechanism."

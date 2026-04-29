@@ -1,0 +1,54 @@
+# Image-generation prompt — diagram_3_our_multijudge_fanout
+
+## One-line summary
+A vertical flowchart showing the multi-judge fan-out architecture of our paper: 57 queries → top-10 retrieval → ThreadPool×9 parallel fan-out to 9 LLM judges (color-coded by family) → 9×9 κ matrix → three downstream outputs (heatmap, per-judge metrics, mechanism analysis).
+
+## Style guidance
+- Style: technical academic flowchart, Mermaid `flowchart TB` (top-to-bottom) style
+- Background: solid white
+- Color palette: 5 distinct soft colors for the 5 model families (light green = Anthropic, light orange = OpenAI, light blue = Google-commercial, light pink = DeepSeek, light purple = Open-weight); yellow/cream for the central κ-matrix node
+- Font: sans-serif, readable
+- Flat 2D, no shadows, no gradients
+- Aspect ratio: tall vertical (3:4 or 4:5)
+
+## Detailed scene description
+
+A **vertical** flowchart flowing top-to-bottom with three tiers:
+
+### Tier 1 (top): Input
+- A pill-shaped box labeled `57 REFINE queries`, light gray fill
+- Below it, a diamond shape labeled `Retrieval top-10`, light gray fill
+- The arrow leaving the diamond carries the label `570 (q, doc) pairs — identical for all judges`
+
+### Tier 2 (middle): Multi-judge fan-out
+A **large rounded rectangle border** labeled `ThreadPool×9 — same input fanned to 9 LLM judges in parallel` containing **9 small judge boxes** arranged in a 3×3 or 5×4 grid, color-coded by family:
+
+- Box 1 (light green / Anthropic): `Claude Opus 4.7`
+- Box 2 (light green / Anthropic): `Claude Sonnet 4.6`
+- Box 3 (light orange / OpenAI): `GPT-5.5 reasoning=low`
+- Box 4 (light orange / OpenAI): `GPT-4o chat`
+- Box 5 (light blue / Google-commercial): `Gemini 3.1 Pro Preview`
+- Box 6 (light blue / Google-commercial): `Gemini 2.5 Pro`
+- Box 7 (light pink / DeepSeek): `DeepSeek V4 Pro`
+- Box 8 (light purple / Open-weight): `Qwen 3.6 Plus`
+- Box 9 (light purple / Open-weight): `Gemma 4 26B`
+
+The container box has a label inside indicating `5 families · 4 within-family pairs · 32 cross-family pairs · 5,130 score records`.
+
+### Tier 3 (bottom): Outputs
+Below the fan-out container, **a single arrow** descends to a **prominent yellow/cream box** labeled:
+`9×9 pairwise quadratic-weighted Cohen's κ matrix`
+This box should be visually highlighted (slightly larger, bolder border) — it is the central artifact.
+
+Below this matrix box, **three branches** spread out:
+- Left branch: `Figure 3 — κ heatmap`
+- Middle branch: `Per-judge aggregate metrics — 9 × nDCG@10 / P@5 / MRR`
+- Right branch: `Marginal score distributions + KL divergence analysis → mechanistic explanation`
+
+All three branches are smaller boxes with light gray fill.
+
+## Annotation
+At the very top, a small caption: `Inputs are identical for all 9 judges; only judge behavior varies.`
+
+## Caption (place below figure)
+"Our multi-judge approach. The retrieval phase is held fixed; 9 LLM judges across 5 families (color-coded) score the same 570 (query, document) pairs in parallel via ThreadPoolExecutor. The pairwise quadratic-weighted Cohen's κ matrix is the publishable artifact, feeding three downstream analyses."

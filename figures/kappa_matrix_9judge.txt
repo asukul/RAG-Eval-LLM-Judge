@@ -1,0 +1,48 @@
+# Image-generation prompt — kappa_matrix_9judge (Figure 3, canonical)
+
+## One-line summary
+A square 9×9 heatmap showing pairwise quadratic-weighted Cohen's κ between 9 LLM judges, with cells colored by Landis-Koch agreement bands and the highest κ (Qwen ↔ Gemma 4 = 0.80) visually emphasized.
+
+## Style guidance
+- Style: matplotlib-style heatmap, academic publication quality
+- Background: solid white
+- Color palette: viridis or RdYlGn diverging colormap (low κ = red/yellow, high κ = green/dark green)
+- Font: sans-serif, clean (matches matplotlib default)
+- Aspect ratio: square (9×9 cells)
+- Add a colorbar on the right
+
+## Plot specification
+- Title: "Pairwise quadratic-weighted Cohen's κ — 9 judges, 5 families, 570 pairs"
+- X-axis label: "Judge B"
+- Y-axis label: "Judge A"
+- Tick labels (both axes, in this order): "Opus 4.7", "Sonnet 4.6", "GPT-5.5 low", "GPT-4o", "Gem 3.1 Prev", "Gem 2.5 Pro", "DSV4 Pro", "Qwen 3.6+", "Gemma 4 26B"
+- Rotate x-axis labels 45° for readability
+- Each cell shows the numeric κ value rounded to 2 decimals
+- Diagonal cells = 1.00, fill with darkest cluster color
+- Off-diagonal cells colored on the κ scale (0.55 to 1.00 range)
+- Colorbar label: "Cohen's κ (quadratic-weighted)"
+- Colorbar tick marks at 0.20 (slight), 0.40 (fair), 0.60 (substantial), 0.80 (almost-perfect) with text labels
+
+## Data matrix (full 9×9, symmetric)
+
+```
+                 Opus  Sonn  G55   GPT4o Gem31 Gem25 DSV4P Qwen  Gemma
+Opus 4.7         1.00  0.71  0.71  0.73  0.72  0.73  0.64  0.75  0.74
+Sonnet 4.6       0.71  1.00  0.79  0.62  0.56  0.77  0.76  0.66  0.62
+GPT-5.5 low      0.71  0.79  1.00  0.63  0.61  0.78  0.69  0.69  0.63
+GPT-4o           0.73  0.62  0.63  1.00  0.72  0.68  0.65  0.73  0.77
+Gem 3.1 Prev     0.72  0.56  0.61  0.72  1.00  0.67  0.57  0.77  0.76
+Gem 2.5 Pro      0.73  0.77  0.78  0.68  0.67  1.00  0.75  0.73  0.73
+DSV4 Pro         0.64  0.76  0.69  0.65  0.57  0.75  1.00  0.66  0.63
+Qwen 3.6+        0.75  0.66  0.69  0.73  0.77  0.73  0.66  1.00  0.80
+Gemma 4 26B      0.74  0.62  0.63  0.77  0.76  0.73  0.63  0.80  1.00
+```
+
+## Special annotation
+**Highlight the Qwen 3.6+ ↔ Gemma 4 26B cell (the cell at row 8 column 9 and its symmetric mirror at row 9 column 8) with a thick black border**, since 0.80 is the matrix-highest off-diagonal κ. Add a small text label near this cell or in the figure margin: "matrix-highest pairwise κ".
+
+## Optional: Landis-Koch band shading
+The colorbar can include subtle horizontal lines or shaded regions at the band boundaries (0.20 / 0.40 / 0.60 / 0.80) with text labels: slight / fair / moderate / substantial / almost-perfect.
+
+## Caption (place below figure)
+"9×9 pairwise quadratic-weighted Cohen's κ heatmap with Landis-Koch band annotations. Family-block ordered (Anthropic → OpenAI → Google-commercial → DeepSeek → Open-weight). Every off-diagonal cell ≥ 0.56 — substantial or moderate; no κ falls into 'fair' or below. The matrix-highest pair (Qwen ↔ Gemma 4 26B = 0.80, highlighted) is between two cross-organization open-weight judges."

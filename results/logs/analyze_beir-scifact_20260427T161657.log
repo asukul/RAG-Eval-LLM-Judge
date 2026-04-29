@@ -1,0 +1,15 @@
+Loading judge results from D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_results\beir-scifact_judges.json...
+Parsing human qrels from D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_data\beir-scifact\scifact.zip...
+Traceback (most recent call last):
+  File "D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\validate_against_trec.py", line 529, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\validate_against_trec.py", line 522, in main
+    return cmd_analyze(args.analyze)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\validate_against_trec.py", line 282, in cmd_analyze
+    qrels = parse_beir_qrels(qrels_path.parent)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\validate_against_trec.py", line 187, in parse_beir_qrels
+    raise FileNotFoundError(f"BEIR qrels not found at {qrels_path}")
+FileNotFoundError: BEIR qrels not found at D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_data\beir-scifact\qrels\test.tsv

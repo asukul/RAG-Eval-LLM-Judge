@@ -1,0 +1,23 @@
+# Core dependencies for reproducing the κ analysis from published JSONs
+scipy>=1.11
+numpy>=1.24
+
+# For external-validation runs against TREC RAG 2024 + BEIR scifact
+openai>=1.30        # OpenAI direct + OpenAI-SDK gateway for OpenRouter
+beir>=2.0           # BEIR auto-downloader (scifact, trec-covid)
+huggingface_hub>=0.20  # MS MARCO v2.1 passage extraction
+
+# For figure regeneration
+matplotlib>=3.7
+seaborn>=0.13
+
+# For slide generation
+python-pptx>=0.6.21
+
+# For tokenizer-overlap analysis (§6.4)
+transformers>=4.40
+sentencepiece>=0.2
+
+# For the analyze_*.py scripts
+pandas>=2.0
+statsmodels>=0.14

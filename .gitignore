@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# Secrets — never commit
+.env
+.env.*
+*.env
+*secret*
+*credentials*
+*.pem
+*.key
+*service-account*.json
+*token*.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local-only state
+data/_local_cache/
+results/_local_*/
+
+# Hugging Face cache (gigabytes — re-downloadable on demand)
+.cache/
+~/.cache/huggingface/
+
+# BEIR auto-downloads (~100 MB each — re-downloadable)
+data/beir-*/
+
+# Large binaries that shouldn't be tracked
+*.zip
+*.tar
+*.tar.gz
+*.7z

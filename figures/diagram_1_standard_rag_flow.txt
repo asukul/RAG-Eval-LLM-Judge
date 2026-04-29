@@ -1,0 +1,38 @@
+# Image-generation prompt — diagram_1_standard_rag_flow
+
+## One-line summary
+A clean horizontal flowchart depicting the standard Retrieval-Augmented Generation (RAG) pipeline used by practitioners: query → embedding → vector store → top-k retrieval → context → answer-generation LLM → final answer. Highlight that "evaluation focus is on the retrieval phase".
+
+## Style guidance
+- Style: technical academic flowchart, similar to Mermaid `flowchart LR` rendered output, clean and minimal
+- Background: solid white
+- Color palette: muted, professional — light grays, soft blues; one yellow/cream highlight box for the evaluated phase
+- Font: sans-serif (e.g., Arial, Inter, Helvetica), readable at print size
+- No 3D effects, no shadows, no gradients — flat 2D
+- Aspect ratio: wide horizontal (16:9 or 21:9)
+
+## Detailed scene description
+
+A horizontal pipeline reading **left to right**, with **6 connected boxes** linked by directional arrows.
+
+From left to right, the boxes are:
+
+1. **User query** — rounded rectangle (pill shape), labeled `User query — e.g., "soil microbiology graduate research"`. Plain white fill, thin gray border.
+
+2. **Embedder** — rectangular box, labeled `Embedder — Vertex text-embedding-005`. Light gray fill.
+
+3. **Vector store** — cylinder shape (database icon), labeled `Vector store — Qdrant HNSW — 1.03M chunks`. Light gray fill.
+
+4. **Retrieved context** — rectangular box, labeled `Retrieved context — 10 documents × 500 chars`. **Yellow/cream highlighted fill** with a dashed border, indicating this is the part being evaluated. The arrow into this box has a label "top-k retrieved (k=10)".
+
+5. **Answer-generation LLM** — rectangular box, labeled `Answer-generation LLM — Claude / GPT / Gemini`. Light gray fill.
+
+6. **Generated answer** — rounded rectangle (pill shape), labeled `Generated answer + citations`. Plain white fill.
+
+Arrows: simple thin black arrows with arrowheads, connecting each box to the next in sequence. The arrow between Vector store and Retrieved context carries the label `top-k retrieved (k=10)`.
+
+## Annotation
+Below the highlighted "Retrieved context" box, place a small italic caption: `← evaluation focus (this paper)`. Keep this caption visually de-emphasized (smaller font, gray italic).
+
+## Caption (place below figure)
+"Standard RAG application pipeline. Our evaluation focuses on the retrieval phase (yellow): given a query, did the vector store return documents that are relevant? The generation phase is consumed but not measured by this paper."

@@ -1,0 +1,80 @@
+  0%|          | 0/5183 [00:00<?, ?it/s]100%|██████████| 5183/5183 [00:00<00:00, 141913.88it/s]
+  loaded BEIR scifact: 5183 docs, 300 queries, 339 qrels
+Loaded 300 aligned pairs from beir-scifact
+Judge preset: p4-supplement-openweight or judges: None
+
+Running judges on 300 pairs...
+[14:13:12] OpenAISdkJudge[openrouter]: model=qwen/qwen3.6-plus reasoning=None max_out_tok=16
+[14:13:12] OpenAISdkJudge[openrouter]: model=google/gemma-4-26b-a4b-it reasoning=None max_out_tok=16
+Built 2 judges:
+  - Qwen 3.6 Plus (OpenRouter)
+  - Gemma 4 26B (OpenRouter)
+
+  [   5/300] processed
+  [  10/300] processed
+  [  15/300] processed
+  [  20/300] processed
+  [  25/300] processed
+  [  30/300] processed
+  [  35/300] processed
+  [  40/300] processed
+  [  45/300] processed
+  [  50/300] processed
+  [  55/300] processed
+  [  60/300] processed
+  [  65/300] processed
+  [  70/300] processed
+  [  75/300] processed
+  [  80/300] processed
+  [  85/300] processed
+  [  90/300] processed
+  [  95/300] processed
+  [ 100/300] processed
+  [ 105/300] processed
+  [ 110/300] processed
+  [ 115/300] processed
+  [ 120/300] processed
+  [ 125/300] processed
+  [ 130/300] processed
+  [ 135/300] processed
+  [ 140/300] processed
+  [ 145/300] processed
+  [ 150/300] processed
+  [ 155/300] processed
+  [ 160/300] processed
+  [ 165/300] processed
+  [ 170/300] processed
+  [ 175/300] processed
+  [ 180/300] processed
+  [ 185/300] processed
+  [ 190/300] processed
+  [ 195/300] processed
+  [ 200/300] processed
+  [ 205/300] processed
+  [ 210/300] processed
+  [ 215/300] processed
+  [ 220/300] processed
+  [ 225/300] processed
+  [ 230/300] processed
+  [ 235/300] processed
+  [ 240/300] processed
+  [ 245/300] processed
+  [ 250/300] processed
+  [ 255/300] processed
+  [ 260/300] processed
+  [ 265/300] processed
+  [ 270/300] processed
+  [ 275/300] processed
+  [ 280/300] processed
+  [ 285/300] processed
+  [ 290/300] processed
+  [ 295/300] processed
+  [ 300/300] processed
+
+Saved: D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_results\beir-scifact_judges.json
+
+=== Per-judge summary ===
+  Qwen 3.6 Plus (OpenRouter)                valid=300/300  mean=1.82
+  Gemma 4 26B (OpenRouter)                  valid=300/300  mean=1.43
+
+Next step: --analyze beir-scifact to compute κ vs human qrels

@@ -1,0 +1,45 @@
+# Image-generation prompt — diagram_4_norm_vs_ours
+
+## One-line summary
+A side-by-side comparison flowchart contrasting "Standard 2024-2026 RAG-eval norm" (left, with red weak-point callout) vs "Our P4-SHORT contribution" (right, with green strength callout), showing the fundamental approach difference.
+
+## Style guidance
+- Style: technical academic flowchart, two parallel columns
+- Background: solid white
+- Color palette:
+  - Left column (norm): light grays + light red/pink for the "weak point" callout
+  - Right column (ours): light grays + light green for the "strong point" callout
+- Font: sans-serif, readable
+- Flat 2D, no shadows
+- Aspect ratio: wide (16:9 or 16:10)
+
+## Detailed scene description
+
+Two side-by-side **vertical column subgraphs**:
+
+### Left column (titled "Standard 2024-2026 RAG-eval norm")
+Three stacked boxes inside a labeled container:
+1. `Single LLM judge` — gray fill
+2. `nDCG / P@k / MRR as the verdict` — gray fill
+3. `Optional: small judge↔human κ` — gray fill, smaller / italic
+
+Below the container, a **dashed red arrow** points downward to a callout box with light-red/pink fill containing:
+`Verdict depends on chosen judge — nDCG spread 1.9× per our data`
+
+### Right column (titled "Our P4-SHORT contribution")
+Four stacked boxes inside a labeled container:
+1. `5 families, 9 judges, 4 within-family controls, open-weight first-class` — gray fill
+2. `Per-judge aggregate metrics + pairwise quadratic-weighted κ matrix` — gray fill
+3. `Mechanistic decomposition: KL divergence R² = 0.33 + reasoning-mode + distillation` — gray fill (note: the most up-to-date number is R²=93% from joint distribution; if regenerating, prefer "joint-distribution structure R² = 93%")
+4. `Disclosure template + open-source toolkit` — gray fill
+
+Below this container, a **dashed green arrow** points downward to a callout box with light-green fill containing:
+`Verdict robustness quantified; practitioners pick judges by calibration philosophy`
+
+The two columns are separated by some visual whitespace; an optional center divider (vertical thin line) can separate them.
+
+## Annotation
+At the top above both columns, a small unobtrusive label: `Same 570 retrieval pairs scored by both approaches.`
+
+## Caption (place below figure)
+"Side-by-side of standard practice (left) vs our approach (right). The standard norm picks a single LLM judge and reports retrieval metrics; we show the same documents yield a 1.9× nDCG@10 spread across 9 judges, making single-judge verdicts unstable. Our 5-family κ matrix quantifies the spread and identifies the calibration clusters that explain it."

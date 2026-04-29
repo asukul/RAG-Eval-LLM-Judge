@@ -1,0 +1,17 @@
+{
+  "corpus": "beir-scifact",
+  "n_aligned_pairs": 300,
+  "kappa_per_judge_vs_human": {
+    "Claude Opus 4.7 (OpenRouter)": 0.0,
+    "Claude Sonnet 4.6 (OpenRouter)": 0.0,
+    "GPT-5.5 (reasoning=low)": 0.0,
+    "GPT-4o (chat)": 0.0,
+    "Gemini 3.1 Pro Preview (OpenRouter)": 0.0,
+    "Gemini 2.5 Pro (OpenRouter)": 0.0,
+    "DeepSeek V4 Pro (OpenRouter)": 0.0,
+    "Qwen 3.6 Plus (OpenRouter)": 0.0,
+    "Gemma 4 26B (OpenRouter)": 0.0
+  },
+  "kappa_ensemble_median_vs_human": 0.0,
+  "interpretation": "slight (Landis-Koch)"
+}

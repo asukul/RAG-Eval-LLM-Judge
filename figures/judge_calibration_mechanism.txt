@@ -1,0 +1,87 @@
+# Image-generation prompt — judge_calibration_mechanism (Figure 6, KL analysis)
+
+## One-line summary
+A 3-panel composite figure analyzing the mechanism behind inter-judge agreement: (A) per-judge marginal score distributions as grouped bar chart, (B) pairwise Jeffreys symmetric KL divergence heatmap, (C) scatter plot of KL vs κ with linear fit and correlation statistics.
+
+## Style guidance
+- Style: matplotlib-style 3-panel academic figure, side-by-side
+- Background: white
+- Color palette: 3 cluster colors — green (#2E7D32, reasoning-generous), blue (#1565C0, strict-mid), red (#C62828, strict-outlier)
+- Font: sans-serif, readable at print size
+- Aspect ratio: very wide (3:1, all 3 panels in a row)
+
+## Panel A (left): Per-judge marginal score distributions
+- Type: grouped bar chart
+- Title: "A. Per-judge marginal score distributions"
+- Subtitle: "(green=reasoning-generous, blue=strict-mid, red=strict-outlier)"
+- X-axis: "Judge score (0-3 ordinal rubric)" with tick labels 0, 1, 2, 3
+- Y-axis: "P(score = k) marginal" with values 0.00 to 0.50 range
+- 9 grouped bars per X position (one per judge), bar width ~0.09
+- Bar colors per judge:
+  - Opus 4.7: blue (#1565C0)
+  - Sonnet 4.6: green (#2E7D32)
+  - GPT-5.5 low: green (#2E7D32)
+  - GPT-4o: blue (#1565C0)
+  - Gem 3.1 Prev: red (#C62828)
+  - Gem 2.5 Pro: red (#C62828)
+  - DSV4 Pro: green (#2E7D32)
+  - Qwen 3.6+: blue (#1565C0)
+  - Gemma 4 26B: blue (#1565C0)
+- Legend showing all 9 judges, fontsize 7, top-right corner, 2 columns
+- Y-axis grid at 0.3 alpha
+
+### Data for panel A (P(score = 0, 1, 2, 3) per judge)
+```
+Judge          P(0)   P(1)   P(2)   P(3)
+Opus 4.7       0.165  0.476  0.291  0.069
+Sonnet 4.6     0.083  0.334  0.364  0.219
+GPT-5.5 low    0.070  0.398  0.363  0.168
+GPT-4o         0.277  0.404  0.216  0.104
+Gem 3.1 Prev   0.350  0.244  0.289  0.117
+Gem 2.5 Pro    0.195  0.320  0.323  0.162
+DSV4 Pro       0.266  0.068  0.400  0.266
+Qwen 3.6+      0.353  0.311  0.146  0.191
+Gemma 4 26B    0.328  0.333  0.235  0.104
+```
+
+## Panel B (middle): Pairwise KL divergence heatmap
+- Type: 9×9 heatmap with viridis colormap (low values = dark purple/blue, high = yellow/green)
+- Title: "B. Pairwise Jeffreys divergence (symmetric KL on score marginals)"
+- Tick labels (both axes): "Opus 4.7", "Sonnet 4.6", "GPT-5.5 low", "GPT-4o", "Gem 3.1 Prev", "Gem 2.5 Pro", "DSV4 Pro", "Qwen 3.6+", "Gemma 4 26B"
+- Cell values: rounded to 2 decimals, white text on dark cells / black text on light cells
+- Diagonal = 0.00
+- Colorbar on right (vertical), label none
+
+### Sample of KL matrix (Jeffreys symmetric divergence; the lowest is Qwen ↔ Gemma at 0.014; highest is around 1.5):
+- Opus 4.7 ↔ Sonnet 4.6: 0.65
+- Sonnet 4.6 ↔ GPT-5.5 low: 0.03
+- GPT-5.5 low ↔ Gem 2.5 Pro: 0.07
+- Qwen 3.6+ ↔ Gemma 4 26B: 0.01 (lowest!)
+- Gem 3.1 Prev ↔ Sonnet 4.6: ~1.0
+- Sonnet 4.6 ↔ DSV4 Pro: 0.07
+- GPT-4o ↔ Gemma 4 26B: 0.06
+- Sonnet 4.6 ↔ Gemma 4 26B: 0.32
+(Approximate; exact values from `judge_kl_kappa_analysis.json` — small KL = similar marginal histograms)
+
+## Panel C (right): KL vs κ scatter
+- Type: scatter plot with linear regression line
+- Title: "C. KL divergence vs κ (does marginal-distribution similarity predict κ?)"
+- X-axis: "Jeffreys (symmetric KL) divergence on score marginals" range 0 to ~1.5
+- Y-axis: "Pairwise quadratic-weighted Cohen's κ" range ~0.55 to 0.85
+- 36 points total (n=9 choose 2 pairs)
+- Color points by cluster:
+  - Within-cluster pairs (n=10): dark green, large dot, black edge
+  - Cross-cluster pairs (n=26): dark red, large dot, black edge
+- Linear regression line: dashed black line, slight transparency
+- Inset text box (top-left or bottom-left): tan/wheat-colored rounded box containing:
+  ```
+  Pearson r = -0.571 (p = 2.7e-4)
+  Spearman ρ = -0.625 (p = 4.6e-5)
+  R² = 0.326
+  KL explains 32.6% of κ variance
+  ```
+- Legend top-right: "Within-cluster (n=10)" green dot; "Cross-cluster (n=26)" red dot
+- Grid at 0.3 alpha
+
+## Caption (place below figure)
+"Mechanism evidence. Panel A shows per-judge marginal score histograms color-coded by calibration cluster. Panel B quantifies pairwise distribution similarity (lower = more similar). Panel C shows KL divergence explains 33% of pairwise κ variance (Pearson r = -0.57, p < 0.001) — calibration philosophy is a major mechanistic factor, but the remaining 67% requires joint-distribution structure (see §6.5)."

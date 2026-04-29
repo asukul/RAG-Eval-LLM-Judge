@@ -1,0 +1,38 @@
+# Image-generation prompt — diagram_2_standard_eval
+
+## One-line summary
+A horizontal flowchart depicting the standard 2024-2026 LLM-as-Judge evaluation pipeline: a single LLM judge scores 570 retrieved (query, document) pairs, producing aggregate metrics; small optional human-validation κ branch shown as caveat.
+
+## Style guidance
+- Style: technical academic flowchart, Mermaid `flowchart LR` style, clean
+- Background: solid white
+- Color palette: light grays for inputs/outputs; **light red/pink fill** for the "single LLM judge" box to signal it as the load-bearing weak point; light yellow for "verdict"
+- Font: sans-serif, readable at print
+- Flat 2D, no shadows
+- Aspect ratio: wide (16:9)
+
+## Detailed scene description
+
+A pipeline flowing **left to right**, with **5 main boxes** plus an optional side branch.
+
+Main flow:
+
+1. **Input box** (left): labeled `57 queries`. White fill, gray border.
+
+2. **Diamond / decision-shape**: labeled `Retrieval — top-10`. Light gray fill. The arrow exiting carries the label `570 (q, doc) pairs`.
+
+3. **Single LLM judge box** (large, central): labeled `Single LLM judge — e.g., Claude Sonnet OR GPT-4o`. **Filled in light red/pink** with a slightly thicker red border, signaling this is the "load-bearing weak point". The arrow exiting carries the label `0-3 score per pair`.
+
+4. **Aggregate metrics box**: labeled `Aggregate metrics — nDCG@10, P@5, MRR`. Light gray fill.
+
+5. **Output box** (right): labeled `Single retrieval verdict — "nDCG@10 = X.XX"`. **Light yellow/cream fill** with thin gold border — visually emphasizing this is the published number.
+
+Optional branch (below the main flow, drawn with **dashed lines** to indicate it's optional):
+
+- A small box labeled `Optional: small human-rated subset — e.g., 200 pairs × 3 annotators` connects via dashed arrow to a small node labeled `judge↔human κ`. This connects back to the Aggregate metrics box with a dashed arrow labeled `published as caveat`.
+
+## Annotation
+Add a small thought-bubble or callout pointing at the "Single LLM judge" box that reads: `← the load-bearing weak point` in red italic text.
+
+## Caption (place below figure)
+"Standard single-judge LLM-as-Judge evaluation as published in 2024-2026. A single LLM judge produces the relevance score; aggregate metrics are reported as the verdict. Most papers do NOT cross-validate against other LLM judges. Our paper's premise: this single-judge dependency makes the verdict unstable — change the judge, change the conclusion."

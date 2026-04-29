@@ -1,0 +1,57 @@
+# Image-generation prompt — diagram_5_calibration_topology
+
+## One-line summary
+A topological clustering diagram showing 9 LLM judges grouped into three calibration clusters (reasoning-generous, strict-mid, strict-outlier), with intra-cluster edges (solid) and cross-cluster edges (dashed) labeled with their pairwise Cohen's κ values, illustrating that calibration philosophy partitions judges more cleanly than provider lineage.
+
+## Style guidance
+- Style: clustered network / topology graph (NOT a tree, NOT a DAG)
+- Background: solid white
+- Color palette: 3 cluster colors — soft green (reasoning-generous), soft blue (strict-mid), soft red (strict-outlier). Use cluster fill colors for grouping, with thin colored borders matching.
+- Font: sans-serif, readable
+- Flat 2D
+- Aspect ratio: wide (16:9 or 16:10)
+
+## Detailed scene description
+
+Three **labeled cluster boxes**, each with a colored fill and rounded border, containing judge nodes:
+
+### Cluster 1: "Reasoning-generous cluster (mean 1.63-1.68)"
+Light green fill, green border. Contains 3 nodes (small ovals):
+- `Sonnet 4.6`
+- `GPT-5.5 reasoning=low`
+- `DeepSeek V4 Pro`
+
+### Cluster 2: "Strict-mid cluster (mean 1.09-1.18)"
+Light blue fill, blue border. Contains 4 nodes:
+- `Opus 4.7`
+- `GPT-4o`
+- `Qwen 3.6 Plus`
+- `Gemma 4 26B`
+
+### Cluster 3: "Apparent strict-outlier — partly missing-data artifact (valid-only mean 1.17 / 1.45)"
+Light red/pink fill, red border. Contains 2 nodes:
+- `Gemini 3.1 Pro Preview (68.4% missing!)`
+- `Gemini 2.5 Pro (47.9% missing)`
+
+### Edges (lines between nodes)
+
+**Intra-cluster edges** (solid lines, labeled with κ values):
+- Within Cluster 1:
+  - Sonnet ↔ GPT-5.5: solid line labeled `κ = 0.79`
+  - Sonnet ↔ DeepSeek V4 Pro: solid line labeled `κ = 0.76`
+  - GPT-5.5 ↔ DeepSeek V4 Pro: solid line labeled `κ = 0.69`
+- Within Cluster 2:
+  - Qwen 3.6 ↔ Gemma 4 26B: **bold solid line** labeled `κ = 0.80 (matrix-highest!)` (this is the headline finding; emphasize visually)
+  - Opus 4.7 ↔ Qwen: solid line labeled `κ = 0.75`
+  - GPT-4o ↔ Gemma 4: solid line labeled `κ = 0.77`
+
+**Cross-cluster edges** (dashed lines, labeled with κ values):
+- Sonnet (Cluster 1) ↔ Gemma 4 (Cluster 2): dashed line labeled `κ ≈ 0.62`
+- GPT-5.5 (Cluster 1) ↔ GPT-4o (Cluster 2): dashed line labeled `κ ≈ 0.63`
+- DeepSeek (Cluster 1) ↔ GPT-4o (Cluster 2): dashed line labeled `κ ≈ 0.65`
+
+## Layout
+Position Cluster 1 (reasoning-generous, green) at the top, Cluster 2 (strict-mid, blue) in the middle, Cluster 3 (strict-outlier, red) at the bottom. Connect within-cluster nodes with solid lines and across-cluster nodes with dashed lines. Make sure the Qwen ↔ Gemma 4 = 0.80 edge is visually prominent (thicker stroke, slightly larger label).
+
+## Caption (place below figure)
+"Calibration cluster topology with intra-cluster (solid) and cross-cluster (dashed) Cohen's κ values. Within-cluster pairs have higher κ than cross-cluster pairs, confirming that calibration philosophy partitions judges more reliably than provider lineage. The cross-organization open-weight pair (Qwen 3.6 Plus × Gemma 4 26B = 0.80) is the matrix maximum — exceeding every commercial within-family pair."
