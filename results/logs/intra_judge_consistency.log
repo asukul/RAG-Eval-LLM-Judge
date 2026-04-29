@@ -1,50 +1,133 @@
-Loaded 50 pairs from TREC RAG 2024 (seed=42)
+Loaded 50 pairs from TREC RAG 2024 sample (seed=42)
 Running 9 judges x 3 rounds = 1350 total calls
 ========================================================================
 
-[1/9] claude-opus-4.7 ...
-[15:11:14] OpenAISdkJudge[openrouter]: model=anthropic/claude-opus-4.7 reasoning=None max_out_tok=16
-  run 1/3: valid=50/50  (18.6s)
-[15:11:32] OpenAISdkJudge[openrouter]: model=anthropic/claude-opus-4.7 reasoning=None max_out_tok=16
-  run 2/3: valid=50/50  (6.5s)
-[15:11:39] OpenAISdkJudge[openrouter]: model=anthropic/claude-opus-4.7 reasoning=None max_out_tok=16
-  run 3/3: valid=50/50  (6.0s)
+[1/9] Claude Opus 4.7 ...
+  run 1/3: valid=50/50  (11.1s)
+  run 2/3: valid=50/50  (18.3s)
+  run 3/3: valid=50/50  (33.2s)
+  -> mean intra-judge kappa = 0.9727
+  -> mean kappa vs human   = 0.5160
+
+[2/9] Claude Sonnet 4.6 ...
+  run 1/3: valid=50/50  (9.1s)
+  run 2/3: valid=50/50  (8.7s)
+  run 3/3: valid=50/50  (9.1s)
+  -> mean intra-judge kappa = 0.9316
+  -> mean kappa vs human   = 0.4842
+
+[3/9] GPT-5.5 (reasoning=low) ...
+  run 1/3: valid=0/50  (3.4s)
+  run 2/3: valid=0/50  (1.8s)
+  run 3/3: valid=0/50  (5.9s)
+  -> insufficient
+
+
+[4/9] GPT-4o ...
+  run 1/3: valid=50/50  (4.9s)
+  run 2/3: valid=50/50  (5.1s)
+  run 3/3: valid=50/50  (5.1s)
+  -> mean intra-judge kappa = 0.9689
+  -> mean kappa vs human   = 0.3647
+
+[5/9] Gemini 3.1 Pro Preview ...
+  run 1/3: valid=50/50  (54.1s)
+  run 2/3: valid=50/50  (54.2s)
+  run 3/3: valid=50/50  (47.0s)
+  -> mean intra-judge kappa = 0.9686
+  -> mean kappa vs human   = 0.5375
+
+[6/9] Gemini 2.5 Pro ...
+  run 1/3: valid=50/50  (84.7s)
+  run 2/3: valid=50/50  (84.1s)
+  run 3/3: valid=50/50  (82.6s)
+  -> mean intra-judge kappa = 0.8264
+  -> mean kappa vs human   = 0.2997
+
+[7/9] DeepSeek V4 Pro ...
+  run 1/3: valid=12/50  (40.5s)
+  run 2/3: valid=17/50  (42.4s)
+  run 3/3: valid=22/50  (43.5s)
+  -> mean intra-judge kappa = 0.7362
+  -> mean kappa vs human   = 0.2506
+
+[8/9] Qwen 3.6 Plus ...
+  run 1/3: valid=50/50  (113.7s)
+  run 2/3: valid=50/50  (133.9s)
+  run 3/3: valid=50/50  (111.2s)
+  -> mean intra-judge kappa = 0.9780
+  -> mean kappa vs human   = 0.5015
+
+[9/9] Gemma 4 26B ...
+  run 1/3: valid=50/50  (12.9s)
+  run 2/3: valid=50/50  (20.5s)
+  run 3/3: valid=50/50  (3.2s)
+  -> mean intra-judge kappa = 0.9593
+  -> mean kappa vs human   = 0.4080
+
+=== Summary (wall=17.4 min) ===
+judge                                intra-kappa   vs-human    delta
+  Claude Opus 4.7                         0.9727     0.5160  +0.4567
+  Claude Sonnet 4.6                       0.9316     0.4842  +0.4474
+  GPT-5.5 (reasoning=low)                    n/a        n/a      n/a
+  GPT-4o                                  0.9689     0.3647  +0.6042
+  Gemini 3.1 Pro Preview                  0.9686     0.5375  +0.4311
+  Gemini 2.5 Pro                          0.8264     0.2997  +0.5267
+  DeepSeek V4 Pro                         0.7362     0.2506  +0.4856
+  Qwen 3.6 Plus                           0.9780     0.5015  +0.4765
+  Gemma 4 26B                             0.9593     0.4080  +0.5513
+
+Saved: D:\RAG-DSpace\p4-llm-judge\results\intra_judge_consistency.json
+
+
+[15:17:48] OpenAISdkJudge[openrouter]: model=google/gemini-2.5-pro reasoning=None max_out_tok=2048
+  run 2/3: valid=15/50  (67.6s)
+[15:18:55] OpenAISdkJudge[openrouter]: model=google/gemini-2.5-pro reasoning=None max_out_tok=2048
+  run 3/3: valid=7/50  (61.2s)
   -> mean intra-judge kappa = 1.0000
-  -> mean kappa vs human   = 0.3614
+  -> mean kappa vs human   = 0.4510
 
-[2/9] claude-sonnet ...
-[15:11:45] OpenAISdkJudge[openrouter]: model=anthropic/claude-sonnet-4.6 reasoning=None max_out_tok=16
-  run 1/3: valid=50/50  (9.2s)
-[15:11:54] OpenAISdkJudge[openrouter]: model=anthropic/claude-sonnet-4.6 reasoning=None max_out_tok=16
-  run 2/3: valid=50/50  (9.4s)
-[15:12:03] OpenAISdkJudge[openrouter]: model=anthropic/claude-sonnet-4.6 reasoning=None max_out_tok=16
-  run 3/3: valid=50/50  (9.7s)
-  -> mean intra-judge kappa = 0.9643
-  -> mean kappa vs human   = 0.4507
+[7/9] deepseek-v4-pro ...
+[15:19:57] OpenAISdkJudge[openrouter]: model=deepseek/deepseek-v4-pro reasoning=None max_out_tok=16
+  run 1/3: valid=34/50  (56.7s)
+[15:20:53] OpenAISdkJudge[openrouter]: model=deepseek/deepseek-v4-pro reasoning=None max_out_tok=16
+  run 2/3: valid=25/50  (48.5s)
+[15:21:42] OpenAISdkJudge[openrouter]: model=deepseek/deepseek-v4-pro reasoning=None max_out_tok=16
+  run 3/3: valid=16/50  (51.6s)
+  -> mean intra-judge kappa = 0.9261
+  -> mean kappa vs human   = 0.4022
 
-[3/9] openai-gpt-5.5-low ...
-[15:12:13] OpenAISdkJudge[openai]: model=gpt-5.5 reasoning=low max_out_tok=256
-  run 1/3: valid=50/50  (16.3s)
-[15:12:29] OpenAISdkJudge[openai]: model=gpt-5.5 reasoning=low max_out_tok=256
-  run 2/3: valid=50/50  (14.4s)
-[15:12:44] OpenAISdkJudge[openai]: model=gpt-5.5 reasoning=low max_out_tok=256
-  run 3/3: valid=50/50  (15.6s)
-  -> mean intra-judge kappa = 0.9130
-  -> mean kappa vs human   = 0.3857
+[8/9] qwen-3.6-plus ...
+[15:22:33] OpenAISdkJudge[openrouter]: model=qwen/qwen3.6-plus reasoning=None max_out_tok=16
+  run 1/3: valid=50/50  (115.1s)
+[15:24:29] OpenAISdkJudge[openrouter]: model=qwen/qwen3.6-plus reasoning=None max_out_tok=16
+[15:24:55]   OpenAI judge error (attempt 1/3) (qwen/qwen3.6-plus): Expecting value: line 81 column 1 (char 440) — retrying in 1s
+  run 2/3: valid=50/50  (132.5s)
+[15:26:41] OpenAISdkJudge[openrouter]: model=qwen/qwen3.6-plus reasoning=None max_out_tok=16
+  run 3/3: valid=50/50  (111.9s)
+  -> mean intra-judge kappa = 0.8908
+  -> mean kappa vs human   = 0.3494
 
-[4/9] openai-gpt-4o ...
-[15:12:59] OpenAISdkJudge[openai]: model=gpt-4o reasoning=None max_out_tok=16
-  run 1/3: valid=50/50  (5.0s)
-[15:13:04] OpenAISdkJudge[openai]: model=gpt-4o reasoning=None max_out_tok=16
-  run 2/3: valid=50/50  (4.6s)
-[15:13:09] OpenAISdkJudge[openai]: model=gpt-4o reasoning=None max_out_tok=16
-  run 3/3: valid=50/50  (4.5s)
-  -> mean intra-judge kappa = 0.9237
-  -> mean kappa vs human   = 0.3396
+[9/9] gemma-4-26b ...
+[15:28:33] OpenAISdkJudge[openrouter]: model=google/gemma-4-26b-a4b-it reasoning=None max_out_tok=16
+  run 1/3: valid=50/50  (12.5s)
+[15:28:45] OpenAISdkJudge[openrouter]: model=google/gemma-4-26b-a4b-it reasoning=None max_out_tok=16
+  run 2/3: valid=50/50  (12.0s)
+[15:28:57] OpenAISdkJudge[openrouter]: model=google/gemma-4-26b-a4b-it reasoning=None max_out_tok=16
+  run 3/3: valid=50/50  (4.4s)
+  -> mean intra-judge kappa = 0.9117
+  -> mean kappa vs human   = 0.2328
 
-[5/9] gemini-3.1-pro ...
-[15:13:13] OpenAISdkJudge[openrouter]: model=google/gemini-3.1-pro-preview reasoning=None max_out_tok=2048
-  run 1/3: valid=7/50  (61.7s)
-[15:14:15] OpenAISdkJudge[openrouter]: model=google/gemini-3.1-pro-preview reasoning=None max_out_tok=2048
-  run 2/3: valid=12/50  (57.5s)
-[15:15:12] OpenAISdkJudge[openrouter]: model=google/gemini-3.1-pro-preview reasoning=None max_out_tok=2048
+=== Summary (wall=17.8 min) ===
+judge                                intra-K   vs-human    delta
+  Claude Opus 4.7 (OpenRouter)        1.0000     0.3614  +0.6386
+  Claude Sonnet 4.6 (OpenRouter)      0.9643     0.4507  +0.5136
+  GPT-5.5 (reasoning=low)             0.9130     0.3857  +0.5273
+  GPT-4o (chat)                       0.9237     0.3396  +0.5841
+  Gemini 3.1 Pro Preview (OpenRoute   1.0000     0.3000  +0.7000
+  Gemini 2.5 Pro (OpenRouter)         1.0000     0.4510  +0.5490
+  DeepSeek V4 Pro (OpenRouter)        0.9261     0.4022  +0.5239
+  Qwen 3.6 Plus (OpenRouter)          0.8908     0.3494  +0.5414
+  Gemma 4 26B (OpenRouter)            0.9117     0.2328  +0.6789
+
+Saved: D:\RAG-DSpace\p4-llm-judge\results\intra_judge_consistency.json

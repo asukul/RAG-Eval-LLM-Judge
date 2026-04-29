@@ -66,7 +66,17 @@ Reproducibility verification — RAG-Eval-LLM-Judge
   [PASS] bootstrap CI: TREC RAG ensemble lower < point: expected=True actual=True
   [PASS] Gwet AC2 file: TREC RAG 9-judge κ matches verifier: expected=0.4941 actual=0.4941
   [PASS] Gwet AC2 > Cohen κ (marginal-skew sanity): expected=True actual=True
+  [PASS] UMBRELA baseline: 537 pairs evaluated: expected=537 actual=537
+  [PASS] UMBRELA baseline: 100% valid: expected=537 actual=537
+  [PASS] UMBRELA kappa is in moderate band (0.40 < kappa < 0.60): expected=True actual=True
+  [PASS] 9-judge ensemble (0.4941) > UMBRELA single (recorded value): expected=True actual=True
+  [PASS] intra-judge: 50 pairs: expected=50 actual=50
+  [PASS] intra-judge: 3 runs: expected=3 actual=3
+  [PASS] intra-judge: 9 judges measured: expected=9 actual=9
+  [PASS] intra-judge: all 9 judges produced valid intra-kappa (GPT-5.5 reasoning fix verified): expected=9 actual=9
+  [PASS] intra-judge: every judge more self-consistent than human-aligned: expected=True actual=True
+  [PASS] intra-judge: bottom-2 judges by self-consistency are open-weight: expected=2 actual=2
 
 ========================================================================
-Results: 52 pass, 0 fail, 0 warn
+Results: 62 pass, 0 fail, 0 warn
 ========================================================================

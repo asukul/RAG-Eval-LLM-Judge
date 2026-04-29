@@ -427,14 +427,31 @@ def verify_supplementary_outputs():
         check("intra-judge: 3 runs", 3, cfg.get("n_runs", 0))
         per_judge = ij.get("per_judge", {})
         check("intra-judge: 9 judges measured", 9, len(per_judge))
-        # All judges should have intra-kappa > kappa-vs-human (otherwise the
-        # judge is less self-consistent than human-aligned, a red flag).
+        # All judges should have valid intra-judge kappa (NEW script with
+        # JUDGE_BUILDERS imports correctly handles GPT-5.5 reasoning mode).
+        valid_judges = [j for j, m in per_judge.items()
+                        if m.get("mean_intra_judge_kappa") is not None]
+        check("intra-judge: all 9 judges produced valid intra-kappa "
+              "(GPT-5.5 reasoning fix verified)",
+              9, len(valid_judges))
+        # All judges should have intra-kappa > kappa-vs-human.
         unstable = [j for j, m in per_judge.items()
                     if m.get("mean_intra_judge_kappa") is not None
                     and m.get("mean_kappa_vs_human") is not None
                     and m["mean_intra_judge_kappa"] < m["mean_kappa_vs_human"]]
-        check("intra-judge: no judge less self-consistent than human-aligned",
+        check("intra-judge: every judge more self-consistent than human-aligned",
               True, len(unstable) == 0)
+        # Open-weight judges Qwen + Gemma should be the lowest-intra-K judges
+        # (paper claim in long.md sec 6.6).
+        intra_ks = {j: m["mean_intra_judge_kappa"]
+                    for j, m in per_judge.items()
+                    if m.get("mean_intra_judge_kappa") is not None}
+        sorted_intra = sorted(intra_ks.items(), key=lambda x: x[1])
+        bottom_two_labels = [s[0] for s in sorted_intra[:2]]
+        bottom_two_open_weight = sum(1 for l in bottom_two_labels
+                                      if "Qwen" in l or "Gemma" in l)
+        check("intra-judge: bottom-2 judges by self-consistency are open-weight",
+              2, bottom_two_open_weight)
     else:
         warn(f"Intra-judge file not found at {intra_fp}; "
              "run src/intra_judge_consistency.py")
