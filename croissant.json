@@ -1,0 +1,323 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform"
+  },
+  "@type": "sc:Dataset",
+  "name": "RAG-Eval-LLM-Judge",
+  "description": "Cross-Family LLM-Judge Agreement Dataset for Institutional Retrieval-Augmented Generation. 9 LLM judges across 5 model families (Anthropic, OpenAI, Google-commercial, DeepSeek, Open-weight) score 570 query-document pairs from an institutional repository (Iowa State University DSpace) plus 1,137 pairs from three public corpora (TREC RAG 2024, TREC-COVID, BEIR scifact). Includes intra-judge self-consistency subset, bootstrap CIs, Gwet AC2, bias diagnostics, and an UMBRELA single-judge baseline. The first published five-family pairwise quadratic-weighted Cohen's kappa matrix on a bounded 0-3 ordinal relevance rubric at >= 500 paired observations with within-family controls and open-weight peers as first-class participants.",
+  "conformsTo": "http://mlcommons.org/croissant/1.0",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "url": "https://github.com/asukul/RAG-Eval-LLM-Judge",
+  "version": "1.0.0",
+  "datePublished": "2026-04-29",
+  "creator": [
+    {
+      "@type": "Person",
+      "name": "Adisak Sukul",
+      "email": "asukul@iastate.edu",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Iowa State University"
+      }
+    }
+  ],
+  "keywords": [
+    "LLM-as-Judge",
+    "retrieval-augmented generation",
+    "information retrieval",
+    "inter-rater agreement",
+    "Cohen's kappa",
+    "Gwet AC2",
+    "meta-evaluation",
+    "TREC RAG 2024",
+    "BEIR scifact",
+    "TREC-COVID"
+  ],
+  "citeAs": "@misc{sukul2026rageval, title = {RAG-Eval-LLM-Judge: Cross-Family LLM-Judge Agreement Dataset}, author = {Sukul, Adisak}, year = {2026}, url = {https://github.com/asukul/RAG-Eval-LLM-Judge}}",
+  "isLiveDataset": false,
+  "rai:annotationsPerItem": "9 LLM-judge integer scores (0-3 ordinal) per query-document pair; null when judge fails to return a parseable score",
+  "rai:dataAnnotationProtocol": "Each judge sees the same (query, document-truncated-to-1500-chars) pair and returns an integer 0-3 per a published rubric (0=irrelevant, 1=topical, 2=partial, 3=fully answers). 5 worked examples calibrate the rubric at prompt time. Temperature = 0.0. Per-judge JSONs preserve raw integer/null outputs without further processing.",
+  "rai:dataReleaseMaintenancePlan": "GitHub-hosted; minor fixes patched in-tree, major versions tagged. Issues responded within 30 days.",
+  "rai:dataPreprocessingProtocol": "Documents truncated to 1500 chars (judge-input cap) before scoring. Scores parsed via regex from judge text response. Failed parses recorded as null.",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "github-repo",
+      "name": "github-repo",
+      "description": "GitHub repository containing all dataset files, code, and papers.",
+      "contentUrl": "https://github.com/asukul/RAG-Eval-LLM-Judge",
+      "encodingFormat": "git+https",
+      "sha256": "main"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "trec-rag-2024-judges-json",
+      "name": "trec-rag-2024-judges-json",
+      "description": "9-judge per-pair scores + NIST human qrels on the 537-pair stratified-balanced TREC RAG 2024 sample.",
+      "contentUrl": "results/trec-rag-2024_judges.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "trec-covid-judges-json",
+      "name": "trec-covid-judges-json",
+      "description": "9-judge per-pair scores + BEIR-distributed TREC-COVID human qrels on a 300-pair sample.",
+      "contentUrl": "results/trec-covid_judges.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "beir-scifact-judges-json",
+      "name": "beir-scifact-judges-json",
+      "description": "9-judge per-pair scores + BEIR scifact human qrels on a 300-pair sample (all-positive labels; precision-only evaluation).",
+      "contentUrl": "results/beir-scifact_judges.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "within-corpus-per-judge-files",
+      "name": "within-corpus-per-judge-files",
+      "description": "Within-corpus (Iowa State University DSpace) 9 per-judge JSONs, each containing 570 (query, document) pairs scored by one of the 9 judges. Each file holds the full retrieval ranks + truncated document previews + integer scores.",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json",
+      "includes": "results/within_corpus/judge_*.json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "within-corpus-merged",
+      "name": "within-corpus-merged",
+      "description": "Merged 9-judge multijudge file: aggregates per judge + 9x9 pairwise quadratic-weighted Cohen's kappa matrix on 570 pairs.",
+      "contentUrl": "results/within_corpus/multijudge_9judge_merged.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "intra-judge-consistency-json",
+      "name": "intra-judge-consistency-json",
+      "description": "Intra-judge self-consistency subset: 50 TREC RAG 2024 pairs x 9 judges x 3 runs each (1,350 score records). Includes mean intra-judge kappa, mean kappa vs human, and pairwise intra-run kappa values.",
+      "contentUrl": "results/intra_judge_consistency.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "umbrela-baseline",
+      "name": "umbrela-baseline",
+      "description": "UMBRELA single-judge baseline (Upadhyay et al. 2024 verbatim prompt + GPT-4o) on the same 537-pair TREC RAG 2024 stratified sample, for direct comparison against the 9-judge ensemble.",
+      "contentUrl": "results/umbrela_baseline_trec_rag_2024.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "bootstrap-cis-json",
+      "name": "bootstrap-cis-json",
+      "description": "Bootstrap 95% confidence intervals (1000 resamples, seed=42) on every reported headline kappa value across all four corpora.",
+      "contentUrl": "results/bootstrap_kappa_cis.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "gwet-ac2-json",
+      "name": "gwet-ac2-json",
+      "description": "Quadratic-weighted Gwet AC2 alongside Cohen kappa for triangulation under marginal-distribution skew (kappa paradox).",
+      "contentUrl": "results/gwet_ac2_alongside_kappa.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "bias-diagnostics-json",
+      "name": "bias-diagnostics-json",
+      "description": "Bias diagnostics: 5x5 family conditional-mean matrix + per-judge marginal score distributions + length-stratification (skipped due to uniform truncation).",
+      "contentUrl": "results/bias_diagnostics.json",
+      "containedIn": {
+        "@id": "github-repo"
+      },
+      "encodingFormat": "application/json"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "external-validation-records",
+      "name": "external-validation-records",
+      "description": "Per-pair LLM-judge scores plus human qrel for each of the three external-validation corpora (TREC RAG 2024 n=537, TREC-COVID n=300, BEIR scifact n=300).",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "external-validation-records/query-id",
+          "name": "query_id",
+          "description": "Corpus-specific query identifier (e.g., '2024-217488' for TREC RAG 2024).",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {"@id": "trec-rag-2024-judges-json"},
+            "extract": {"jsonPath": "$.pair_index[*][0]"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "external-validation-records/doc-id",
+          "name": "doc_id",
+          "description": "Corpus-specific document identifier.",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {"@id": "trec-rag-2024-judges-json"},
+            "extract": {"jsonPath": "$.pair_index[*][1]"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "external-validation-records/human-rel",
+          "name": "human_rel",
+          "description": "Ground-truth relevance label (0-3 ordinal for TREC RAG / TREC-COVID; binary 0/1 for BEIR scifact mapped to 0/3).",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {"@id": "trec-rag-2024-judges-json"},
+            "extract": {"jsonPath": "$.human_scores[*]"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "external-validation-records/judge-scores",
+          "name": "judge_scores",
+          "description": "Per-judge integer score (0-3) or null. Keyed by judge label.",
+          "dataType": "sc:Text",
+          "repeated": true,
+          "source": {
+            "fileObject": {"@id": "trec-rag-2024-judges-json"},
+            "extract": {"jsonPath": "$.per_judge_scores"}
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "within-corpus-records",
+      "name": "within-corpus-records",
+      "description": "Per-pair retrieval entries for the within-corpus 9-judge ablation on Iowa State University DSpace (570 pairs total: 57 queries x top-10 retrieval). Each per-judge file contributes 570 records via the queries[].retrieved[] nested structure.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "within-corpus-records/judge-label",
+          "name": "judge_label",
+          "description": "Display name of the judge that produced this record (e.g., 'Claude Sonnet 4.6 (OpenRouter)').",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {"@id": "within-corpus-per-judge-files"},
+            "extract": {"jsonPath": "$.config.judge_label"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "within-corpus-records/query-id",
+          "name": "query_id",
+          "description": "REFINE query identifier (one of 57).",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {"@id": "within-corpus-per-judge-files"},
+            "extract": {"jsonPath": "$.queries[*].query_id"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "within-corpus-records/rank",
+          "name": "rank",
+          "description": "1-10 rank within top-K retrieval for the query.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {"@id": "within-corpus-per-judge-files"},
+            "extract": {"jsonPath": "$.queries[*].retrieved[*].rank"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "within-corpus-records/point-id",
+          "name": "point_id",
+          "description": "Qdrant point UUID (deterministic across judges; this is what guarantees retrieval-determinism alignment so that scores from different judges are positionally comparable).",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {"@id": "within-corpus-per-judge-files"},
+            "extract": {"jsonPath": "$.queries[*].retrieved[*].point_id"}
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "within-corpus-records/judge-score",
+          "name": "judge_score",
+          "description": "Integer 0-3 from the rubric, or null when the judge failed to return a parseable score.",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {"@id": "within-corpus-per-judge-files"},
+            "extract": {"jsonPath": "$.queries[*].retrieved[*].judge_score"}
+          }
+        }
+      ]
+    }
+  ]
+}

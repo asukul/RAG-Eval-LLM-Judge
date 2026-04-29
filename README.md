@@ -73,6 +73,27 @@ The **always-works 6-judge subset** (≥95% on both corpora) is Anthropic + Open
 
 ---
 
+## For NeurIPS 2026 D&B reviewers
+
+This release is structured as a **dataset + benchmark contribution** with a separate paper draft framed for the [NeurIPS 2026 Datasets & Benchmarks Track](https://nips.cc/Conferences/2026/CallForDatasetsBenchmarks). Key artifacts:
+
+| Artifact | Purpose |
+|---|---|
+| [`papers/neurips_db.md`](papers/neurips_db.md) | NeurIPS D&B-style paper draft (~9 pp + appendices). Leads with dataset + harness contribution; empirical findings are illustrative use cases. |
+| [`DATA_CARD.md`](DATA_CARD.md) | HuggingFace-style data card. Configurations, schemas, curation rationale, biases, social impact, license. |
+| [`croissant.json`](croissant.json) | [Croissant 1.0](https://github.com/mlcommons/croissant) JSON-LD metadata. Distribution objects + recordSet schemas for ML-platform integration. |
+| [`src/verify_paper_claims.py`](src/verify_paper_claims.py) | Programmatic claim verifier — 62 numerical checks against shipped JSONs, < 5 sec to run, 0 fails on a clean checkout. |
+| [`tests/`](tests/) | 25-test pytest suite covering κ math, ensemble convention, retrieval determinism, and shipped-artifact integrity. |
+| [`results/within_corpus/`](results/within_corpus/) | 9 raw per-judge files (5,130 within-corpus score records) — sufficient to reproduce the 9×9 κ matrix without API access. |
+| [`results/intra_judge_consistency.json`](results/intra_judge_consistency.json) | Intra-judge self-consistency: 50 × 9 × 3 = 1,350 records measuring run-to-run reliability. |
+| [`results/umbrela_baseline_trec_rag_2024.json`](results/umbrela_baseline_trec_rag_2024.json) | UMBRELA single-judge baseline (Upadhyay et al. 2024) for direct comparison. |
+
+**Reproducibility from a clean checkout:** ~$95 paid-API spend, ~13 hours wall (verified). Step-by-step commands in `papers/neurips_db.md` §6.
+
+**License:** MIT (code) + CC-BY-4.0 (data, figures, papers, dataset card).
+
+---
+
 ## Repo structure
 
 ```
@@ -108,11 +129,27 @@ p4-llm-judge/
 │   ├── sample_537_pairs.tsv       # Stratified-balanced 537-pair sample (random.seed(42))
 │   ├── needed_passage_ids.txt     # 537 unique MS MARCO v2.1 passage IDs
 │   └── passages.json              # 537 extracted passages (MS MARCO v2.1)
+├── tests/                         # Pytest test suite (25 tests, run with `pytest`)
+│   ├── test_kappa.py              # cohen_kappa_quadratic identity tests
+│   ├── test_ensemble.py           # Upper-median convention tests
+│   └── test_artifacts.py          # Shipped-JSON integrity + retrieval determinism
+├── pytest.ini                     # Pytest configuration
+├── DATA_CARD.md                   # HuggingFace-style data card (NeurIPS D&B)
+├── croissant.json                 # Croissant 1.0 JSON-LD dataset metadata
 ├── .env.template                  # Copy → .env and fill in your API keys
 ├── .gitignore                     # Excludes secrets, data caches, etc.
 ├── LICENSE                        # MIT (code) + CC-BY-4.0 (data, figures, paper text)
 ├── CITATION.cff                   # Citation File Format for academic citation
 └── README.md                      # This file
+```
+
+Paper draft variants:
+
+```
+papers/short.md       — 4-page workshop version (LLM4Eval @ SIGIR 2027 target)
+papers/long.md        — 12-page LNCS version (ECIR 2027 / TOIS journal target)
+papers/neurips_db.md  — 9-page Datasets & Benchmarks reframe (NeurIPS 2026 D&B target)
+papers/WALKTHROUGH.md — 12-section guide explaining how each paper is constructed
 ```
 
 ---
