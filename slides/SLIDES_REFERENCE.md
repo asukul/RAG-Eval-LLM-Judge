@@ -11,8 +11,8 @@
 | File | Purpose |
 |---|---|
 | `make_p4_slides.py` | Python generator script. Edit this, then re-run, to update the .pptx files. |
-| `P4-SHORT.pptx` | 15-slide deck for LLM4Eval @ SIGIR 2027 workshop (15-20 min talk) |
-| `P4-LONG.pptx` | 30-slide deck for ECIR 2028 / TOIS full conference (25-30 min talk) |
+| `P4-SHORT.pptx` | 16-slide deck for LLM4Eval @ SIGIR 2027 workshop (15-20 min talk) |
+| `P4-LONG.pptx` | 33-slide deck for ECIR 2028 / TOIS full conference (25-30 min talk) |
 | `SLIDES_REFERENCE.md` | This file. |
 
 To regenerate both decks after any edit:
@@ -24,7 +24,7 @@ py -3 -X utf8 papers/P4_llm_as_judge/slides/make_p4_slides.py
 
 ## 2. Slide-by-slide map (which slide → which generator function)
 
-### P4-SHORT (15 slides)
+### P4-SHORT (16 slides)
 
 | # | Slide title | Generator function |
 |---:|---|---|
@@ -40,11 +40,12 @@ py -3 -X utf8 papers/P4_llm_as_judge/slides/make_p4_slides.py
 | 10 | C3 — cross-org open-weight matrix-highest | `slide_C3` |
 | 11 | Mechanism summary | `slide_mechanism_summary` |
 | 12 | External validation results (κ table) | `slide_external_validation_results` |
-| 13 | Coverage divergence (table) | `slide_coverage_finding` |
-| 14 | Takeaway | `slide_takeaway` |
-| 15 | Q&A | `slide_qa` |
+| 13 | TREC-COVID third-corpus replication | `slide_trec_covid_results` |
+| 14 | Coverage divergence (3-corpus table) | `slide_coverage_finding` |
+| 15 | Takeaway | `slide_takeaway` |
+| 16 | Q&A | `slide_qa` |
 
-### P4-LONG (30 slides)
+### P4-LONG (33 slides)
 
 | # | Slide title | Generator function |
 |---:|---|---|
@@ -73,13 +74,14 @@ py -3 -X utf8 papers/P4_llm_as_judge/slides/make_p4_slides.py
 | 23 | §6 tokenizer refutation (table) | `slide_tokenizer_refutation` |
 | 24 | §7 external validation setup | `slide_external_validation_setup` |
 | 25 | §7 external validation results | `slide_external_validation_results` |
-| 26 | §7 coverage finding | `slide_coverage_finding` |
-| 27 | §7 Thakur 2025 comparison | `slide_thakur_comparison` |
-| 28 | Limitations | `slide_limitations` |
-| 29 | Reproducibility (commands) | `slide_reproducibility` |
-| 30 | Future work | `slide_future_work` |
-| 31 | Takeaway | `slide_takeaway` |
-| 32 | Q&A | `slide_qa` |
+| 26 | §7 TREC-COVID third-corpus replication | `slide_trec_covid_results` |
+| 27 | §7 coverage divergence (3 corpora) | `slide_coverage_finding` |
+| 28 | §7 Thakur 2025 comparison | `slide_thakur_comparison` |
+| 29 | Limitations | `slide_limitations` |
+| 30 | Reproducibility (commands) | `slide_reproducibility` |
+| 31 | Future work | `slide_future_work` |
+| 32 | Takeaway | `slide_takeaway` |
+| 33 | Q&A | `slide_qa` |
 
 To find the function in `make_p4_slides.py`, search for `def slide_<name>` (Ctrl+F in any editor).
 
@@ -119,6 +121,14 @@ When you ask "change the κ from 0.49 to X", I edit these constants in `make_p4_
 - **Sample:** 300 pairs (all-positive qrels, κ undefined methodologically)
 - **9-judge ensemble precision (≥ 2):** **63.7%**
 - **Per-judge precision range:** 43% (Gemma 4 26B) to 75% (GPT-5.5 reasoning=low)
+
+### External validation — TREC-COVID biomedical scientific (added 2026-04-28)
+- **Sample:** 300 pairs (BEIR-distributed; 0/1/2 qrels mapped to 0/2/3 rubric)
+- **Frontier-7 ensemble κ:** **0.4462** (Landis-Koch moderate)
+- **Per-judge κ range:** 0.22 (Gemini 3.1 Prev) to 0.53 (Opus 4.7)
+- **Coverage:** Sonnet/GPT-5.5/GPT-4o 100%; Opus 84%, DSV4 83%; Gemini 3.1 Prev 44%, Gemini 2.5 Pro 6%
+- **Open-weight supplement:** Qwen 3.6 Plus + Gemma 4 26B run pending — slide currently shows frontier-7; will be re-rendered as 9-judge once supplement merges
+- **Wall + cost:** ~2.5 h, ~$15 (frontier); ~$2 + ~30 min expected for supplement
 
 ### Coverage on TREC RAG 2024 (paper-relevant)
 | Judge | TREC RAG 2024 | BEIR scifact |

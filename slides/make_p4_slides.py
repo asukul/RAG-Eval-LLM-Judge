@@ -470,25 +470,58 @@ def slide_external_validation_results(p, n, total, *, version_label):
 def slide_coverage_finding(p, n, total, *, version_label):
     s = standard_content_slide(p, "Coverage divergence — content-domain reliability axis")
     rows = [
-        ["Judge", "TREC RAG 2024 (n=537)", "BEIR scifact (n=300)"],
-        ["GPT-5.5 (reasoning=low)", "100%", "100%"],
-        ["GPT-4o", "100%", "100%"],
-        ["Claude Opus 4.7", "100%", "95%"],
-        ["Claude Sonnet 4.6", "100%", "99.7%"],
-        ["Qwen 3.6 Plus", "100%", "100%"],
-        ["Gemma 4 26B", "100%", "100%"],
-        ["DeepSeek V4 Pro", "39%", "84%"],
-        ["Gemini 3.1 Pro Preview", "24%", "60%"],
-        ["Gemini 2.5 Pro", "17%", "86%"],
+        ["Judge", "TREC RAG 2024 (n=537)", "BEIR scifact (n=300)", "TREC-COVID (n=300)"],
+        ["GPT-5.5 (reasoning=low)", "100%", "100%", "100%"],
+        ["GPT-4o", "100%", "100%", "100%"],
+        ["Claude Opus 4.7", "100%", "95%", "84%"],
+        ["Claude Sonnet 4.6", "100%", "99.7%", "100%"],
+        ["Qwen 3.6 Plus", "100%", "100%", "—"],
+        ["Gemma 4 26B", "100%", "100%", "—"],
+        ["DeepSeek V4 Pro", "39%", "84%", "83%"],
+        ["Gemini 3.1 Pro Preview", "24%", "60%", "44%"],
+        ["Gemini 2.5 Pro", "17%", "86%", "6%"],
     ]
-    add_table(s, 0.7, 1.5, rows,
-              col_widths=[3.5, 3.0, 3.0],
-              total_width=9.5, font_size=14)
-    add_textbox(s, 0.7, 6.0, 12, 1.0,
-                "ALWAYS-WORKS 6-judge subset (≥95% on both): Anthropic + OpenAI + Qwen + Gemma. "
+    add_table(s, 0.5, 1.5, rows,
+              col_widths=[3.0, 2.4, 2.4, 2.4],
+              total_width=10.2, font_size=13)
+    add_textbox(s, 0.5, 6.2, 12, 1.0,
+                "ALWAYS-WORKS 6-judge subset (≥95% on TREC RAG + BEIR scifact): Anthropic + OpenAI + Qwen + Gemma. "
                 "The 2 cheapest open-weight judges make this subset. "
-                "Gemini fails on TREC RAG (web content) more than on BEIR (scientific abstracts) — reliability is content-domain dependent.",
-                size=14, color=COLOR_TEXT, bold=False)
+                "Gemini fails on web/biomedical content more than on scientific abstracts — reliability is content-domain dependent.",
+                size=13, color=COLOR_TEXT, bold=False)
+    add_footer(s, f"P4 — {version_label}")
+    add_slide_number(s, n, total)
+
+
+def slide_trec_covid_results(p, n, total, *, version_label):
+    s = standard_content_slide(p, "Third-corpus replication — TREC-COVID biomedical (300 pairs)")
+    rows = [
+        ["Rank", "Judge", "κ vs NIST qrels", "valid/300"],
+        ["1", "Claude Opus 4.7", "0.5323", "251"],
+        ["2", "Claude Sonnet 4.6", "0.4238", "300"],
+        ["3", "GPT-4o", "0.3874", "300"],
+        ["4", "GPT-5.5 (reasoning=low)", "0.3871", "300"],
+        ["5", "DeepSeek V4 Pro", "0.3144", "250"],
+        ["6", "Gemini 3.1 Pro Preview", "0.2202", "133"],
+        ["—", "Gemini 2.5 Pro", "n/a (small-n)", "19"],
+        ["", "Frontier-7 ensemble median", "0.4462", "300"],
+    ]
+    add_table(s, 0.7, 1.4, rows,
+              col_widths=[0.6, 4.0, 1.8, 1.4],
+              total_width=7.8, font_size=14)
+    add_textbox(s, 9.0, 1.4, 4.0, 5.0,
+                "Three corpora, three κ\n\n"
+                "• ISU DSpace: within-pair max 0.80\n"
+                "  (no human gold available)\n\n"
+                "• TREC RAG 2024: 9-judge κ = 0.4941\n"
+                "  (web passages, MS MARCO v2.1)\n\n"
+                "• BEIR scifact: precision 63.7%\n"
+                "  (κ undefined — all-positive qrels)\n\n"
+                "• TREC-COVID: frontier-7 κ = 0.4462\n"
+                "  (biomedical scientific)\n\n"
+                "All three public-corpus ensembles\nin the moderate Landis-Koch band.\n"
+                "Robustness across content domains.",
+                size=12, color=COLOR_TEXT)
     add_footer(s, f"P4 — {version_label}")
     add_slide_number(s, n, total)
 
@@ -801,6 +834,7 @@ def build_short() -> Presentation:
         ("C3+C4", slide_C3),
         ("mechanism", slide_mechanism_summary),
         ("ext val", slide_external_validation_results),
+        ("trec-covid", slide_trec_covid_results),
         ("coverage", slide_coverage_finding),
         ("takeaway", slide_takeaway),
         ("Q&A", slide_qa),
@@ -847,6 +881,7 @@ def build_long() -> Presentation:
         # External validation
         ("ext val setup", lambda p, n, t: slide_external_validation_setup(p, n, t, version_label="LONG")),
         ("ext val results", lambda p, n, t: slide_external_validation_results(p, n, t, version_label="LONG")),
+        ("trec-covid results", lambda p, n, t: slide_trec_covid_results(p, n, t, version_label="LONG")),
         ("coverage", lambda p, n, t: slide_coverage_finding(p, n, t, version_label="LONG")),
         ("Thakur comparison", slide_thakur_comparison),
         # Closing
