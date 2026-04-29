@@ -122,13 +122,14 @@ When you ask "change the κ from 0.49 to X", I edit these constants in `make_p4_
 - **9-judge ensemble precision (≥ 2):** **63.7%**
 - **Per-judge precision range:** 43% (Gemma 4 26B) to 75% (GPT-5.5 reasoning=low)
 
-### External validation — TREC-COVID biomedical scientific (added 2026-04-28)
+### External validation — TREC-COVID biomedical scientific (added 2026-04-28; 9-judge merged 2026-04-29)
 - **Sample:** 300 pairs (BEIR-distributed; 0/1/2 qrels mapped to 0/2/3 rubric)
-- **Frontier-7 ensemble κ:** **0.4462** (Landis-Koch moderate)
-- **Per-judge κ range:** 0.22 (Gemini 3.1 Prev) to 0.53 (Opus 4.7)
-- **Coverage:** Sonnet/GPT-5.5/GPT-4o 100%; Opus 84%, DSV4 83%; Gemini 3.1 Prev 44%, Gemini 2.5 Pro 6%
-- **Open-weight supplement:** Qwen 3.6 Plus + Gemma 4 26B run pending — slide currently shows frontier-7; will be re-rendered as 9-judge once supplement merges
-- **Wall + cost:** ~2.5 h, ~$15 (frontier); ~$2 + ~30 min expected for supplement
+- **9-judge ensemble κ:** **0.3447** (Landis-Koch fair, near-moderate)
+- **Frontier-7 ensemble κ:** 0.4462 (moderate; for reference)
+- **Per-judge κ range:** 0.22 (Gemini 3.1 Prev) to 0.53 (Opus 4.7); Qwen 0.32, Gemma 4 0.27
+- **Coverage:** Sonnet/GPT-5.5/GPT-4o/Qwen/Gemma all 100%; Opus 84%, DSV4 83%; Gemini 3.1 Prev 44%, Gemini 2.5 Pro 6%
+- **Open-weight tradeoff:** broadens coverage to 100% but lowers ensemble κ by 0.10 (vs 0.025 on TREC RAG 2024) — content-domain dependent
+- **Wall + cost:** ~5.5 h total (~2.5 h frontier + ~3 h supplement), ~$17 ($15 frontier + $2 supplement)
 
 ### Coverage on TREC RAG 2024 (paper-relevant)
 | Judge | TREC RAG 2024 | BEIR scifact |

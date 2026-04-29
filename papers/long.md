@@ -318,6 +318,38 @@ We validate the same 9-judge slate against two public benchmarks. The within-cor
 
 The **Gemini 2.5 Pro top κ (0.55) is on a tiny n=92 valid sample** and is therefore reported with a small-n caveat. The single-judge headline (excluding Gemini 2.5 Pro on coverage grounds) is **Claude Sonnet 4.6 at κ = 0.51**.
 
+## 7.1b TREC-COVID: 300 pairs, biomedical scientific replication
+
+**Corpus**: TREC-COVID biomedical scientific (BEIR-distributed), 171,332 documents × 50 queries × 66,336 qrels. We sample 300 query-document pairs via the same `GenericDataLoader` pipeline as BEIR scifact (§7.2). Qrels are 3-class (0=irrelevant, 1=topical, 2=fully-relevant); we map to our 0-3 rubric via {0:0, 1:2, 2:3}.
+
+**Judge run**: same 9-judge slate, same prompt template. Two-phase: 7-judge frontier preset + 2-judge open-weight supplement. Total 2,700 score records, ~3 hours wall, ~USD 17.
+
+**Per-judge κ vs human qrels** (quadratic-weighted Cohen's κ):
+
+| Rank | Judge | κ | valid/300 | Landis-Koch |
+|---:|---|---:|---:|---|
+| 1 | Claude Opus 4.7 (OpenRouter) | **0.5323** | 251 | moderate, near-substantial |
+| 2 | Claude Sonnet 4.6 (OpenRouter) | 0.4238 | 300 | moderate |
+| 3 | GPT-4o (chat) | 0.3874 | 300 | fair, near-moderate |
+| 4 | GPT-5.5 (reasoning=low) | 0.3871 | 300 | fair, near-moderate |
+| 5 | Qwen 3.6 Plus (OpenRouter) | 0.3181 | 300 | fair |
+| 6 | DeepSeek V4 Pro (OpenRouter) | 0.3144 | 250 | fair |
+| 7 | Gemma 4 26B (OpenRouter) | 0.2743 | 300 | fair |
+| 8 | Gemini 3.1 Pro Preview (OpenRouter) | 0.2202 | 133 | fair, low-end |
+| — | Gemini 2.5 Pro (OpenRouter) | n/a | 19 | insufficient overlap |
+| **9-judge ensemble median** | | **0.3447** | 300 | **fair, near-moderate** |
+| 7-judge frontier-only ensemble median | | 0.4462 | 300 | moderate |
+
+*Table 5b: Per-judge and ensemble κ vs NIST-curated TREC-COVID qrels on the 300-pair BEIR-distributed subset. Ensemble = per-pair median across all valid (non-null) judge scores.*
+
+**Interpretation**:
+1. All 8 judges with sufficient valid coverage achieve κ > 0.22 — every judge's biomedical-relevance signal correlates fairly-or-better with human NIST judgments. None at chance.
+2. **Opus 4.7 leads on biomedical** (κ = 0.53) — a different headline judge than on TREC RAG 2024 web content (where Sonnet led at κ = 0.51 ignoring Gemini's small-n). Per-judge ranking is content-domain dependent; the always-works subset is more stable than per-judge ordering.
+3. **The 9-judge ensemble drops 0.10 below the frontier-7 ensemble** (0.3447 vs 0.4462) — a larger drop than the −0.025 we saw on TREC RAG 2024 web content (0.4941 vs 0.5187). Qwen (κ = 0.32) and Gemma 4 (κ = 0.27) trail their TREC RAG 2024 numbers (0.41 / 0.40 each) on biomedical, suggesting **the robustness↔headline κ tradeoff is content-domain dependent**: open-weight models broaden coverage uniformly but recover less of the human-agreement signal on biomedical scientific text than on web passages.
+4. **Coverage on TREC-COVID matches the always-works subset**: Anthropic + OpenAI + Qwen + Gemma all 100% (except Opus at 84% with thinking-mode null fraction). DeepSeek V4 Pro 83%, Gemini 3.1 Prev 44%, Gemini 2.5 Pro 6%. Gemini 2.5 Pro's biomedical coverage failure is severe enough to exclude its κ on small-n grounds.
+
+**Cross-corpus pattern (3 corpora)**: ISU DSpace within-pair max 0.80 (no human gold), TREC RAG 2024 ensemble κ = 0.4941 (web), BEIR scifact precision = 63.7% (κ undefined), TREC-COVID ensemble κ = 0.3447 (biomedical). All three public-corpus ensembles are above chance; the moderate Landis-Koch band lands on web content, the fair-near-moderate band on biomedical. The §7.3 coverage divergence finding strengthens with the third data point: the always-works 6-judge subset (Anthropic + OpenAI + Qwen + Gemma) holds across all three external corpora.
+
 ## 7.2 BEIR scifact: 300 pairs, precision-only
 
 **Corpus**: BEIR scifact [thakur2021beir], 300 pairs from the test split via `GenericDataLoader`.

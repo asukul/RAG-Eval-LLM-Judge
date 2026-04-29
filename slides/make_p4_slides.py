@@ -475,8 +475,8 @@ def slide_coverage_finding(p, n, total, *, version_label):
         ["GPT-4o", "100%", "100%", "100%"],
         ["Claude Opus 4.7", "100%", "95%", "84%"],
         ["Claude Sonnet 4.6", "100%", "99.7%", "100%"],
-        ["Qwen 3.6 Plus", "100%", "100%", "—"],
-        ["Gemma 4 26B", "100%", "100%", "—"],
+        ["Qwen 3.6 Plus", "100%", "100%", "100%"],
+        ["Gemma 4 26B", "100%", "100%", "100%"],
         ["DeepSeek V4 Pro", "39%", "84%", "83%"],
         ["Gemini 3.1 Pro Preview", "24%", "60%", "44%"],
         ["Gemini 2.5 Pro", "17%", "86%", "6%"],
@@ -494,34 +494,40 @@ def slide_coverage_finding(p, n, total, *, version_label):
 
 
 def slide_trec_covid_results(p, n, total, *, version_label):
-    s = standard_content_slide(p, "Third-corpus replication — TREC-COVID biomedical (300 pairs)")
+    s = standard_content_slide(p, "Third-corpus replication — TREC-COVID biomedical (300 pairs, 9 judges)")
     rows = [
         ["Rank", "Judge", "κ vs NIST qrels", "valid/300"],
         ["1", "Claude Opus 4.7", "0.5323", "251"],
         ["2", "Claude Sonnet 4.6", "0.4238", "300"],
         ["3", "GPT-4o", "0.3874", "300"],
         ["4", "GPT-5.5 (reasoning=low)", "0.3871", "300"],
-        ["5", "DeepSeek V4 Pro", "0.3144", "250"],
-        ["6", "Gemini 3.1 Pro Preview", "0.2202", "133"],
+        ["5", "Qwen 3.6 Plus", "0.3181", "300"],
+        ["6", "DeepSeek V4 Pro", "0.3144", "250"],
+        ["7", "Gemma 4 26B", "0.2743", "300"],
+        ["8", "Gemini 3.1 Pro Preview", "0.2202", "133"],
         ["—", "Gemini 2.5 Pro", "n/a (small-n)", "19"],
-        ["", "Frontier-7 ensemble median", "0.4462", "300"],
+        ["", "9-judge ensemble median", "0.3447", "300"],
+        ["", "(frontier-7 ensemble for ref)", "0.4462", "300"],
     ]
     add_table(s, 0.7, 1.4, rows,
               col_widths=[0.6, 4.0, 1.8, 1.4],
-              total_width=7.8, font_size=14)
-    add_textbox(s, 9.0, 1.4, 4.0, 5.0,
+              total_width=7.8, font_size=13)
+    add_textbox(s, 9.0, 1.4, 4.0, 5.5,
                 "Three corpora, three κ\n\n"
                 "• ISU DSpace: within-pair max 0.80\n"
                 "  (no human gold available)\n\n"
                 "• TREC RAG 2024: 9-judge κ = 0.4941\n"
-                "  (web passages, MS MARCO v2.1)\n\n"
+                "  (web passages)\n\n"
                 "• BEIR scifact: precision 63.7%\n"
                 "  (κ undefined — all-positive qrels)\n\n"
-                "• TREC-COVID: frontier-7 κ = 0.4462\n"
+                "• TREC-COVID: 9-judge κ = 0.3447\n"
                 "  (biomedical scientific)\n\n"
-                "All three public-corpus ensembles\nin the moderate Landis-Koch band.\n"
-                "Robustness across content domains.",
-                size=12, color=COLOR_TEXT)
+                "Open-weight broadens coverage\n"
+                "(Qwen + Gemma both 100%)\n"
+                "but lowers ensemble κ more on\n"
+                "biomedical (-0.10) than on web\n"
+                "(-0.025 on TREC RAG 2024).",
+                size=11, color=COLOR_TEXT)
     add_footer(s, f"P4 — {version_label}")
     add_slide_number(s, n, total)
 
