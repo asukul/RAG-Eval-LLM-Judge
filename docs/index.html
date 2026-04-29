@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cross-Family LLM-Judge Agreement for Institutional RAG</title>
+<meta name="description" content="A 5-Family, 9-Judge LLM-as-Judge Ablation on 570 institutional RAG pairs. Validated on TREC RAG 2024 (kappa=0.4941) and BEIR scifact.">
+<meta name="author" content="Adisak Sukul">
+<meta property="og:title" content="Cross-Family LLM-Judge Agreement for Institutional RAG">
+<meta property="og:description" content="Open-weight LLM judges win the within-pair race. 5 families, 9 judges, 570 pairs, validated on NIST TREC RAG 2024.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://asukul.github.io/RAG-Eval-LLM-Judge/">
+<style>
+:root{
+  --fg:#0e1116;
+  --muted:#57606a;
+  --bg:#ffffff;
+  --bg-alt:#f6f8fa;
+  --link:#0969da;
+  --accent:#0e4a86;
+  --warn:#c8102e;
+  --border:#d0d7de;
+  --code-bg:#f6f8fa;
+  --maxw:920px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+header.hero{background:linear-gradient(180deg,#0e4a86 0,#0a3a6c 100%);color:#fff;padding:48px 24px 40px}
+header.hero .wrap{max-width:var(--maxw);margin:0 auto}
+header.hero h1{margin:0 0 12px;font-size:30px;line-height:1.25;font-weight:700;letter-spacing:-0.01em}
+header.hero .subtitle{margin:0 0 18px;font-size:18px;opacity:0.92;font-weight:500}
+header.hero .meta{margin:0 0 16px;font-size:14px;opacity:0.85}
+header.hero .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+header.hero .links a{display:inline-block;padding:8px 14px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);border-radius:6px;color:#fff;font-size:14px;font-weight:500}
+header.hero .links a:hover{background:rgba(255,255,255,0.22);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:32px 24px 64px}
+section{margin:0 0 36px;scroll-margin-top:24px}
+h2{margin:0 0 14px;font-size:22px;color:var(--accent);border-bottom:2px solid var(--border);padding-bottom:6px}
+h3{margin:24px 0 10px;font-size:17px;color:var(--fg)}
+p{margin:0 0 12px}
+.callout{background:var(--bg-alt);border-left:4px solid var(--accent);padding:14px 18px;margin:14px 0;border-radius:0 6px 6px 0}
+.callout.warn{border-left-color:var(--warn)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--bg-alt);border:1px solid var(--border);border-radius:8px;padding:14px}
+.kpi .num{display:block;font-size:24px;font-weight:700;color:var(--accent);line-height:1.1;margin-bottom:4px}
+.kpi .lbl{display:block;font-size:13px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+th{background:var(--bg-alt);font-weight:600;color:var(--accent)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.bold{font-weight:700}
+figure{margin:18px 0;text-align:center}
+figure img{max-width:100%;height:auto;border:1px solid var(--border);border-radius:6px}
+figure figcaption{margin-top:8px;font-size:13px;color:var(--muted);font-style:italic}
+.fig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0}
+.fig-grid figure{margin:0}
+code,pre{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:13.5px}
+code{background:var(--code-bg);padding:2px 5px;border-radius:3px}
+pre{background:var(--code-bg);padding:12px 14px;border-radius:6px;overflow-x:auto;border:1px solid var(--border)}
+pre code{background:transparent;padding:0}
+ul.findings{list-style:none;padding:0;margin:14px 0}
+ul.findings li{background:var(--bg-alt);border-left:3px solid var(--accent);padding:12px 16px;margin-bottom:10px;border-radius:0 6px 6px 0}
+ul.findings li strong.tag{display:inline-block;background:var(--accent);color:#fff;padding:2px 8px;border-radius:3px;font-size:12px;margin-right:8px;font-weight:700}
+.cite-box{background:#fafbfc;border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-size:14px}
+footer{max-width:var(--maxw);margin:0 auto;padding:24px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);text-align:center}
+.toc{background:var(--bg-alt);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:0 0 28px}
+.toc h3{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.toc ol{margin:0;padding-left:22px;font-size:14px}
+.toc li{margin:2px 0}
+@media (max-width:600px){
+  header.hero{padding:32px 18px 28px}
+  header.hero h1{font-size:23px}
+  main{padding:24px 16px 48px}
+  h2{font-size:19px}
+  .kpi .num{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Cross-Family LLM-Judge Agreement for Institutional RAG</h1>
+    <p class="subtitle">A 5-Family, 9-Judge LLM-as-Judge Ablation</p>
+    <p class="meta">Adisak Sukul · Iowa State University · LLM4Eval @ SIGIR 2027 (under review) · arXiv preprint forthcoming</p>
+    <p class="meta"><strong>TL;DR — Open-weight LLM judges win the within-pair race.</strong> Qwen 3.6 Plus &harr; Gemma 4 26B reach &kappa; = 0.80, the highest pairwise quadratic-weighted Cohen's &kappa; in our 9 &times; 9 matrix &mdash; exceeding every commercial within-family pair at ~1% of the cost.</p>
+    <div class="links">
+      <a href="https://github.com/asukul/RAG-Eval-LLM-Judge">GitHub repo</a>
+      <a href="https://github.com/asukul/RAG-Eval-LLM-Judge/blob/main/papers/short.md">Short paper (4 pp)</a>
+      <a href="https://github.com/asukul/RAG-Eval-LLM-Judge/blob/main/papers/long.md">Long paper</a>
+      <a href="https://github.com/asukul/RAG-Eval-LLM-Judge/blob/main/slides/P4-SHORT.pptx">Slides (SHORT)</a>
+      <a href="https://github.com/asukul/RAG-Eval-LLM-Judge/tree/main/results">Raw results (JSON)</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<aside class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li><a href="#headline">Headline numbers</a></li>
+    <li><a href="#findings">Four findings (C1&ndash;C4)</a></li>
+    <li><a href="#matrix">9-judge &kappa; matrix</a></li>
+    <li><a href="#disclosure">Why disclosure matters: a 1.9&times; spread</a></li>
+    <li><a href="#mechanism">Mechanism: joint-distribution structure</a></li>
+    <li><a href="#validation">External validation (TREC RAG 2024, BEIR scifact)</a></li>
+    <li><a href="#reproduce">Reproduce</a></li>
+    <li><a href="#cite">Cite</a></li>
+  </ol>
+</aside>
+
+<section id="headline">
+<h2>Headline numbers</h2>
+<div class="kpi-grid">
+  <div class="kpi"><span class="num">9 &times; 5</span><span class="lbl">judges across 5 model families</span></div>
+  <div class="kpi"><span class="num">570</span><span class="lbl">institutional RAG pairs (ISU DSpace)</span></div>
+  <div class="kpi"><span class="num">0.80</span><span class="lbl">matrix-max &kappa; (Qwen &harr; Gemma 4)</span></div>
+  <div class="kpi"><span class="num">0.4941</span><span class="lbl">9-judge ensemble &kappa; vs NIST TREC RAG 2024</span></div>
+  <div class="kpi"><span class="num">63.7%</span><span class="lbl">9-judge precision on BEIR scifact</span></div>
+  <div class="kpi"><span class="num">$56</span><span class="lbl">total paid-API spend</span></div>
+</div>
+</section>
+
+<section id="findings">
+<h2>Four findings</h2>
+<ul class="findings">
+  <li><strong class="tag">C1</strong> <strong>Cross-family reasoning judges converge at &kappa; &ge; 0.75.</strong> Five cross-family pairs reach substantial-or-better &kappa; &mdash; well above the 0.4&ndash;0.6 typical [Rahmani 2024] and the 0.60 unweighted GPT-4o&harr;Llama-3.1-405B baseline of [Thakur 2025]. DeepSeek V4 Pro joining the cluster rules out a "Western training data" explanation; the pattern replicates across three independent ablation scales (5/7/9-judge).</li>
+  <li><strong class="tag">C2</strong> <strong>Within-family agreement is bounded by the cross-family ceiling.</strong> No within-family pair dominates: Anthropic 0.71, OpenAI 0.63, Google-commercial 0.67, cross-organization Open-weight 0.80. At odds with self-preference findings on open-ended generation [Panickssery 2024]; suggests self-preference is mediated by output-space boundedness, not provider lineage.</li>
+  <li><strong class="tag">C3</strong> <strong>Open-weight judges produce the matrix-highest &kappa;.</strong> Qwen 3.6 Plus &harr; Gemma 4 26B = <strong>0.80</strong> &mdash; exceeds every commercial within-family pair, ties the cross-family reasoning ceiling. Both open-weight judges cluster with strict-mid commercial models (mean 1.11&ndash;1.18) <em>not</em> with reasoning-generous reasoning models (1.63&ndash;1.68). At ~$0.30 marginal cost, a free on-prem cross-organization open-weight ensemble outperforms ~$18 of commercial within-family calls.</li>
+  <li><strong class="tag">C4</strong> <strong>Open-source toolkit and disclosure template.</strong> We release the multi-judge harness (<code>eval_llm_judge.py</code>), the external-validation harness (<code>validate_against_trec.py</code>), the cross-run merge tooling, the 57-query REFINE set, the rubric template, all 9 within-corpus per-judge JSONs (5,130 records), and 9 external-validation JSONs (4,833 records).</li>
+</ul>
+</section>
+
+<section id="matrix">
+<h2>9-judge &kappa; matrix</h2>
+<figure>
+  <img src="figures/kappa_matrix_9judge.png" alt="9-judge pairwise quadratic-weighted Cohen's kappa heatmap">
+  <figcaption>Pairwise quadratic-weighted Cohen's &kappa; on 570 ISU DSpace retrieval pairs. Every off-diagonal cell &ge; 0.56 (substantial or moderate by Landis-Koch). Two emergent calibration clusters: reasoning-generous (Sonnet, GPT-5.5, DSV4 Pro) and strict-mid + open-weight (GPT-4o, Opus 4.7, Qwen, Gemma 4). Calibration philosophy partitions judges more cleanly than provider lineage.</figcaption>
+</figure>
+</section>
+
+<section id="disclosure">
+<h2>Why disclosure matters: a 1.9&times; spread</h2>
+<p>The same 570 retrieved documents yield wildly different aggregate verdicts depending only on which LLM judges them. nDCG@10 ranges from <strong>0.45</strong> (Gemini 3.1 Pro Preview) to <strong>0.86</strong> (Sonnet 4.6) &mdash; a 1.9&times; spread driven entirely by judge selection. A practitioner using Sonnet concludes the pipeline is excellent; using Gemini 3.1 Prev, the same pipeline appears broken.</p>
+
+<table>
+<thead><tr><th>Judge</th><th>Family</th><th class="num">nDCG@10</th><th class="num">P@5</th><th class="num">MRR</th><th class="num">Mean</th></tr></thead>
+<tbody>
+<tr><td>Sonnet 4.6</td><td>Anthropic</td><td class="num bold">0.862</td><td class="num bold">0.649</td><td class="num bold">0.826</td><td class="num">1.68</td></tr>
+<tr><td>GPT-5.5 (low)</td><td>OpenAI</td><td class="num">0.846</td><td class="num">0.600</td><td class="num">0.792</td><td class="num">1.63</td></tr>
+<tr><td>DSV4 Pro</td><td>DeepSeek</td><td class="num">0.835</td><td class="num bold">0.702</td><td class="num bold">0.883</td><td class="num">1.63</td></tr>
+<tr><td>GPT-4o</td><td>OpenAI</td><td class="num">0.803</td><td class="num">0.361</td><td class="num">0.575</td><td class="num">1.15</td></tr>
+<tr><td>Qwen 3.6</td><td>Open-weight</td><td class="num">0.758</td><td class="num">0.379</td><td class="num">0.599</td><td class="num">1.18</td></tr>
+<tr><td>Gemma 4 26B</td><td>Open-weight</td><td class="num">0.753</td><td class="num">0.375</td><td class="num">0.573</td><td class="num">1.11</td></tr>
+<tr><td>Opus 4.7</td><td>Anthropic</td><td class="num">0.749</td><td class="num">0.372</td><td class="num">0.536</td><td class="num">1.09</td></tr>
+<tr><td>Gemini 2.5 Pro</td><td>Google</td><td class="num">0.624</td><td class="num">0.281</td><td class="num">0.486</td><td class="num">0.76</td></tr>
+<tr><td>Gemini 3.1 Prev</td><td>Google</td><td class="num bold">0.454</td><td class="num bold">0.158</td><td class="num bold">0.315</td><td class="num bold">0.37</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>Disclosure standard (C4).</strong> We propose the field adopt: <em>"nDCG@10 = X.XX via [family]/[model]/[reasoning-config], N pairs, DATE"</em> &mdash; the same way drug trials report dose and duration. Without it, "our retriever scores 0.86" is not a comparable measurement.
+</div>
+</section>
+
+<section id="mechanism">
+<h2>Mechanism: joint-distribution structure</h2>
+<p>What predicts pairwise &kappa;? Joint-distribution structure of paired scores &mdash; specifically dispersion (variance product) and effective rank &mdash; explains <strong>R&sup2; = 93%</strong> of &kappa; variance. Structural factors (provider, reasoning-mode, model class) are <strong>fully mediated</strong>: they affect &kappa; only through the joint distribution they induce. The shared-tokenizer hypothesis is refuted: Qwen &harr; Gemma 4 vocabulary Jaccard = 0.066 (lowest in slate) yet &kappa; = 0.80 (matrix-highest) &mdash; convergence happens at the decision-making layer, not lexical encoding.</p>
+
+<div class="fig-grid">
+<figure>
+  <img src="figures/judge_kappa_regression_decomposition.png" alt="Regression decomposition: predictors of pairwise kappa">
+  <figcaption>R&sup2; decomposition. Joint-distribution variance product and effective rank dominate; family/reasoning fully mediated.</figcaption>
+</figure>
+<figure>
+  <img src="figures/judge_calibration_mechanism.png" alt="Calibration mechanism: lenient vs strict clusters">
+  <figcaption>Calibration mechanism. Mean-score &times; agreement plane: two clusters (reasoning-generous vs strict-mid) partition judges more cleanly than provider family.</figcaption>
+</figure>
+</div>
+</section>
+
+<section id="validation">
+<h2>External validation against NIST human qrels</h2>
+<p>To address single-corpus exposure, we replicated the 9-judge slate on two public benchmarks with NIST/BEIR-curated relevance judgments.</p>
+
+<h3>TREC RAG 2024 (537 stratified-balanced pairs, 0&ndash;3 ordinal &kappa;)</h3>
+<ul>
+<li>Per-judge &kappa; vs human qrels: <strong>0.40&ndash;0.55</strong></li>
+<li>9-judge ensemble median &kappa; = <strong>0.4941</strong> (Landis-Koch <em>moderate</em>, near-substantial)</li>
+<li>7-judge frontier-only &kappa; = <strong>0.5187</strong> (open-weight broadens coverage, slightly lowers &kappa; &mdash; a robustness/headline tradeoff)</li>
+<li>5 of 9 judges hit &kappa; &ge; 0.47</li>
+</ul>
+
+<h3>BEIR scifact (300 pairs, all-positive qrels &rarr; precision)</h3>
+<ul>
+<li>9-judge ensemble precision at score &ge; 2: <strong>63.7%</strong> (range 43&ndash;75% across judges)</li>
+</ul>
+
+<div class="callout">
+<strong>Coverage divergence is a content-domain reliability axis.</strong> On TREC RAG 2024 web passages, Anthropic + OpenAI + Qwen + Gemma return scores on 100% of pairs; Gemini 3.1 Prev 24%, Gemini 2.5 Pro 17% (thinking-mode parse aborts on long passages). The <em>always-works 6-judge subset</em> (&ge;95% coverage on both corpora) is Anthropic + OpenAI + Qwen + Gemma &mdash; <strong>the 2 cheapest judges make this subset</strong>.
+</div>
+
+<p>Validation pipeline replaces a per-institution IRB study (~$1,500&ndash;3,000, 6&ndash;12 weeks) with public-NIST evidence (~$56, ~13 hours).</p>
+</section>
+
+<section id="reproduce">
+<h2>Reproduce</h2>
+
+<h3>Setup</h3>
+<pre><code>git clone https://github.com/asukul/RAG-Eval-LLM-Judge
+cd RAG-Eval-LLM-Judge
+pip install -r requirements.txt
+cp .env.template .env       # add OPENAI_API_KEY + OPENROUTER_API_KEY</code></pre>
+
+<h3>Within-corpus replication (your own collection)</h3>
+<pre><code>py -3 src/eval_llm_judge.py \
+    --collection &lt;your-collection&gt; \
+    --judge-preset p4-frontier
+# ~$18.30, ~5.5 h wall</code></pre>
+
+<h3>External validation (TREC RAG 2024)</h3>
+<pre><code>py -3 src/validate_against_trec.py \
+    --corpus trec-rag-2024 \
+    --judge-preset p4-frontier \
+    --max-pairs 537
+# ~$35, ~7.5 h wall</code></pre>
+
+<h3>Regenerate the &kappa; heatmap</h3>
+<pre><code>py -3 src/make_kappa_heatmap.py \
+    --input results/&lt;your-multijudge-json&gt; \
+    --output figures/kappa_matrix_9judge.png</code></pre>
+
+<p>Model versions pinned 2026-04-25. Targeting SIGIR Artifact Badging (Functional/Reusable).</p>
+</section>
+
+<section id="cite">
+<h2>Cite</h2>
+<div class="cite-box">
+<pre><code>@inproceedings{sukul2027p4llmjudge,
+  title    = {Cross-Family LLM-Judge Agreement for Institutional RAG:
+              A 5-Family, 9-Judge Ablation},
+  author   = {Sukul, Adisak},
+  booktitle = {Proceedings of the LLM4Eval Workshop at SIGIR 2027},
+  year     = {2027},
+  note     = {arXiv preprint forthcoming},
+  url      = {https://github.com/asukul/RAG-Eval-LLM-Judge}
+}</code></pre>
+</div>
+<p>See <a href="https://github.com/asukul/RAG-Eval-LLM-Judge/blob/main/CITATION.cff"><code>CITATION.cff</code></a> for machine-readable citation metadata.</p>
+</section>
+
+</main>
+
+<footer>
+&copy; 2026 Adisak Sukul &middot; Iowa State University &middot; <a href="https://github.com/asukul/RAG-Eval-LLM-Judge/blob/main/LICENSE">MIT (code) / CC-BY-4.0 (data, figures, papers)</a>
+</footer>
+
+</body>
+</html>
