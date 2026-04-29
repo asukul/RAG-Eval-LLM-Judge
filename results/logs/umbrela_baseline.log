@@ -1,0 +1,39 @@
+Loaded 537 pairs from TREC RAG 2024 stratified sample
+Running UMBRELA prompt (Upadhyay et al. 2024) with gpt-4o-2024-08-06
+========================================================================
+  [  20/537] valid=20  elapsed=8s  rate=2.53/s  eta=205s
+  [  40/537] valid=40  elapsed=12s  rate=3.29/s  eta=151s
+  [  60/537] valid=60  elapsed=17s  rate=3.48/s  eta=137s
+  [  80/537] valid=80  elapsed=21s  rate=3.80/s  eta=120s
+  [ 100/537] valid=100  elapsed=24s  rate=4.18/s  eta=104s
+  [ 120/537] valid=120  elapsed=26s  rate=4.58/s  eta=91s
+  [ 140/537] valid=140  elapsed=29s  rate=4.85/s  eta=82s
+  [ 160/537] valid=160  elapsed=31s  rate=5.08/s  eta=74s
+  [ 180/537] valid=180  elapsed=34s  rate=5.25/s  eta=68s
+  [ 200/537] valid=200  elapsed=37s  rate=5.43/s  eta=62s
+  [ 220/537] valid=220  elapsed=40s  rate=5.56/s  eta=57s
+  [ 240/537] valid=240  elapsed=43s  rate=5.62/s  eta=53s
+  [ 260/537] valid=260  elapsed=45s  rate=5.76/s  eta=48s
+  [ 280/537] valid=280  elapsed=48s  rate=5.80/s  eta=44s
+  [ 300/537] valid=300  elapsed=51s  rate=5.83/s  eta=41s
+  [ 320/537] valid=320  elapsed=54s  rate=5.90/s  eta=37s
+  [ 340/537] valid=340  elapsed=58s  rate=5.89/s  eta=33s
+  [ 360/537] valid=360  elapsed=61s  rate=5.93/s  eta=30s
+  [ 380/537] valid=380  elapsed=63s  rate=5.99/s  eta=26s
+  [ 400/537] valid=400  elapsed=66s  rate=6.04/s  eta=23s
+  [ 420/537] valid=420  elapsed=69s  rate=6.09/s  eta=19s
+  [ 440/537] valid=440  elapsed=72s  rate=6.10/s  eta=16s
+  [ 460/537] valid=460  elapsed=76s  rate=6.09/s  eta=13s
+  [ 480/537] valid=480  elapsed=79s  rate=6.11/s  eta=9s
+  [ 500/537] valid=500  elapsed=81s  rate=6.14/s  eta=6s
+  [ 520/537] valid=520  elapsed=84s  rate=6.17/s  eta=3s
+  [ 537/537] valid=537  elapsed=106s  rate=5.08/s  eta=0s
+
+=== UMBRELA baseline result ===
+  pairs:       537
+  valid:       537/537 (100.0%)
+  kappa vs human: 0.4265
+  wall:        1.8 min
+
+Saved: D:\RAG-DSpace\p4-llm-judge\results\umbrela_baseline_trec_rag_2024.json
+

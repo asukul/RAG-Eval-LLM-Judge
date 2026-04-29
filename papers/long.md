@@ -310,6 +310,24 @@ Full bias-diagnostic data: `results/bias_diagnostics.json`. Computation script: 
 
 We validate the same 9-judge slate against two public benchmarks. The within-corpus 9×9 κ matrix establishes inter-judge agreement; this section establishes judge-vs-human agreement on labels we did not generate.
 
+## 7.0 UMBRELA single-judge baseline
+
+Before reporting our 9-judge ensemble against TREC RAG 2024 NIST qrels, we run the **UMBRELA single-judge baseline** [upadhyay2024umbrela] on the same 537-pair stratified-balanced sample, using the verbatim UMBRELA prompt (arXiv:2406.06519, Section 3) with `gpt-4o-2024-08-06` (UMBRELA's published default backbone). This isolates the **prompt-and-rubric** contribution of our methodology from the model-and-ensemble contributions.
+
+**UMBRELA result on our 537-pair sample**: **κ = 0.4265, n_valid = 537/537 (100%)**, wall ~1.8 min, ~$0.30. *(Note: at temperature 0.0 across two independent runs, GPT-4o-with-UMBRELA-prompt produced κ = 0.4265 and 0.4387 respectively — a 0.012 κ jitter even with identical inputs, supporting the §6.6 finding that LLM judges have measurable intra-judge variance and motivating the §3.4 ensemble convention.)*
+
+**Comparison to our 9-judge ensemble and to single-judge variants** (all on the same 537 pairs, same human qrels):
+
+| Configuration | κ vs human | Notes |
+|---|---:|---|
+| UMBRELA (their prompt + GPT-4o) | **0.4265** | published baseline |
+| **Our prompt + GPT-4o (single judge)** | 0.4065 | our prompt slightly under-performs UMBRELA's on the same model |
+| **Our prompt + Sonnet 4.6 (single best)** | 0.5123 | best single judge in our slate |
+| **Our prompt + 9-judge ensemble** | **0.4941** | ensemble of 9 judges, upper-median vote |
+| **Our prompt + 7-judge frontier ensemble** | **0.5187** | frontier-only ensemble (no open-weight) |
+
+**Two findings.** (1) Our prompt is **not better** than UMBRELA's on the same backbone (GPT-4o + our prompt = 0.41 vs UMBRELA = 0.43); the methodological contribution comes from the *judge slate and ensemble*, not the prompt. We do not claim prompt-level superiority. (2) **Both single-judge frontier (Sonnet) and 9-judge / 7-judge ensembles outperform UMBRELA** by 0.07–0.09 κ, supporting C1 (cross-family ensemble convergence) and C4 (the disclosure-template + ensemble proposal) as a methodological advance over the single-judge UMBRELA baseline. UMBRELA result file: `results/umbrela_baseline_trec_rag_2024.json`.
+
 ## 7.1 TREC RAG 2024: 537-pair stratified-balanced sample
 
 **Corpus**: TREC RAG 2024 retrieval track [thakur2025trecragsupport; macavaney2025trec_rag], 20,283 NIST human relevance judgments across 86 unique queries on the MS MARCO v2.1 segmented passage corpus.

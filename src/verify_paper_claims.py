@@ -403,6 +403,42 @@ def verify_supplementary_outputs():
         warn(f"Gwet AC2 file not found at {ac2_fp}; "
              "run src/compute_gwet_ac2.py")
 
+    umbrela_fp = REPO / "results" / "umbrela_baseline_trec_rag_2024.json"
+    if umbrela_fp.exists():
+        u = json.loads(umbrela_fp.read_text(encoding="utf-8"))
+        check("UMBRELA baseline: 537 pairs evaluated", 537, u.get("n_pairs", 0))
+        check("UMBRELA baseline: 100% valid", 537, u.get("n_valid", 0))
+        # UMBRELA should be in the moderate band (Landis-Koch 0.40-0.60)
+        kappa = u.get("kappa_vs_human")
+        check("UMBRELA kappa is in moderate band (0.40 < kappa < 0.60)",
+              True, 0.40 < (kappa or 0) < 0.60)
+        # Our ensemble should beat UMBRELA single-judge
+        check("9-judge ensemble (0.4941) > UMBRELA single (recorded value)",
+              True, 0.4941 > (kappa or 99))
+    else:
+        warn(f"UMBRELA baseline not found at {umbrela_fp}; "
+             "run src/run_umbrela_baseline.py")
+
+    intra_fp = REPO / "results" / "intra_judge_consistency.json"
+    if intra_fp.exists():
+        ij = json.loads(intra_fp.read_text(encoding="utf-8"))
+        cfg = ij.get("config", {})
+        check("intra-judge: 50 pairs", 50, cfg.get("n_pairs", 0))
+        check("intra-judge: 3 runs", 3, cfg.get("n_runs", 0))
+        per_judge = ij.get("per_judge", {})
+        check("intra-judge: 9 judges measured", 9, len(per_judge))
+        # All judges should have intra-kappa > kappa-vs-human (otherwise the
+        # judge is less self-consistent than human-aligned, a red flag).
+        unstable = [j for j, m in per_judge.items()
+                    if m.get("mean_intra_judge_kappa") is not None
+                    and m.get("mean_kappa_vs_human") is not None
+                    and m["mean_intra_judge_kappa"] < m["mean_kappa_vs_human"]]
+        check("intra-judge: no judge less self-consistent than human-aligned",
+              True, len(unstable) == 0)
+    else:
+        warn(f"Intra-judge file not found at {intra_fp}; "
+             "run src/intra_judge_consistency.py")
+
 
 def main():
     print("=" * 72)

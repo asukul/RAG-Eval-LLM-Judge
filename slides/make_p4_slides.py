@@ -422,6 +422,45 @@ def slide_mechanism_summary(p, n, total, *, version_label):
     add_slide_number(s, n, total)
 
 
+def slide_baselines_and_bias(p, n, total, *, version_label):
+    """UMBRELA baseline + bias-diagnostics summary slide. Added in P3."""
+    s = standard_content_slide(p, "Baselines and bias diagnostics (P3 additions)")
+    add_textbox(s, 0.6, 1.3, 6.4, 0.4, "UMBRELA single-judge baseline",
+                size=15, bold=True, color=COLOR_TITLE)
+    add_textbox(s, 0.6, 1.7, 6.4, 3.0,
+                "(Upadhyay et al. 2024) prompt + GPT-4o on the same 537 pairs:\n"
+                "    kappa vs human = 0.4265, n_valid = 537/537\n\n"
+                "Comparison (same 537 pairs, same human qrels):\n"
+                "  - UMBRELA baseline:                 0.4265\n"
+                "  - Our prompt + GPT-4o:              0.4065\n"
+                "  - Our prompt + Sonnet 4.6 (best):   0.5123\n"
+                "  - Our 9-judge ensemble:             0.4941\n"
+                "  - Our 7-judge frontier ensemble:    0.5187\n\n"
+                "Both ensembles + best single judge >> UMBRELA single by 0.07-0.09 kappa.\n"
+                "The contribution is the SLATE + ENSEMBLE, not the prompt.",
+                size=12, color=COLOR_TEXT, font="Consolas")
+
+    add_textbox(s, 7.3, 1.3, 5.6, 0.4, "Bias diagnostics (free recompute)",
+                size=15, bold=True, color=COLOR_TITLE)
+    add_textbox(s, 7.3, 1.7, 5.6, 3.0,
+                "Family conditional-mean matrix (5x5):\n"
+                "  Anthropic 2.07,  OpenAI 1.93,  Google 2.01\n"
+                "  DeepSeek 2.45,   Open-weight 1.62\n"
+                "  -> calibration drift, NOT self-preference\n"
+                "     (no family's diagonal dominates its row)\n\n"
+                "Per-judge marginal score distributions:\n"
+                "  -> visualizes 3-cluster structure directly\n\n"
+                "Length-stratified kappa: SKIPPED\n"
+                "  (text_preview uniformly truncated at 240\n"
+                "   chars in shipped JSONs; defer to re-extract)\n\n"
+                "Position bias: not directly applicable\n"
+                "  (single-document scoring, not pairwise)",
+                size=11, color=COLOR_TEXT)
+    add_image(s, FIGS / "bias_diagnostics_panel.png", 0.6, 4.85, 12.4, 2.6)
+    add_footer(s, f"P4 — {version_label}")
+    add_slide_number(s, n, total)
+
+
 def slide_external_validation_setup(p, n, total, *, version_label):
     s = standard_content_slide(p, "External validation: NIST TREC RAG 2024 — 537 stratified-balanced pairs")
     add_bullets(s, 0.7, 1.4, 12.5, 5.0, [
@@ -841,6 +880,7 @@ def build_short() -> Presentation:
         ("mechanism", slide_mechanism_summary),
         ("ext val", slide_external_validation_results),
         ("trec-covid", slide_trec_covid_results),
+        ("baselines+bias (P3)", slide_baselines_and_bias),
         ("coverage", slide_coverage_finding),
         ("takeaway", slide_takeaway),
         ("Q&A", slide_qa),
@@ -888,6 +928,7 @@ def build_long() -> Presentation:
         ("ext val setup", lambda p, n, t: slide_external_validation_setup(p, n, t, version_label="LONG")),
         ("ext val results", lambda p, n, t: slide_external_validation_results(p, n, t, version_label="LONG")),
         ("trec-covid results", lambda p, n, t: slide_trec_covid_results(p, n, t, version_label="LONG")),
+        ("baselines+bias (P3)", lambda p, n, t: slide_baselines_and_bias(p, n, t, version_label="LONG")),
         ("coverage", lambda p, n, t: slide_coverage_finding(p, n, t, version_label="LONG")),
         ("Thakur comparison", slide_thakur_comparison),
         # Closing
