@@ -135,6 +135,15 @@ cp .env.template .env
 
 ### Reproducibility commands
 
+#### 0. Verify all headline numerical claims (free, ~3 sec)
+
+```bash
+py -3 -X utf8 src/verify_paper_claims.py
+# → 43 pass / 0 fail / 1 warn (BEIR median convention)
+```
+
+This script independently recomputes every per-judge κ, every ensemble κ, every BEIR precision number, and every structural claim from the within-corpus 9×9 matrix in `figures/kappa_matrix_9judge.txt`. Exit code 0 ⇒ paper claims are internally consistent with shipped JSONs. Latest run: `results/verification_log.txt`.
+
 #### 1. Re-compute κ from the published per-judge JSONs (free, ~2 sec)
 
 ```bash

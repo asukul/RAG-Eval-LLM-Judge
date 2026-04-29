@@ -13,7 +13,7 @@ For each test query in a JSON file, this script:
        3 = Highly relevant
   4. Computes standard IR metrics — nDCG@5, nDCG@10, Precision@1/5/10, MRR —
      per-query and averaged across the test set.
-  5. Saves a timestamped JSON report under backend/data/eval/.
+  5. Saves a timestamped JSON report under results/.
 
 The LLM judge supports two transports:
   A) Direct `anthropic` SDK using ANTHROPIC_API_KEY (fast, default when available)
@@ -57,24 +57,40 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-# qdrant-client is a hard dependency of the backend, so importing at top is safe.
-from qdrant_client import QdrantClient
+# qdrant-client is needed for the within-corpus retrieval path (--collection),
+# but NOT for the --analyze path that just reads shipped per-judge JSONs.
+# Make the import lazy so external-validation analysis (validate_against_trec.py
+# --analyze) works on machines that haven't installed qdrant_client.
+try:
+    from qdrant_client import QdrantClient  # type: ignore[import-not-found]
+    _QDRANT_AVAILABLE = True
+except ImportError:  # pragma: no cover
+    QdrantClient = None  # type: ignore[assignment,misc]
+    _QDRANT_AVAILABLE = False
 
 # ----------------------------------------------------------------------
 # Paths and defaults
 # ----------------------------------------------------------------------
 
 HERE = Path(__file__).resolve().parent
-BACKEND = HERE.parent
-EVAL_DIR = BACKEND / "data" / "eval"
+# Standalone-repo paths. The harness was originally written for an outer
+# isu-research-search/backend/scripts/ layout; in the public RAG-Eval-LLM-Judge
+# repo, src/ sits directly under the repo root and results/ is the equivalent
+# of the old backend/data/eval/ output directory.
+REPO = HERE.parent
+EVAL_DIR = REPO / "results"
 DEFAULT_QUERIES = EVAL_DIR / "test_queries.json"
+
+# Backwards-compatible alias for any external code that imported BACKEND.
+BACKEND = REPO
 
 DEFAULT_QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6334")
 DEFAULT_TOP_K = 10
 DEFAULT_CLAUDE_MODEL = os.getenv("CLAUDE_JUDGE_MODEL", "claude-opus-4-6")
 
-# Project .env (API keys for OpenAI/Gemini/OpenRouter/Anthropic SDK usage)
-PROJECT_ROOT = BACKEND.parent  # isu-research-search/
+# Project .env (API keys for OpenAI/Gemini/OpenRouter/Anthropic SDK usage).
+# In the standalone repo, .env sits at the repo root.
+PROJECT_ROOT = REPO
 DOTENV_PATH = PROJECT_ROOT / ".env"
 
 
@@ -1258,7 +1274,7 @@ def main() -> int:
     parser.add_argument(
         "--output",
         default=None,
-        help="Override the output path (default auto-generated under backend/data/eval/)",
+        help="Override the output path (default auto-generated under results/)",
     )
     parser.add_argument(
         "--limit",

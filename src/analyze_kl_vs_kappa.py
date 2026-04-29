@@ -22,10 +22,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr, spearmanr
 
-REPO = Path(__file__).resolve().parents[2]
-EVAL_DIR = REPO / "backend" / "data" / "eval"
-FIG_DIR = REPO / "papers" / "P4_llm_as_judge" / "figures"
-OUT_DIR = REPO / "papers" / "P4_llm_as_judge"
+# Standalone-repo paths. Within-corpus 9-judge JSON ships in results/
+# under the dspace_fulltext_vertex_multijudge_*_9judge.json filename.
+REPO = Path(__file__).resolve().parents[1]
+EVAL_DIR = REPO / "results"
+FIG_DIR = REPO / "figures"
+OUT_DIR = REPO / "results"
 
 # Order judges in the same family-block ordering used elsewhere
 JUDGE_ORDER = [

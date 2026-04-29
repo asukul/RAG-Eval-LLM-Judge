@@ -15,11 +15,11 @@ import json
 from pathlib import Path
 import numpy as np
 
-REPO = Path(__file__).resolve().parents[2]
-EVAL_DIR = REPO / "backend" / "data" / "eval"
-ROOT = Path(__file__).resolve().parent
-FIG_DIR = ROOT / "figures"
-OUT_JSON = ROOT / "judge_valid_only_kappa.json"
+# Standalone-repo paths.
+REPO = Path(__file__).resolve().parents[1]
+EVAL_DIR = REPO / "results"
+FIG_DIR = REPO / "figures"
+OUT_JSON = REPO / "results" / "judge_valid_only_kappa.json"
 
 JUDGE_ORDER = [
     "Claude Opus 4.7 (OpenRouter)",

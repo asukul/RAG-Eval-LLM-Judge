@@ -161,9 +161,9 @@ We organize the 9-judge ablation into four contribution claims, each supported b
 
 ## C1. Cross-family reasoning judges converge at κ ≥ 0.75
 
-Five cross-family pairs reach substantial-or-better κ (Fig. 3): Sonnet ↔ GPT-5.5 (0.79), Qwen ↔ Gemma 4 (0.80; cross-org open-weight), Sonnet ↔ DSV4 Pro (0.78), GPT-5.5 ↔ DSV4 Pro (0.77), DSV4 Pro ↔ Sonnet (0.78). This is well above the 0.4-0.6 typical in prior art [rahmani2024judges] and the 0.60 unweighted baseline of [thakur2025trecragsupport].
+Nine cross-family pairs reach substantial-or-better κ ≥ 0.75 (Fig. 3), spanning every pairwise combination of the five families: Sonnet ↔ GPT-5.5 (0.79; Anthropic ↔ OpenAI), Qwen ↔ Gemma 4 (0.80; cross-organization Open-weight), GPT-5.5 ↔ Gemini 2.5 Pro (0.78; OpenAI ↔ Google-commercial, on Gemini's valid subset), Sonnet ↔ Gemini 2.5 Pro (0.77; Anthropic ↔ Google-commercial), GPT-4o ↔ Gemma 4 (0.77; OpenAI ↔ Open-weight), Gemini 3.1 Prev ↔ Qwen (0.77; Google-commercial ↔ Open-weight), Sonnet ↔ DSV4 Pro (0.76; Anthropic ↔ DeepSeek), Gemini 3.1 Prev ↔ Gemma 4 (0.76; Google-commercial ↔ Open-weight), and Gemini 2.5 Pro ↔ DSV4 Pro (0.75; Google-commercial ↔ DeepSeek). Opus ↔ Qwen (0.75; Anthropic ↔ Open-weight) sits at the boundary. This is well above the 0.4-0.6 typical in prior art [rahmani2024judges] and the 0.60 unweighted baseline of [thakur2025trecragsupport].
 
-**DeepSeek V4 Pro joining the reasoning-generous cluster rules out a "Western training data" common-cause explanation** — DSV4 was trained primarily on Chinese-language and Chinese-mathematical sources [deepseek_v4_techreport]. The convergence of Anthropic, OpenAI, and DeepSeek reasoning-mode judges on the same calibration cluster is therefore not an artifact of a shared SFT corpus.
+**DeepSeek V4 Pro joining the reasoning-generous cluster makes a simple "shared Western training data" common-cause explanation less plausible** — DSV4 was trained primarily on Chinese-language and Chinese-mathematical sources [deepseek_v4_techreport]. The convergence of Anthropic, OpenAI, and DeepSeek reasoning-mode judges on the same calibration cluster is therefore not straightforwardly attributable to a shared SFT corpus, though the experiment does not formally rule out alternative mechanisms (shared evaluation-data leakage, distillation lineage, or community-of-practice effects) that we discuss in §6.5.
 
 The pattern replicates across three independent ablation scales (5-judge → 7-judge → 9-judge) within run-to-run noise; full results in Appendix B (FINDINGS_5judge / 7judge / 9judge).
 
@@ -183,7 +183,7 @@ All four within-family pairs are at most equal to the strongest cross-family com
 
 Qwen 3.6 Plus ↔ Gemma 4 26B = **0.80** — exceeds every commercial within-family pair and ties the cross-family reasoning ceiling. Both open-weight judges (mean 1.11-1.18) cluster with GPT-4o and Opus 4.7 (1.09-1.15) **not** with the reasoning-generous triad (1.63-1.68). This is a novel finding on bounded ordinal IR judging: prior literature has either lumped open-weight judges into a single bucket or compared them only to a reference frontier judge.
 
-At ~USD 0.30 marginal cost (vs ~USD 18.30 for the commercial 7-judge frontier), **a free on-prem cross-organization open-weight ensemble achieves higher cross-validation κ than ~USD 60 of commercial within-family calls.** The economic asymmetry has direct policy implications for sovereign-cloud and privacy-conservative deployments — institutions that cannot use commercial APIs at all are nonetheless not condemned to lower-quality judging. We open-source the cross-org open-weight pair as the recommended low-cost configuration in §9.
+At ~USD 0.30 marginal cost via API routing (vs ~USD 18.30 for the commercial 7-judge frontier), **an open-weight cross-organization pair, accessed in this study through API routing, achieves higher cross-validation κ than the ~USD 18 commercial 7-judge frontier.** The economic asymmetry has direct implications for sovereign-cloud and privacy-conservative deployments where commercial APIs are not an option, **conditional on a self-hosted replication confirming that the API-routed κ behavior holds under direct inference** (we note this gap as a §8 limitation pending follow-up). We open-source the cross-org open-weight pair as the recommended low-cost configuration in §9, and treat the policy claim about sovereign-cloud deployments as provisional until a self-hosted measurement is available.
 
 External corroboration on TREC RAG 2024 (§7): Qwen 3.6 Plus and Gemma 4 26B both achieve **100% coverage** on the 537-pair sample — better than 4 of the 7 frontier judges. Their individual κ vs human qrels (0.41 each) is moderate by Landis-Koch and within 0.04 of each other, mirroring the within-corpus matrix-highest κ pattern.
 
@@ -223,23 +223,27 @@ For each pair (A, B), we compute symmetric KL: KL_sym(A || B) = ½ KL(A || B) + 
 
 Sign is negative as expected: more divergent score distributions → lower agreement. **But 33% is a coarse proxy** — two judges can have identical marginal distributions and still disagree wildly on which specific pairs they assign which score. The marginal-only model is not sufficient.
 
-## 6.2 Joint-distribution structure: R² = 93%
+## 6.2 Joint-distribution decomposition of κ
 
-For each pair (A, B), the joint distribution P(A, B) is a 4×4 confusion matrix (16 cells). We extract two structural features:
+For each pair (A, B), the joint distribution P(A, B) is a 4×4 confusion matrix (16 cells). We extract two features:
 
-- **Dispersion** = quadratic-weighted disagreement distance. For each cell P(A=i, B=j), weight by (i−j)² and sum. This is the same quantity that drives quadratic-weighted κ in the denominator, but as a feature it operationalizes "how far apart are the judges' scores when they disagree?"
-- **Effective rank** = 4×4 joint distribution's effective rank computed from the singular value spectrum, after centering. This operationalizes "how many independent dimensions of variation does the joint distribution have?"
+- **Dispersion** = quadratic-weighted disagreement distance, Σ P(A=i, B=j)·(i−j)². **This is by construction the numerator of the (1 − weighted-agreement) term in the quadratic-weighted κ denominator** — operationalizing "how far apart are the judges' scores when they disagree?"
+- **Effective rank** = 4×4 joint distribution's effective rank computed from the singular value spectrum after centering. This operationalizes "how many independent dimensions of variation does the joint distribution have?", a quantity not directly entailed by the κ formula.
 
 Regressing κ on (dispersion, effective_rank) jointly:
 
-- **R² = 0.928** on the 36 pairs (the model explains 93% of the variance in κ across pairs)
+- **R² = 0.928** on the 36 pairs
 - Both predictors significant: dispersion β = -2.11 (p < 1e-9), effective_rank β = -0.087 (p < 1e-3)
 
-**The joint-distribution structure of paired scores is the dominant explanation of pairwise κ.** Dispersion alone gives R² = 0.89; adding effective_rank lifts it to 0.93 by capturing the "how clumped" dimension orthogonal to "how far apart." Figure 6 (panel 3) renders κ vs dispersion as a scatter with effective rank as color: the linear relationship is striking, with the four highest-κ pairs at the dispersion floor and the four lowest at the dispersion ceiling.
+**Disclosure of mathematical structure.** A high R² between κ and dispersion is *partly mathematical*: dispersion appears in the quadratic-weighted κ formula by construction, and on synthetic pairs we confirm that κ ~ dispersion alone reaches R² ≈ 0.998 in the limit (purely from the weighting structure of κ itself). Reporting R² = 0.928 between κ and (dispersion + effective_rank) on real data is therefore best read as a **decomposition of κ into its mathematical components** rather than as the discovery of a hidden empirical relationship. The decomposition is informative — it reveals which axes of joint-distribution structure correlate with κ in our specific 36-pair slate — but does not by itself constitute an empirical mechanism. Effective rank, the second predictor, is *not* directly entailed by the κ formula; its 0.04 incremental R² above dispersion alone is the small genuinely-empirical residual within this section.
 
-## 6.3 Structural factors are fully mediated
+**The empirically interesting result is the next subsection** (§6.3): once dispersion and effective rank are accounted for, *structural factors* (provider, reasoning-mode, model class) add ≤ 0.005 to R² and are individually non-significant. That is the contribution that does not follow from the κ formula. We frame §6.2 as the necessary mathematical scaffolding for §6.3's empirical finding.
 
-If the joint distribution explains 93% of κ variance, do structural factors (provider, reasoning-mode, model class) add anything? We follow the classical mediation-analysis framework of Baron and Kenny [baronkenny1986], modernized per MacKinnon [mackinnon2007], and test full mediation by including binary indicators for each structural factor as additional predictors. Significance is assessed via standard OLS p-values; we report Cohen's κ statistic [cohen1968] in its original quadratic-weighted formulation per Fleiss et al. [fleiss1971], with Landis-Koch interpretation bands [landis1977]. KL divergence on score marginals is computed per Kullback and Leibler [kullback1951]:
+Figure 6 (panel 3) renders κ vs dispersion as a scatter with effective rank as color: the near-linear relationship is striking but, again, partly definitional. The four highest-κ pairs sit at the dispersion floor and the four lowest at the dispersion ceiling, as the formula entails.
+
+## 6.3 Structural factors are absorbed by the joint distribution (the empirical finding)
+
+§6.2's decomposition is partly mathematical, as disclosed. The empirically meaningful question is whether **structural factors** (provider, reasoning-mode, model class) add any *incremental* explanatory power above the dispersion + effective-rank decomposition. If they do not — if their effect on κ is fully captured by the joint distribution they induce — then provider lineage operates on κ only through its effect on score-allocation geometry, with no residual provider-specific channel. We test this with a regression-style decomposition in the spirit of mediation analysis [baronkenny1986; mackinnon2007], cautioning that with n = 36 unique judge pairs, the inferential unit is the judge-pair (not the document) and effect sizes should be interpreted descriptively rather than as causal estimates. We report Cohen's κ statistic [cohen1968] in its original quadratic-weighted formulation per Fleiss et al. [fleiss1971], with Landis-Koch interpretation bands [landis1977]. KL divergence on score marginals is computed per Kullback and Leibler [kullback1951]:
 
 | Predictor | β | p | Cumulative R² |
 |---|---:|---:|---:|
@@ -249,11 +253,13 @@ If the joint distribution explains 93% of κ variance, do structural factors (pr
 | same_reasoning_mode | -0.029 | 0.21 | 0.931 |
 | same_model_class (frontier vs compact) | -0.013 | 0.55 | 0.931 |
 
-*Table 4: Mediation analysis. After controlling for dispersion and effective_rank, all three structural factors are non-significant (p > 0.18) and add < 0.005 to R². The structural factors **affect κ only through the joint distribution they induce**.*
+*Table 4: Decomposition with structural factors added. After dispersion and effective_rank are included, all three structural factors are individually non-significant (p > 0.18) and jointly add < 0.005 to R². Structural factors **add no measurable incremental explanatory power above the joint-distribution decomposition** on this 36-pair slate.*
 
-**Interpretation**: provider, reasoning-mode, and model-class effects on κ are real, but they operate by shaping the joint distribution between paired judges. Two judges from the same family share more dispersion structure than two from different families; two reasoning-mode judges share more dispersion structure than reasoning-vs-non-reasoning. But once we have the joint distribution, the structural labels add no incremental information.
+**Interpretation (descriptive, not causal).** Provider, reasoning-mode, and model-class effects on κ may be real but, on these data, are absorbed by the joint-distribution features. Two judges from the same family appear to share more dispersion structure than two from different families; two reasoning-mode judges appear to share more dispersion structure than reasoning-vs-non-reasoning pairs. Once the joint distribution is included as a predictor, the structural labels add no detectable incremental information.
 
-This is a stronger statement than "provider doesn't matter." Provider matters, but its effect size is fully captured by the joint distribution it induces. A multi-factor regression on raw structural labels (without the joint distribution features) would over-credit provider as a causal factor; the mediation analysis correctly attributes it to the joint distribution as the proximate cause.
+This decomposition supports a weaker form of the "provider doesn't matter" claim: **provider may still matter, but on this slate its effect size is entirely captured by the score-allocation geometry it induces, not by a residual provider-specific channel.** A multi-factor regression on raw structural labels (without the joint distribution features) would over-credit provider as an explanatory factor; including the joint distribution attributes it to score-allocation geometry as the proximate driver. We frame this as evidence consistent with, rather than proof of, full mediation; n = 36 limits the inferential strength.
+
+**Robustness checks for this finding (next paper revision):** bootstrap 95% CIs on the structural-factor coefficients, sensitivity to alternative definitions of dispersion and effective rank, and a permutation test for whether the structural-factor R² increment exceeds chance. Pending those checks, the §6.3 result is best read as **strongly suggestive descriptive evidence**, not a confirmed causal mediation.
 
 ## 6.4 The shared-tokenizer hypothesis is refuted
 

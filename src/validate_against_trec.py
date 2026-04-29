@@ -29,13 +29,19 @@ import urllib.request
 from pathlib import Path
 from typing import Optional
 
-REPO = Path(__file__).resolve().parents[2]
-ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "_validation_data"
-RESULTS_DIR = ROOT / "_validation_results"
+# Standalone-repo paths. The previous version assumed a parent monorepo
+# layout (REPO/backend/scripts/, REPO/backend/data/eval/) which does not
+# exist in the public RAG-Eval-LLM-Judge repository. We now resolve
+# everything relative to the repo root, defined as the parent of src/.
+REPO = Path(__file__).resolve().parents[1]
+SRC_DIR = REPO / "src"
+DATA_DIR = REPO / "data"
+RESULTS_DIR = REPO / "results"
+# Backwards-compatible aliases (some external callers may still reference these names)
+ROOT = SRC_DIR
 
-# Reuse judge infrastructure from the main eval harness
-sys.path.insert(0, str(REPO / "backend" / "scripts"))
+# Reuse judge infrastructure from src/eval_llm_judge.py (same directory)
+sys.path.insert(0, str(SRC_DIR))
 try:
     from eval_llm_judge import (  # type: ignore
         JUDGE_BUILDERS,
@@ -48,7 +54,10 @@ try:
     _load_dotenv_manual(REPO / ".env")
 except ImportError as e:
     print(f"ERROR: cannot import from eval_llm_judge.py: {e}")
-    print("This script depends on backend/scripts/eval_llm_judge.py being importable.")
+    print("This script depends on src/eval_llm_judge.py being importable.")
+    print("If qdrant_client / anthropic / openai is missing for the within-corpus")
+    print("eval path, you can still use --analyze on shipped per-judge JSONs;")
+    print("install the optional deps only if you intend to run --corpus.")
     sys.exit(1)
 
 
@@ -267,13 +276,26 @@ def cmd_analyze(corpus_id: str) -> int:
         return 1
 
     results_path = RESULTS_DIR / f"{corpus_id}_judges.json"
-    qrels_path = DATA_DIR / corpus_id / Path(cfg["qrels_url"]).name
+    qrels_basename = Path(cfg["qrels_url"]).name
+    # Try both the standalone-repo flat layout (data/<file>) and the legacy
+    # nested layout (data/<corpus_id>/<file>). The public repo flattens TREC
+    # RAG 2024 inputs into data/ directly.
+    qrels_candidates = [
+        DATA_DIR / qrels_basename,
+        DATA_DIR / corpus_id / qrels_basename,
+        # BEIR-style: data/beir-<id>/<id>/qrels/test.tsv
+        DATA_DIR / f"beir-{corpus_id}" / corpus_id / "qrels" / "test.tsv",
+    ]
+    qrels_path = next((p for p in qrels_candidates if p.exists()), qrels_candidates[0])
     if not results_path.exists():
         print(f"ERROR: judge results not found at {results_path}")
         print(f"  Run validation first: --corpus {corpus_id} --judge-preset p4-frontier")
         return 1
     if not qrels_path.exists():
-        print(f"ERROR: qrels not downloaded. Run: --download {corpus_id}")
+        print(f"ERROR: qrels not found. Tried these locations:")
+        for cand in qrels_candidates:
+            print(f"  - {cand}")
+        print(f"  Run: --download {corpus_id}  (or place qrels at one of the paths above)")
         return 1
 
     print(f"Loading judge results from {results_path}...")

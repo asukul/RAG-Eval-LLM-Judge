@@ -349,8 +349,12 @@ A grep for the old number across the repo will surface all occurrences — `grep
 **To change a numerical value (e.g., re-run gives κ = 0.4955 not 0.4941):**
 1. `grep -r "0.4941" .` to find all occurrences
 2. Update each location (papers, arxiv, dashboard, slides reference)
-3. Re-run `slides/make_p4_slides.py` to update PowerPoint
-4. Commit all changes in one batch with a message explaining the source of the new number
+3. Update the `expected = {...}` dict in `src/verify_paper_claims.py` to match the new value
+4. Re-run `slides/make_p4_slides.py` to update PowerPoint
+5. Run `py -3 src/verify_paper_claims.py` — must report 0 fail before commit
+6. Commit all changes in one batch with a message explaining the source of the new number
+
+The verifier `src/verify_paper_claims.py` is the single source of truth for "every numerical claim in every paper draft + dashboard is consistent with the shipped data." Run it before every commit that touches numbers.
 
 **To add a new finding (e.g., TREC-COVID validation):**
 1. Add to `papers/long.md` §7 (full paragraph + per-judge table per user's preference)

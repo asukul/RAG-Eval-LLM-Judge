@@ -4,8 +4,8 @@ Reads the combined multi-judge results file and writes a PNG heatmap of the
 pairwise quadratic-weighted Cohen's κ. Run once after any multi-judge eval.
 
 Usage:
-    py -3 papers/P4_llm_as_judge/make_kappa_heatmap.py \
-        [--input backend/data/eval/results_dspace_fulltext_vertex_multijudge_20260424_180713.json]
+    py -3 src/make_kappa_heatmap.py \
+        [--input results/<your_multijudge_json>.json]
 
 Defaults to the newest multijudge JSON if --input is omitted.
 """
@@ -21,9 +21,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-REPO = Path(__file__).resolve().parents[2]
-EVAL_DIR = REPO / "backend" / "data" / "eval"
-FIG_DIR = Path(__file__).resolve().parent / "figures"
+# Standalone-repo paths.
+REPO = Path(__file__).resolve().parents[1]
+EVAL_DIR = REPO / "results"
+FIG_DIR = REPO / "figures"
 
 
 # Short labels for readability in the figure (map from full label prefix).

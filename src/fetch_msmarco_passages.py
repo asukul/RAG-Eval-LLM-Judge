@@ -21,8 +21,11 @@ from pathlib import Path
 
 from huggingface_hub import hf_hub_download
 
-ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "_validation_data" / "trec-rag-2024"
+# Standalone-repo paths. TREC RAG 2024 inputs (qrels, sample, passages,
+# needed_passage_ids) live in REPO/data/ in this repository, not in
+# src/_validation_data/ (the legacy monorepo location).
+REPO = Path(__file__).resolve().parents[1]
+DATA = REPO / "data"
 NEEDED_IDS_FILE = DATA / "needed_passage_ids.txt"
 OUT_JSON = DATA / "passages.json"
 PROGRESS_FILE = DATA / "fetch_msmarco_progress.json"
