@@ -1,0 +1,16 @@
+{
+  "corpus": "trec-covid",
+  "n_aligned_pairs": 300,
+  "n_judges": 7,
+  "kappa_per_judge_vs_human": {
+    "Claude Opus 4.7 (OpenRouter)": 0.5323,
+    "Claude Sonnet 4.6 (OpenRouter)": 0.4238,
+    "GPT-5.5 (reasoning=low)": 0.3871,
+    "GPT-4o (chat)": 0.3874,
+    "Gemini 3.1 Pro Preview (OpenRouter)": 0.2202,
+    "Gemini 2.5 Pro (OpenRouter)": null,
+    "DeepSeek V4 Pro (OpenRouter)": 0.3144
+  },
+  "kappa_ensemble_median_vs_human": 0.4462,
+  "interpretation": "moderate"
+}

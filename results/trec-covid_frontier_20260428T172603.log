@@ -1,0 +1,95 @@
+  0%|          | 0/171332 [00:00<?, ?it/s]  8%|▊         | 13477/171332 [00:00<00:01, 134583.06it/s] 18%|█▊        | 30076/171332 [00:00<00:00, 152594.25it/s] 26%|██▋       | 45333/171332 [00:00<00:00, 138480.33it/s] 35%|███▍      | 59318/171332 [00:00<00:00, 134989.37it/s] 43%|████▎     | 72895/171332 [00:00<00:00, 132350.62it/s] 51%|█████     | 86853/171332 [00:00<00:00, 134362.88it/s] 60%|██████    | 103566/171332 [00:00<00:00, 144621.69it/s] 70%|███████   | 120705/171332 [00:00<00:00, 152803.61it/s] 79%|███████▉  | 136051/171332 [00:00<00:00, 137617.65it/s] 88%|████████▊ | 150116/171332 [00:01<00:00, 130868.29it/s] 95%|█████████▌| 163441/171332 [00:01<00:00, 126155.77it/s]100%|██████████| 171332/171332 [00:01<00:00, 133654.32it/s]
+  loaded BEIR trec-covid: 171332 docs, 50 queries, 66336 qrels
+Loaded 300 aligned pairs from trec-covid
+Judge preset: p4-frontier or judges: None
+
+Running judges on 300 pairs...
+[17:26:27] OpenAISdkJudge[openrouter]: model=anthropic/claude-opus-4.7 reasoning=None max_out_tok=16
+[17:26:28] OpenAISdkJudge[openrouter]: model=anthropic/claude-sonnet-4.6 reasoning=None max_out_tok=16
+[17:26:28] OpenAISdkJudge[openai]: model=gpt-5.5 reasoning=low max_out_tok=256
+[17:26:29] OpenAISdkJudge[openai]: model=gpt-4o reasoning=None max_out_tok=16
+[17:26:29] OpenAISdkJudge[openrouter]: model=google/gemini-3.1-pro-preview reasoning=None max_out_tok=2048
+[17:26:29] OpenAISdkJudge[openrouter]: model=google/gemini-2.5-pro reasoning=None max_out_tok=2048
+[17:26:30] OpenAISdkJudge[openrouter]: model=deepseek/deepseek-v4-pro reasoning=None max_out_tok=16
+Built 7 judges:
+  - Claude Opus 4.7 (OpenRouter)
+  - Claude Sonnet 4.6 (OpenRouter)
+  - GPT-5.5 (reasoning=low)
+  - GPT-4o (chat)
+  - Gemini 3.1 Pro Preview (OpenRouter)
+  - Gemini 2.5 Pro (OpenRouter)
+  - DeepSeek V4 Pro (OpenRouter)
+
+  [   5/300] processed
+  [  10/300] processed
+  [  15/300] processed
+  [  20/300] processed
+  [  25/300] processed
+  [  30/300] processed
+  [  35/300] processed
+  [  40/300] processed
+  [  45/300] processed
+  [  50/300] processed
+  [  55/300] processed
+  [  60/300] processed
+  [  65/300] processed
+  [  70/300] processed
+  [  75/300] processed
+  [  80/300] processed
+  [  85/300] processed
+  [  90/300] processed
+  [  95/300] processed
+  [ 100/300] processed
+  [ 105/300] processed
+  [ 110/300] processed
+  [ 115/300] processed
+  [ 120/300] processed
+  [ 125/300] processed
+  [ 130/300] processed
+  [ 135/300] processed
+  [ 140/300] processed
+  [ 145/300] processed
+  [ 150/300] processed
+  [ 155/300] processed
+  [ 160/300] processed
+  [ 165/300] processed
+  [ 170/300] processed
+  [ 175/300] processed
+  [ 180/300] processed
+  [ 185/300] processed
+  [ 190/300] processed
+  [ 195/300] processed
+  [ 200/300] processed
+  [ 205/300] processed
+  [ 210/300] processed
+  [ 215/300] processed
+  [ 220/300] processed
+  [ 225/300] processed
+  [ 230/300] processed
+  [ 235/300] processed
+  [ 240/300] processed
+  [ 245/300] processed
+  [ 250/300] processed
+  [ 255/300] processed
+  [ 260/300] processed
+  [ 265/300] processed
+  [ 270/300] processed
+  [ 275/300] processed
+  [ 280/300] processed
+  [ 285/300] processed
+  [ 290/300] processed
+  [ 295/300] processed
+  [ 300/300] processed
+
+Saved: D:\RAG-DSpace\isu-research-search\papers\P4_llm_as_judge\_validation_results\trec-covid_judges.json
+
+=== Per-judge summary ===
+  Claude Opus 4.7 (OpenRouter)              valid=251/300  mean=1.12
+  Claude Sonnet 4.6 (OpenRouter)            valid=300/300  mean=1.50
+  GPT-5.5 (reasoning=low)                   valid=300/300  mean=1.35
+  GPT-4o (chat)                             valid=300/300  mean=0.88
+  Gemini 3.1 Pro Preview (OpenRouter)       valid=133/300  mean=0.70
+  Gemini 2.5 Pro (OpenRouter)               valid= 19/300  mean=0.89
+  DeepSeek V4 Pro (OpenRouter)              valid=250/300  mean=1.14
+
+Next step: --analyze trec-covid to compute κ vs human qrels

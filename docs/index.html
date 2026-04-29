@@ -120,7 +120,8 @@ footer{max-width:var(--maxw);margin:0 auto;padding:24px;border-top:1px solid var
   <div class="kpi"><span class="num">0.80</span><span class="lbl">matrix-max &kappa; (Qwen &harr; Gemma 4)</span></div>
   <div class="kpi"><span class="num">0.4941</span><span class="lbl">9-judge ensemble &kappa; vs NIST TREC RAG 2024</span></div>
   <div class="kpi"><span class="num">63.7%</span><span class="lbl">9-judge precision on BEIR scifact</span></div>
-  <div class="kpi"><span class="num">$56</span><span class="lbl">total paid-API spend</span></div>
+  <div class="kpi"><span class="num">0.4462</span><span class="lbl">7-judge ensemble &kappa; on TREC-COVID</span></div>
+  <div class="kpi"><span class="num">~$70</span><span class="lbl">total paid-API spend</span></div>
 </div>
 </section>
 
@@ -198,6 +199,14 @@ footer{max-width:var(--maxw);margin:0 auto;padding:24px;border-top:1px solid var
 <ul>
 <li>9-judge ensemble precision at score &ge; 2: <strong>63.7%</strong> (range 43&ndash;75% across judges)</li>
 </ul>
+
+<h3>TREC-COVID biomedical scientific (300 pairs, 0&ndash;2 qrels &rarr; 0/2/3 rubric)</h3>
+<ul>
+<li>Frontier-7 ensemble &kappa; vs NIST human qrels: <strong>0.4462</strong> (Landis-Koch <em>moderate</em>)</li>
+<li>Per-judge &kappa; range: 0.22&ndash;0.53 (Opus 4.7 leads, Gemini 2.5 Pro insufficient overlap due to thinking-mode parse aborts)</li>
+<li>Coverage: Sonnet, GPT-5.5, GPT-4o all 100%; Opus 84%, DSV4 83%; Gemini 3.1 Prev 44%, Gemini 2.5 Pro 6%</li>
+</ul>
+<p>Three independent corpora &mdash; institutional (ISU), scientific fact-verification (BEIR scifact), biomedical (TREC-COVID) &mdash; all return frontier ensemble agreement in the moderate-to-substantial Landis-Koch band.</p>
 
 <div class="callout">
 <strong>Coverage divergence is a content-domain reliability axis.</strong> On TREC RAG 2024 web passages, Anthropic + OpenAI + Qwen + Gemma return scores on 100% of pairs; Gemini 3.1 Prev 24%, Gemini 2.5 Pro 17% (thinking-mode parse aborts on long passages). The <em>always-works 6-judge subset</em> (&ge;95% coverage on both corpora) is Anthropic + OpenAI + Qwen + Gemma &mdash; <strong>the 2 cheapest judges make this subset</strong>.
