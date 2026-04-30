@@ -44,3 +44,12 @@ data/beir-*/
 *.tar
 *.tar.gz
 *.7z
+
+# Build artifacts (zip bundles, latex aux files)
+_build_supplementary/
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz
