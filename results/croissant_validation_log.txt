@@ -1,0 +1,38 @@
+Croissant 1.0 validation log
+============================
+Run: 2026-04-29 (P3f-followup)
+Validator: mlcroissant (MLCommons official Python validator)
+Command: py -3 -c "import mlcroissant as mlc; mlc.Dataset(jsonld='croissant.json')"
+
+Result: [OK] Croissant 1.0 validates against MLCommons schema
+
+Properties:
+  name:           RAG-Eval-LLM-Judge
+  conformsTo:     ['http://mlcommons.org/croissant/1.0']
+  license:        https://creativecommons.org/licenses/by/4.0/
+  version:        1.0.0
+  url:            https://github.com/asukul/RAG-Eval-LLM-Judge
+  distribution:   11 entries (FileObject + FileSet entries for all
+                  external-validation, within-corpus, intra-judge,
+                  UMBRELA-baseline, bootstrap-CIs, Gwet AC2, and
+                  bias-diagnostics result files)
+  record_sets:    2 entries
+    - external-validation-records: 4 fields (query_id, doc_id,
+                                             human_rel, judge_scores)
+    - within-corpus-records:        5 fields (judge_label, query_id,
+                                              rank, point_id, judge_score)
+
+History:
+  - First draft (2026-04-29) validated with one WARNING about non-
+    standard @context (missing equivalentProperty and samplingRate
+    keys vs. mlcroissant's expected canonical context).
+  - Fix: added equivalentProperty and samplingRate keys to @context
+    (matched mlcroissant/_src/core/rdf.py canonical reference).
+  - Re-validated cleanly with no schema warnings. Only remaining
+    notice is "ConjunctiveGraph is deprecated, use Dataset instead"
+    which is a deprecation warning in the transitive rdflib
+    dependency, not in our metadata.
+
+To re-validate after edits:
+  pip install mlcroissant
+  py -3 -c "import mlcroissant as mlc; mlc.Dataset(jsonld='croissant.json')"
