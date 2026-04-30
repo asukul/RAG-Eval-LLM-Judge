@@ -1,0 +1,79 @@
+% neurips_data_2026.sty
+%
+% PLACEHOLDER style file for the NeurIPS 2026 Datasets & Benchmarks Track.
+% Replace with the official `neurips_data_2026.sty` when the CFP drops at
+% https://nips.cc/Conferences/2026/CallForDatasetsBenchmarks
+%
+% This placeholder reproduces the layout / spacing conventions of the
+% NeurIPS 2024 D&B and NeurIPS 2025 D&B style files (close to identical),
+% so the compiled PDF approximates the final layout closely enough for
+% page-count and figure-fit verification ahead of the official release.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{neurips_data_2026}[2026/04/29 v0.1 NeurIPS Data&Benchmarks Track placeholder]
+
+% Anonymous (double-blind) by default; pass [final] to reveal authors.
+\newif\if@neuripsfinal\@neuripsfinalfalse
+\DeclareOption{final}{\@neuripsfinaltrue}
+\DeclareOption{nonatbib}{\PassOptionsToPackage{}{natbib}}
+\ProcessOptions\relax
+
+% Page geometry (NeurIPS D&B 2024-2025: 8.5x11, ~1in margins)
+\RequirePackage[letterpaper,top=1in,bottom=1in,left=1.0in,right=1.0in]{geometry}
+
+% Standard NeurIPS body font is Times-equivalent at 10pt with 11pt leading
+\RequirePackage{times}
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize\@xpt{11pt}%
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus2\p@
+  \abovedisplayshortskip \z@ \@plus2\p@
+  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  \belowdisplayskip \abovedisplayskip
+}
+
+% Title block
+\renewcommand\maketitle{%
+  \par
+  \begingroup
+  \ifx\@firsttitle\@empty
+    \def\@titlewrap{\@title}%
+  \else
+    \def\@titlewrap{\@title}%
+  \fi
+  \begin{center}%
+    {\bfseries\large\@titlewrap\par}%
+    \vskip 1em%
+    \if@neuripsfinal
+      {\@author\par}%
+    \else
+      {Anonymous Author(s)\\Affiliation\\Address\\\texttt{email}\par}%
+    \fi
+  \end{center}%
+  \par
+  \vskip 1.0em
+  \endgroup
+}
+
+% Abstract
+\renewenvironment{abstract}{%
+  \vskip 0.075in
+  \begin{center}{\bfseries\large Abstract}\end{center}%
+  \begin{quote}\small
+}{%
+  \end{quote}\vskip 0.5em%
+}
+
+% Standard section formatting (close to NeurIPS defaults)
+\RequirePackage{titlesec}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{0.5em}{}
+
+% Reasonable defaults for figures, tables, citations
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{xcolor}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+\endinput
